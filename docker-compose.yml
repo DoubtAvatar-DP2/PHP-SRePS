@@ -1,0 +1,36 @@
+version: "3.2"
+services:
+  # Apache PHP Server
+  php:
+    build: 
+      context: './php-config/'
+    depends_on:
+      - mysql
+      - composer
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - ./src/:/var/www/html/
+    ports: 
+      - 8080:80
+  
+  # MySQL Server
+  mysql:
+    image: mysql:5.6.40
+    networks:
+      - backend
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+  
+  # Composer image used to download dependencies
+  composer:
+    image: composer:latest
+    command: install
+    working_dir: /composer
+    volumes: 
+      - ./src/:/composer
+
+networks:
+  frontend:
+  backend:
