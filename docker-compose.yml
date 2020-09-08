@@ -21,8 +21,24 @@ services:
     networks:
       - backend
     environment:
+      - MYSQL_DATABASE=SREPS
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=password
       - MYSQL_ROOT_PASSWORD=rootpassword
   
+  # PHPMyAdmin Server
+  phpmyadmin:
+    image: phpmyadmin:latest
+    networks:
+      - backend
+    depends_on: 
+      - mysql
+    environment: 
+    - PMA_HOST=mysql
+    - MYSQL_ROOT_PASSWORD=rootpassword
+    ports:
+      - 8081:80
+
   # Composer image used to download dependencies
   composer:
     image: composer:latest
