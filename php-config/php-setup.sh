@@ -4,18 +4,7 @@
 apt-get update -y && apt-get upgrade -y
 
 # Install some required dependencies
-apt-get install -y \
-    zip \
-    unzip \
-    wget \
-    git \
-    zlib1g-dev \
-    libxml2-dev \
-    libgd-dev \
-    libpng-dev \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libzip-dev
+apt-get install -y zip unzip wget git zlib1g-dev libxml2-dev libgd-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev libzip-dev
 
 # Install xdebug
 pecl install xdebug
