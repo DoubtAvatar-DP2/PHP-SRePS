@@ -25,6 +25,8 @@ services:
       - MYSQL_USER=admin
       - MYSQL_PASSWORD=password
       - MYSQL_ROOT_PASSWORD=rootpassword
+    volumes: 
+      - data:/var/lib/mysql
   
   # PHPMyAdmin Server
   phpmyadmin:
@@ -39,6 +41,7 @@ services:
     ports:
       - ${PMA_PORT}:80
 
+
   # Composer image used to download dependencies
   composer:
     image: composer:latest
@@ -50,3 +53,6 @@ services:
 networks:
   frontend:
   backend:
+
+volumes: 
+  data:
