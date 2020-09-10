@@ -3,7 +3,7 @@ services:
   # Apache PHP Server
   php:
     build: 
-      context: './php-config/'
+      context: php-config
     depends_on:
       - mysql
       - composer
