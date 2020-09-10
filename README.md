@@ -12,6 +12,8 @@ Successful docker-compose up output
 
 ## Accessing services
 
+**Note: ** When using Docker Toolbox / Docker with VirtualBox, you will need to obtain the IP address using the Docker Quickstart Terminal and use that IP address instead of `localhost`
+
 The webserver can be accessed via (http://localhost:8080/)
 
 PHPMyAdmin can be accessed via (http://localhost:8081/)
