@@ -1,9 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Display | PHP SReps</title>
-</head>
-<body>
-    <h1>People Health Pharmacy Sales Reporting System</h1>
-</body>
+    <head>
+        <title>Display | PHP SReps</title>
+    </head>
+    <body>
+        <table id="bodyTable">
+            <tr>
+                <td>
+                    <table>
+                        <tr><td>PHP-SRePs</td></tr>
+                        <tr><td>Records</td></tr>
+                        <tr><td>Prediction</td></tr>
+                        <tr><td>Import</td></tr>
+                        <tr><td>Export</td></tr>
+                        <tr><td>About Us</td></tr>
+                    </table>
+                </td>
+                <td id="main">
+                    <h1>View Records</h1>
+                    <table>
+                        <tr>
+                            <form id="searchAndNewForm">
+                                <td>
+                                    <!--Search bar-->
+                                    <input type="search" id="recordSearchBut" name="recordSearch" placeholder="Search for records" />
+                                    
+                                    <!--New record button-->
+                                    <button type="button">+ New Record</button>
+                                </td>
+                            </form>
+                        </tr>
+                        <tr>
+                            <table id="recordTable">
+                                <tr>
+                                    <th>Record #</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Total Price</th>
+                                </tr>
+                                <!--Display record information here-->
+                            </table>
+                        </tr>
+                        <tr>
+                            <!--Page navigation goes here-->
+                            <table id="navTable">
+                                <tr>  
+                                    <td>    
+                                        <form id="navForm">
+                                            <!--Back Button-->
+                                            <button type="button">&lt;&lt; Back</button>
+
+                                            <!--Other elements go here-->
+                                            <!--Example buttons: <button type="button">1</button><button type="button">2</button><button type="button">3</button>-->
+
+                                            <!--Next Button-->
+                                            <button type="button">Next &gt;&gt;</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
 </html>
