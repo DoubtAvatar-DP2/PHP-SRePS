@@ -19,10 +19,20 @@
             <td>
                 <h1>New Record</h1>
                 <form>
-                    <label for="recorddate">Record Date:</label><br>
-                    <input type="date" id="recorddate" name="recorddate"><br>
-                    <label for="customer">Customer:</label><br>
-                    <input type="text" id="customer" name="customer">
+                    <label for="recorddate">Record Date:</label>
+                    <input type="date" id="recorddate" name="recorddate" placeholder="Please enter the record date">
+                    <label for="customer">Customer:</label>
+                    <input type="text" id="customer" name="customer" placeholder="Enter customer ID or name">
+                    <table>
+                        <tr><th>#</th><th>Product Name</th><th>Quantity</th><th>Quoted Price</th><th>Total Price</th></tr>
+                        <tr>
+                            <td>1</td>
+                            <td><input type="text" id="productname" name="productname" placeholder="Enter product name or ID here"></td>
+                            <td><input type="number" id="quantity" name="quantity"></td>
+                            <td><input type="number" id="price" name="price"></td>
+                            <td><input type="number" id="totalprice" name="totalprice" readonly="true"></td>
+                        </tr>
+                    </table>
                 </form> 
             </td>
         </tr>
