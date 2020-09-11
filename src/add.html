@@ -18,7 +18,7 @@
             </td>
             <td>
                 <h1>New Record</h1>
-                <form>
+                <form id="addrecordform">
                     <label for="recorddate">Record Date:</label>
                     <input type="date" id="recorddate" name="recorddate" placeholder="Please enter the record date">
                     <label for="customer">Customer:</label>
@@ -33,6 +33,9 @@
                             <td><input type="number" id="totalprice" name="totalprice" readonly="true"></td>
                         </tr>
                     </table>
+                    <p>Total $0</p>
+                    <label for="note">Note</label><br>
+                    <input type="text" id="note" name="note" placeholder="Enter any comment">                    
                 </form> 
             </td>
         </tr>
