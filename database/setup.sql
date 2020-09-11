@@ -17,19 +17,11 @@ CREATE TABLE Products (
     FOREIGN KEY(CategoryID) REFERENCES Categories(CategoryID)
 );
 
-CREATE TABLE Customers (
-    CustomerID INT NOT NULL AUTO_INCREMENT,
-    CustomerName VARCHAR(100) NOT NULL,
-    PRIMARY KEY(CustomerID)
-);
-
 CREATE TABLE SalesRecords (
     SalesRecordNumber INT NOT NULL AUTO_INCREMENT,
     SalesDate	DateTime NOT NULL,
-    Comment     VARCHAR(200),
-    CustomerID INT NOT NULL,
-    PRIMARY KEY(SalesRecordNumber),
-    FOREIGN KEY(CustomerID) REFERENCES Customers(CustomerID)
+    Comment     VARCHAR(200),   
+    PRIMARY KEY(SalesRecordNumber)
 );
 
 CREATE TABLE SaleRecordDetails (
@@ -275,30 +267,15 @@ VALUES
     3
 );
 
-
-INSERT INTO Customers(CustomerID, CustomerName)
-VALUES 
-(1, "Anonymous");
-
-INSERT INTO Customers(CustomerID, CustomerName)
+INSERT INTO SalesRecords (SalesRecordNumber, SalesDate)
 VALUES
-(2, "Alex"),
-(3, "Bob"),
-(4, "Terry"),
-(5, "Yvonne"),
-(6, "Luccie"),
-(7, "Zarchary"),
-(10, "Sean");
-
-INSERT INTO SalesRecords (SalesRecordNumber, SalesDate, CustomerID)
-VALUES
-(1000, "2020-09-11", 1),
-(1001, "2020-09-10", 1),
-(1002, "2020-09-09", 2),
-(1003, "2020-09-09", 3),
-(1004, "2020-09-08", 10),
-(1005, "2020-09-07", 7),
-(1006, "2020-09-05", 5);
+(1000, "2020-09-11"),
+(1001, "2020-09-10"),
+(1002, "2020-09-09"),
+(1003, "2020-09-09"),
+(1004, "2020-09-08"),
+(1005, "2020-09-07"),
+(1006, "2020-09-05");
 
 INSERT INTO SaleRecordDetails(SalesRecordNumber, ProductNumber, QuotedPrice, QuantityOrdered)
 VALUES
