@@ -11,10 +11,11 @@
         public function findAll()
         {
             $statement = "
-                SELECT SalesRecordNumber, SalesDate, Comment
-                FROM $this->table_name
+                SELECT 
+                    SalesRecordNumber, SalesDate, Comment
+                FROM 
+                    $this->table_name
             ";
-            echo $statement;
 
             try {
                 $statement = $this->db->query($statement);
@@ -32,7 +33,7 @@
             $statement = "
                 SELECT 
                     SalesRecordNumber, SalesDate, Comment
-                FROM $table_name
+                FROM $this->table_name
                 WHERE 
                     SalesRecordNumber = ?;
             ";            
@@ -52,7 +53,7 @@
         public function insert(Array $input)
         {
             $statement = "
-                INSERT INTO $table_name
+                INSERT INTO $this->table_name
                     (SalesRecordNumber, SalesDate, Comment)
                 VALUES
                     (:SalesRecordNumber, :SalesDate, :Comment);
@@ -61,11 +62,12 @@
             try {
                 $statement = $this->db->prepare($statement);
                 $statement->execute(array(
-                    'SalesRecordNumber' => $input['SalesRecordNumber'],
+                    'SalesRecordNumber' => $input['SalesRecordNumber'] ?? null,
                     'SalesDate' => $input['SalesDate'],
                     'Comment' => $input['Comment'] ?? null,
                 ));
-
+                // return 0 if the salesRecord already exists
+                // return 1 if the new input is successfully appended
                 return $statement->rowCount();
             } 
             catch(PDOException $e)
@@ -74,23 +76,27 @@
             }
         }
 
-        public function update($salesRecordNumber, Array $input)
+        public function update(Array $input)
         {
             $statement = "
-                UPDATE $table_name
+                UPDATE 
+                    $this->table_name
                 SET
                     SalesDate = :SalesDate,
                     Comment = :Comment
-                WHERE SalesRecordNumber = :SalesRecordNumber;
+                WHERE 
+                    SalesRecordNumber = :SalesRecordNumber;
             ";
             
             try {
                 $statement = $this->db->prepare($statement);
                 $statement->execute(array(
-                    'SalesRecordNumber' => $salesRecordNumber,
+                    'SalesRecordNumber' => $input['SalesRecordNumber'],
                     'SalesDate' => $input['SalesDate'],
                     'Comment' => $input['Comment'] ?? null,
                 ));
+                // return 0 if the salesRecord does not update
+                // return 1 if the new input is successfully updated
                 return $statement->rowCount();
             }
             catch(PDOException $e)
@@ -102,13 +108,21 @@
         public function delete($salesRecordNumber)
         {
             $statement = "
-                DELETE FROM $table_name
-                WHERE SalesRecordNumber = ?
+                DELETE FROM 
+                    $this->table_name
+                WHERE 
+                    SalesRecordNumber = :SalesRecordNumber
             ";
 
             try {
                 $statement = $this->db->prepare($statement);
-                $statement->execute(array($salesRecordNumber));
+
+                $result = $statement->execute(array(
+                    'SalesRecordNumber' => $salesRecordNumber
+                ));
+
+                // return 1 when the target record is successfully deleted.
+                // return 0 when the target record is not deleted.
                 return $statement->rowCount();
             }
             catch(PDOException $e)
