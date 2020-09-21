@@ -9,8 +9,8 @@
             $user   = "admin";
             $password = "password";
             $charset = "utf8mb4";
+
             try {
-                
                 $this->dbConnection = new PDO(
                     "mysql:host=$host;charset=$charset;dbname=$db",
                     $user,
