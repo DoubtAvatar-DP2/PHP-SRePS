@@ -26,6 +26,7 @@ services:
       - MYSQL_PASSWORD=password
       - MYSQL_ROOT_PASSWORD=rootpassword
     volumes: 
+      - ./database:/docker-entrypoint-initdb.d
       - data:/var/lib/mysql
   
   # PHPMyAdmin Server
