@@ -2,11 +2,12 @@
 <html lang="en">
     <head>
         <title>Display | PHP SReps</title>
+        <link rel="stylesheet" href="display.css">
     </head>
     <body>
         <table id="bodyTable">
             <tr>
-                <td>
+                <td id="sidebar">
                     <table>
                         <tr><td>PHP-SRePs</td></tr>
                         <tr><td>Records</td></tr>
@@ -23,46 +24,45 @@
                             <form id="searchAndNewForm">
                                 <td>
                                     <!--Search bar-->
-                                    <input type="search" id="recordSearchBut" name="recordSearch" placeholder="Search for records" />
-                                    
+                                    <input id="searchBar" type="search" id="recordSearchBut" name="recordSearch" placeholder="Search for records" />
+                                    <button id="searchBut" type="submit" value="SEARCH" onclick="SearchButFilter()" />
+
                                     <!--New record button-->
-                                    <button type="button">+ New Record</button>
+                                    <button type="submit" value="NEW">+ New Record</button>
                                 </td>
                             </form>
                         </tr>
                         <tr>
-                            <table id="recordTable">
-                                <tr>
-                                    <th>Record #</th>
-                                    <th>Date</th>
-                                    <th>Customer</th>
-                                    <th>Total Price</th>
-                                </tr>
-                                <!--Display record information here-->
-                            </table>
+                            <td>
+                                <table id="recordTable">
+                                    <tr class="tableRow">
+                                        <th class="tableCol">Record #</th>
+                                        <th class="tableCol">Date</th>
+                                        <th class="tableCol">Customer</th>
+                                        <th class="tableCol">Total Price</th>
+                                    </tr>
+                                    <!--Display record information here-->
+                                </table>
+                            </td>
                         </tr>
                         <tr>
-                            <!--Page navigation goes here-->
-                            <table id="navTable">
-                                <tr>  
-                                    <td>    
-                                        <form id="navForm">
-                                            <!--Back Button-->
-                                            <button type="button">&lt;&lt; Back</button>
+                            <td>
+                                <form id="navForm">
+                                    <!--Back Button-->
+                                    <button id="butBack" type="submit" value="BACK">&lt;&lt; Back</button>
 
-                                            <!--Other elements go here-->
-                                            <!--Example buttons: <button type="button">1</button><button type="button">2</button><button type="button">3</button>-->
+                                    <!--Other elements go here-->
+                                    <!--Example buttons: <button type="submit" value="1">1</button><button type="submit" value="2">2</button><button type="submit" value="3">3</button>-->
 
-                                            <!--Next Button-->
-                                            <button type="button">Next &gt;&gt;</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            </table>
+                                    <!--Next Button-->
+                                    <button id="butNext" type="submit" value="NEXT">Next &gt;&gt;</button>
+                                </form>
+                            </td>
                         </tr>
                     </table>
                 </td>
             </tr>
         </table>
     </body>
+    <script src="display.js" />
 </html>

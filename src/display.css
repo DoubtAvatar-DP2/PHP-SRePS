@@ -1,0 +1,52 @@
+html
+{
+    min-height: 100vh;
+    position: relative;
+}
+
+body
+{
+    height: 100vh;
+}
+
+td
+{
+    border: 1px solid black;
+    width: 100vh;
+}
+
+#sidebar
+{
+    width: 25vh;
+}
+
+#main
+{
+    width: 75vh;
+}
+
+#butBack
+{
+    float: left;
+}
+
+#butNext
+{
+    float: right;
+}
+
+#searchBar
+{
+    width: 75%;
+}
+
+#searchBut
+{
+    display: none;
+}
+
+.tableCol
+{
+    border: 1px solid black;
+    width: 25vh;
+}
