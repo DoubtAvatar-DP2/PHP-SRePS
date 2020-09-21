@@ -42,6 +42,14 @@ services:
     ports:
       - ${PMA_PORT}:80
 
+  # PHP unit testing  
+  phpunit:
+    image: php:7.4-cli
+    restart: "no"
+    volumes:
+      - .:/var/www/html/
+    working_dir: /var/www/html
+    entrypoint: src/vendor/bin/phpunit
 
   # Composer image used to download dependencies
   composer:
