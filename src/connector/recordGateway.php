@@ -1,19 +1,20 @@
 <?php
     class SalesRecord {
-        private $connection = null;
+        private $db = null;
         private $table_name = "SalesRecords";
 
         public function __construct($db)
         {
-            $this->connection = $db;
+            $this->db = $db;
         }
 
         public function findAll()
         {
             $statement = "
                 SELECT SalesRecordNumber, SalesDate, Comment
-                FROM $table_name
+                FROM $this->table_name
             ";
+            echo $statement;
 
             try {
                 $statement = $this->db->query($statement);
