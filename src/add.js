@@ -1,7 +1,11 @@
 var inputid = 0;
 
 addNewProductField();
-addNewProductField();
+
+function checkForNewProductField()
+{
+
+}
 
 function addNewProductField()
 {
@@ -47,15 +51,20 @@ function calculateProductTotal(idNumber)
     if (!isNaN(price) && !isNaN(quantity) && price > 0 && quantity > 0)
     {
         document.getElementById(totalpriceId).value = quantity*price;
-        calculateSalesTotal(idNumber);
+        calculateSalesTotal();
     }
 }
 
-function calculateSalesTotal(idNumber)
+function calculateSalesTotal()
 {
-    var totalpriceId = "totalprice" + idNumber;
+    var totals = 0; 
 
-    var totals = document.getElementById(totalpriceId).value;
+    for (i = 1; i <= inputid; i++)
+    {
+        itemtotal = document.getElementById("totalprice"+i).value
+        totals += parseInt(itemtotal);
+    }
+
     if (!isNaN(totals))
     {
         document.getElementById("total").innerHTML = "Total $" + totals;
