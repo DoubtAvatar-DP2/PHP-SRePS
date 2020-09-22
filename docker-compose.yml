@@ -47,8 +47,8 @@ services:
     image: php:7.4-cli
     restart: "no"
     volumes:
-      - .:/var/www/html/
-    working_dir: /var/www/html
+      - .:/composer
+    working_dir: /composer
     entrypoint: src/vendor/bin/phpunit
 
   # Composer image used to download dependencies

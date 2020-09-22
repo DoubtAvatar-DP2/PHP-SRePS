@@ -6,9 +6,17 @@ use PHPUnit\Framework\TestCase;
 
 class MyTest extends TestCase
 {
-  public function testMyTest(): void
+  public function testDatabaseInsertion(): void
   {
-    self::assertTrue(false);
+    $this->markTestIncomplete( 'Not written yet.' );
+  }
+  public function testRecordRemoval(): void
+  {
+    $this->markTestIncomplete( 'Not written yet.' );
+  }
+  public function testSalesRecordEditing(): void
+  {
+    $this->markTestIncomplete( 'Not written yet.' );
   }
 }
 ?>
