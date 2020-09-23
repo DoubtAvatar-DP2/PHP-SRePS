@@ -4,7 +4,7 @@ addNewProductField();
 
 function checkForNewProductField()
 {
-    var allFieldsFull = false
+    var allFieldsFull = false;
 
     for (i = 1; i <= inputid; i++)
     {
@@ -19,6 +19,7 @@ function checkForNewProductField()
         }
         else
         {
+            alert("One of these rows has empty cells.");
             allFieldsFull = false;
         }
     }
@@ -26,6 +27,15 @@ function checkForNewProductField()
     if(allFieldsFull)
     {
         addNewProductField();
+    }
+}
+
+function deleteRow(idNumber)
+{
+    var table = document.getElementById("productEntries").deleteRow(idNumber);
+    if (document.getElementById("productEntries").rows.length > 1)
+    {
+        table.deleteRow(idNumber);
     }
 }
 
@@ -45,12 +55,14 @@ function addNewProductField()
     var quantityCell = productEntryRow.insertCell(2);
     var priceCell = productEntryRow.insertCell(3);
     var totalCell = productEntryRow.insertCell(4);
+    var deleteButtonCell = productEntryRow.insertCell(5);
     
     entrynumbercell.innerHTML = inputid;
     productNameCell.innerHTML = "<input type=\"text\" id=\""+productNameId+"\" name=\"productname\" placeholder=\"Enter product name or ID here\"></td>"; 
     quantityCell.innerHTML = "<input type=\"number\" id=\""+quantityId+"\" name=\"quantity\">";
     priceCell.innerHTML = "<input type=\"number\" step=\"0.01\" id=\""+priceId+"\" name=\"price\">";
     totalCell.innerHTML = "<input type=\"number\" id=\""+totalpriceId+"\" name=\"totalprice\" readonly=\"true\" value=\"0\">";
+    deleteButtonCell.innerHTML = "<img id=\"delete"+inputid+"\" src=\"bin.png\" height=\"20\" width=\"20\">";
 
     var i = inputid;
     document.getElementById(quantityId).addEventListener("change", function() {calculateProductTotal(i)}); 
@@ -59,6 +71,8 @@ function addNewProductField()
     document.getElementById(quantityId).addEventListener("change", checkForNewProductField); 
     document.getElementById(productNameId).addEventListener("change", checkForNewProductField); 
     document.getElementById(priceId).addEventListener("change", checkForNewProductField); 
+
+    document.getElementById("delete"+inputid).addEventListener("click", function() {deleteRow(i)});
 }
 
 function calculateProductTotal(idNumber)
