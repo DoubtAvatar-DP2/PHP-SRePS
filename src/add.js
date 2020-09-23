@@ -49,16 +49,16 @@ function addNewProductField()
     entrynumbercell.innerHTML = inputid;
     productNameCell.innerHTML = "<input type=\"text\" id=\""+productNameId+"\" name=\"productname\" placeholder=\"Enter product name or ID here\"></td>"; 
     quantityCell.innerHTML = "<input type=\"number\" id=\""+quantityId+"\" name=\"quantity\">";
-    priceCell.innerHTML = "<input type=\"number\" id=\""+priceId+"\" name=\"price\">";
+    priceCell.innerHTML = "<input type=\"number\" step=\"0.01\" id=\""+priceId+"\" name=\"price\">";
     totalCell.innerHTML = "<input type=\"number\" id=\""+totalpriceId+"\" name=\"totalprice\" readonly=\"true\" value=\"0\">";
 
     var i = inputid;
-    document.getElementById(quantityId).addEventListener("click", function() {calculateProductTotal(i)}); 
-    document.getElementById(priceId).addEventListener("click", function() {calculateProductTotal(i)}); 
+    document.getElementById(quantityId).addEventListener("change", function() {calculateProductTotal(i)}); 
+    document.getElementById(priceId).addEventListener("change", function() {calculateProductTotal(i)}); 
 
-    document.getElementById(quantityId).addEventListener("click", checkForNewProductField); 
-    document.getElementById(productNameId).addEventListener("click", checkForNewProductField); 
-    document.getElementById(priceId).addEventListener("click", checkForNewProductField); 
+    document.getElementById(quantityId).addEventListener("change", checkForNewProductField); 
+    document.getElementById(productNameId).addEventListener("change", checkForNewProductField); 
+    document.getElementById(priceId).addEventListener("change", checkForNewProductField); 
 }
 
 function calculateProductTotal(idNumber)
@@ -88,7 +88,7 @@ function calculateSalesTotal()
     for (i = 1; i <= inputid; i++)
     {
         itemtotal = document.getElementById("totalprice"+i).value
-        totals += parseInt(itemtotal);
+        totals += parseFloat(itemtotal);
     }
 
     if (!isNaN(totals))
