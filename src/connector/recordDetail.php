@@ -10,6 +10,9 @@
 
         public function findAll()
         {
+            /*
+            * return an associate array containing all record details
+            */
             $statement = "
                 SELECT 
                     SalesRecordNumber, ProductNumber, QuotedPrice, QuantityOrdered
@@ -30,6 +33,9 @@
 
         public function find($recordNumber, $productNumber)
         {
+            /*
+            * return an associate array containing all record details that matches record number and product number
+            */
             $statement = "
                 SELECT 
                     SalesRecordNumber, ProductNumber, QuotedPrice, QuantityOrdered
@@ -56,6 +62,9 @@
 
         public function findByRecordNumber($recordNumber)
         {
+            /*
+            * return an associate array containing all record details that matches record number
+            */
             $statement = "
                 SELECT 
                     SalesRecordNumber, ProductNumber, QuotedPrice, QuantityOrdered
@@ -81,6 +90,9 @@
 
         public function findByProductNumber($productNumber)
         {
+            /*
+            * return an associate array containing all record details that matches product number
+            */
             $statement = "
                 SELECT 
                     SalesRecordNumber, ProductNumber, QuotedPrice, QuantityOrdered
@@ -106,6 +118,11 @@
 
         public function insert(Array $newRecordDetails)
         {
+            /*
+            * insert the record details into the table.
+            * when successful, return the key of the inserted detail including product number and record number.
+            * otherwise, return null.
+            */
             $statement = "
                 INSERT INTO $this->table_name
                     (SalesRecordNumber, ProductNumber, QuotedPrice, QuantityOrdered)
@@ -115,14 +132,19 @@
 
             try {
                 $statement = $this->db->prepare($statement);
-                $statement->execute(array(
+                $isSuccesful = $statement->execute(array(
                     'SalesRecordNumber' => $newRecordDetails['SalesRecordNumber'],
                     'ProductNumber'     => $newRecordDetails['ProductNumber'],
                     'QuotedPrice'       => $newRecordDetails['QuotedPrice'],
                     'QuantityOrdered'   => $newRecordDetails['QuantityOrdered']
                 ));
 
-                return $statement->rowCount();
+                if ($isSuccesful)
+                {
+                    return array('SalesRecordNumber' => $newRecordDetails['SalesRecordNumber'],
+                                'ProductNumber'      => $newRecordDetails['ProductNumber']);
+                }
+                return null;
             } 
             catch(PDOException $e)
             {
@@ -132,6 +154,11 @@
 
         public function update($existingRecordNumber, $existingProductNumber, Array $recordDetails)
         {
+            /*
+            * update the existing detail.
+            * return 1 when successful.
+            * if not, return 0.
+            */
             $statement = "
                 UPDATE $this->table_name
                 SET
@@ -154,7 +181,7 @@
                     'newQuotedPrice' =>         $recordDetails['QuotedPrice'],
                     'newQuantityOrdered' =>     $recordDetails['QuantityOrdered'],
                 ));
-                return $statement->rowCount();
+                return $statement->rowCount() > 0 ? 1 : 0;
             }
             catch(PDOException $e)
             {
@@ -164,6 +191,10 @@
 
         public function delete($salesRecordNumber, $productNumber)
         {
+            /*
+            * return 1 when the target detail is successfully deleted.
+            * return 0 when the target detail is not deleted.
+            */
             $statement = "
                 DELETE FROM $this->table_name
                 WHERE 
@@ -176,7 +207,7 @@
                     "SalesRecordNumber" => $salesRecordNumber,
                     "ProductNumber" => $productNumber
                 ));
-                return $statement->rowCount();
+                return $statement->rowCount() > 0 ? 1 : 0;
             }
             catch(PDOException $e)
             {
