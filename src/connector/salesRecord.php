@@ -10,6 +10,9 @@
 
         public function findAll()
         {
+            /*
+            * return an associate array containing all sales records
+            */
             $statement = "
                 SELECT 
                     SalesRecordNumber, SalesDate, Comment
@@ -30,6 +33,9 @@
 
         public function find($recordNumber)
         {
+            /* 
+            * return the array containing the record that has the requested record number.
+            */
             $statement = "
                 SELECT 
                     SalesRecordNumber, SalesDate, Comment
@@ -52,6 +58,11 @@
 
         public function insert(Array $input)
         {
+            /*
+            * insert the new record into the table.
+            * return the id of the inserted record when successful.
+            * otherwise, return null.
+            */
             $statement = "
                 INSERT INTO $this->table_name
                     (SalesRecordNumber, SalesDate, Comment)
@@ -66,9 +77,12 @@
                     'SalesDate' => $input['SalesDate'],
                     'Comment' => $input['Comment'] ?? null,
                 ));
-                // return 0 if the salesRecord already exists
-                // return 1 if the new input is successfully appended
-                return $statement->rowCount();
+                
+                if ($statement->rowCount() != 0)
+                {
+                    return $this->db->lastInsertId();
+                }
+                return null;
             } 
             catch(PDOException $e)
             {
@@ -78,6 +92,11 @@
 
         public function update(Array $input)
         {
+            /*
+            * update the existing record in table.
+            * return 1 when successful.
+            * if not, return 0.
+            */
             $statement = "
                 UPDATE 
                     $this->table_name
@@ -87,7 +106,6 @@
                 WHERE 
                     SalesRecordNumber = :SalesRecordNumber;
             ";
-            
             try {
                 $statement = $this->db->prepare($statement);
                 $statement->execute(array(
@@ -95,9 +113,8 @@
                     'SalesDate' => $input['SalesDate'],
                     'Comment' => $input['Comment'] ?? null,
                 ));
-                // return 0 if the salesRecord does not update
-                // return 1 if the new input is successfully updated
-                return $statement->rowCount();
+
+                return $statement->rowCount() > 0 ? 1 : 0;
             }
             catch(PDOException $e)
             {
@@ -107,6 +124,10 @@
 
         public function delete($salesRecordNumber)
         {
+            /*
+            * return 1 when the target record is successfully deleted.
+            * return 0 when the target record is not deleted.
+            */
             $statement = "
                 DELETE FROM 
                     $this->table_name
@@ -120,10 +141,7 @@
                 $result = $statement->execute(array(
                     'SalesRecordNumber' => $salesRecordNumber
                 ));
-
-                // return 1 when the target record is successfully deleted.
-                // return 0 when the target record is not deleted.
-                return $statement->rowCount();
+                return $statement->rowCount() > 0 ? 1 : 0;
             }
             catch(PDOException $e)
             {
@@ -131,3 +149,4 @@
             }
         }
     }
+?>
