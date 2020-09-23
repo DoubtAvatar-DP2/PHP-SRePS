@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class MyTest extends TestCase
 {
-  public function testDatabaseInsertion(): void
+  public function testMyTests(): void
   {
     $this->markTestIncomplete( 'Not written yet.' );
   }
