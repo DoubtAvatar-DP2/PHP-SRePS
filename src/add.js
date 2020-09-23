@@ -6,12 +6,14 @@ function checkForNewProductField()
 {
     var allFieldsFull = false;
 
-    for (i = 1; i <= inputid; i++)
+    var table = document.getElementById("productEntries");
+
+    for (r in table.rows)
     {
-        totalprice = document.getElementById("totalprice"+i).value;
-        productName = document.getElementById("productname"+i).value;
-        price = document.getElementById("price"+i).value;
-        quantity = document.getElementById("quantity"+i).value;
+        totalprice = r.cells[4].value;
+        productName = r.cells[1].value;
+        price = r.cells[3].value;
+        quantity = r.cells[2].value;
 
         if (totalprice != 0 && productName != "" && price != "" && quantity != "")
         {
@@ -19,7 +21,6 @@ function checkForNewProductField()
         }
         else
         {
-            alert("One of these rows has empty cells.");
             allFieldsFull = false;
         }
     }
@@ -32,8 +33,8 @@ function checkForNewProductField()
 
 function deleteRow(idNumber)
 {
-    var table = document.getElementById("productEntries").deleteRow(idNumber);
-    if (document.getElementById("productEntries").rows.length > 1)
+    var table = document.getElementById("productEntries");
+    if (table.rows.length > 2)
     {
         table.deleteRow(idNumber);
     }
