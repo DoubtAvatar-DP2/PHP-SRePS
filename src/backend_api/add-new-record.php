@@ -5,8 +5,6 @@
     
     const SUCCESS_CODE = 0;
 
-
-
     function FetchRecordByPOST()
     {
         /*
@@ -81,33 +79,20 @@
     
     // retrieve the recordDetails table
     $recordDetailTable = new SaleRecordDetails($db);
-    
-    // collect sales date and comment data
-    try {
-        $newRecord = FetchRecordByPOST();
-    }
-    catch(Exception $e)
-    {
-        exit($e->getMessage());
-    }
-    
-    // adding new sales record
-    try {
-        $newRecordID = AddNewSalesRecord($salesRecordTable, $newRecord);
-    }
-    catch(Exception $e)
-    {
-        exit($e->getMessage());
-    }
 
-    // retrieving record details
     try {
+        // collect sales date and comment data
+        $newRecord = FetchRecordByPOST();
+        // adding new sales record
+        $newRecordID = AddNewSalesRecord($salesRecordTable, $newRecord);
+        // retrieving record details
         $recordDetails = FetchRecordDetailsByPOST($newRecordID);
     }
     catch(Exception $e)
     {
         exit($e->getMessage());
     }
+
 
     for ($i = 0; $i < count($recordDetails); ++$i)
     {
