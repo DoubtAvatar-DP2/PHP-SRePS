@@ -89,7 +89,9 @@ function calculateProductTotal(idNumber)
     var price = document.getElementById(priceId).value;
     if (!isNaN(price) && !isNaN(quantity) && price > 0 && quantity > 0)
     {
-        document.getElementById(totalpriceId).value = quantity*price;
+        var total = quantity*price;
+        total = total.toFixed(2);
+        document.getElementById(totalpriceId).value = total;
         calculateSalesTotal();
     }
 }
