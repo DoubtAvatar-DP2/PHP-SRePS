@@ -8,12 +8,12 @@ function checkForNewProductField()
 
     var table = document.getElementById("productEntries");
 
-    for (r in table.rows)
-    {
-        totalprice = r.cells[4].value;
-        productName = r.cells[1].value;
-        price = r.cells[3].value;
-        quantity = r.cells[2].value;
+    for(i=1; i < table.rows.length; i++)
+    {   
+        var totalprice = table.rows[i].cells[4].firstChild.value;
+        var productName = table.rows[i].cells[1].firstChild.value;
+        var price = table.rows[i].cells[3].firstChild.value;
+        var quantity = table.rows[i].cells[2].firstChild.value;
 
         if (totalprice != 0 && productName != "" && price != "" && quantity != "")
         {
@@ -78,7 +78,6 @@ function addNewProductField()
 
 function calculateProductTotal(idNumber)
 {
-    //var idNumber = inputid;
     var quantityId = "quantity" + idNumber;
     var priceId = "price" + idNumber;
     var productNameId = "productname" + idNumber;
@@ -88,7 +87,6 @@ function calculateProductTotal(idNumber)
     document.getElementById("total").innerHTML = "Total $0"
     var quantity = document.getElementById(quantityId).value;
     var price = document.getElementById(priceId).value;
-    //alert("Checking values: Quantity: "+quantity+", Price: "+price);
     if (!isNaN(price) && !isNaN(quantity) && price > 0 && quantity > 0)
     {
         document.getElementById(totalpriceId).value = quantity*price;
@@ -100,9 +98,11 @@ function calculateSalesTotal()
 {
     var totals = 0; 
 
-    for (i = 1; i <= inputid; i++)
+    var table = document.getElementById("productEntries");
+
+    for (i = 1; i < table.rows.length; i++)
     {
-        itemtotal = document.getElementById("totalprice"+i).value
+        var itemtotal = table.rows[i].cells[4].firstChild.value;
         totals += parseFloat(itemtotal);
     }
 
