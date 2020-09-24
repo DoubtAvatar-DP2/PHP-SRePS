@@ -19,7 +19,10 @@ function checkForNewProductField()
         }
         else
         {
-            alert("One of these rows has empty cells.");
+            /* DESTRUCTIVE
+            * I temporarily remove alert
+            */
+            // alert("One of these rows has empty cells.");
             allFieldsFull = false;
         }
     }
@@ -58,9 +61,9 @@ function addNewProductField()
     var deleteButtonCell = productEntryRow.insertCell(5);
     
     entrynumbercell.innerHTML = inputid;
-    productNameCell.innerHTML = "<input type=\"text\" id=\""+productNameId+"\" name=\"productname\" placeholder=\"Enter product name or ID here\"></td>"; 
-    quantityCell.innerHTML = "<input type=\"number\" id=\""+quantityId+"\" name=\"quantity\">";
-    priceCell.innerHTML = "<input type=\"number\" step=\"0.01\" id=\""+priceId+"\" name=\"price\">";
+    productNameCell.innerHTML = "<input type=\"text\" id=\""+productNameId+"\" name=\"productname\" placeholder=\"Enter product name or ID here\" class='productNumber'></td>"; 
+    quantityCell.innerHTML = "<input type=\"number\" id=\""+quantityId+"\" name=\"quantity\" class='quantity'>";
+    priceCell.innerHTML = "<input type=\"number\" step=\"0.01\" id=\""+priceId+"\" name=\"price\" class='price'>";
     totalCell.innerHTML = "<input type=\"number\" id=\""+totalpriceId+"\" name=\"totalprice\" readonly=\"true\" value=\"0\">";
     deleteButtonCell.innerHTML = "<img id=\"delete"+inputid+"\" src=\"bin.png\" height=\"20\" width=\"20\">";
 
@@ -110,3 +113,61 @@ function calculateSalesTotal()
         document.getElementById("total").innerHTML = "Total $" + totals;
     }
 }
+
+function fetchRecordDetails()
+{
+    /*
+    * retrieve details from table into an array.
+    */
+    var productNumberInputs = document.getElementsByClassName("productNumber");
+    var quantityInputs = document.getElementsByClassName("quantity");
+    var quotedInputs = document.getElementsByClassName("price");
+
+    var recordDetails = [];
+
+    for (let i = 0; i < productNumberInputs.length - 1; ++i)
+    {
+        recordDetails.push({
+            productNumber: productNumberInputs[i].value,
+            quantityOrdered: quantityInputs[i].value,
+            quotedPrice: quotedInputs[i].value
+        });
+    }
+    return recordDetails;
+}
+
+document.getElementById("add-record-button").addEventListener("click", (event) => {
+
+    /*
+    * fetch record data + details before send them to add-new-record.php by POST
+    */
+
+    // prevent the form from submitting as the default action
+    event.preventDefault();
+    sales_record_data = {
+        SalesDate: document.getElementById("recorddate").value,
+        Comment: document.getElementById("note").value,
+        RecordDetails: fetchRecordDetails() 
+    };
+
+    // post to add-new-record.php
+    $.post({
+        url: "backend_api/add-new-record.php",
+        data: sales_record_data,
+        success: (data) => {
+            // check if receiving successful code
+            if (data == 0)
+            {
+                alert("Successfully added a record, we will move you to the main page shortly.");
+            }
+            else 
+            {
+                alert("Failed to add a record");
+                console.log(data);
+            }
+        },
+        error: () => {
+            alert("We can not save your sales record now. Please try again later.");
+        }
+    });
+});

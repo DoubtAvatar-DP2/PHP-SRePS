@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>Add | PHP SReps</title>
 </head>
 <body>
@@ -20,7 +21,7 @@
                 <h1>New Record</h1>
                 <form id="addrecordform">
                     <label for="recorddate">Record Date:</label>
-                    <input type="date" id="recorddate" name="recorddate" placeholder="Please enter the record date">
+                    <input type="date" id="recorddate" name="recorddate" placeholder="Please enter the record date" required>
                     <label for="customer">Customer:</label>
                     <input type="text" id="customer" name="customer" placeholder="Enter customer ID or name">
                     <table id="productEntries">
