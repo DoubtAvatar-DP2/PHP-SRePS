@@ -19,10 +19,7 @@ function checkForNewProductField()
         }
         else
         {
-            /* DESTRUCTIVE
-            * I temporarily remove alert
-            */
-            // alert("One of these rows has empty cells.");
+            alert("One of these rows has empty cells.");
             allFieldsFull = false;
         }
     }
