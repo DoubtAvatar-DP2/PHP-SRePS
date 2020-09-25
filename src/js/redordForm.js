@@ -68,7 +68,7 @@ function addNewProductField()
     quantityCell.innerHTML = "<input type=\"number\" id=\""+quantityId+"\" name=\"quantity\">";
     priceCell.innerHTML = "<input type=\"number\" step=\"0.01\" id=\""+priceId+"\" name=\"price\">";
     totalCell.innerHTML = "<input type=\"number\" id=\""+totalpriceId+"\" name=\"totalprice\" readonly=\"true\" value=\"0\">";
-    deleteButtonCell.innerHTML = "<img id=\"delete"+inputid+"\" src=\"bin.png\" height=\"20\" width=\"20\">";
+    deleteButtonCell.innerHTML = "<img id=\"delete"+inputid+"\" src=\"images\bin.png\" height=\"20\" width=\"20\">";
 
     var i = inputid;
     document.getElementById(quantityId).addEventListener("change", function() {calculateProductTotal(i)}); 
