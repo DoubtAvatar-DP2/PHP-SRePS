@@ -101,7 +101,7 @@
       </main>
 
     
-      <script src="display.js" type="text/javascript"></script>
+      <script src="js/list.js" type="text/javascript"></script>
 
 <?php
     include("includes/footer.php");
