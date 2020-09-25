@@ -42,7 +42,7 @@
 </main>
 
 <!-- Custom script to add/remove new entries to the form -->
-<script src=" js/redordForm.js"></script>
+<script src=" js/recordForm.js"></script>
 
 <?php
     include("includes/footer.php");
