@@ -38,6 +38,11 @@ function deleteRow(idNumber)
     {
         table.deleteRow(idNumber);
     }
+
+    for(j=1; j < table.rows.length; j++)
+    {   
+        table.rows[j].cells[0].innerHTML = j;
+    }
 }
 
 function addNewProductField()
@@ -58,7 +63,7 @@ function addNewProductField()
     var totalCell = productEntryRow.insertCell(4);
     var deleteButtonCell = productEntryRow.insertCell(5);
     
-    entrynumbercell.innerHTML = inputid;
+    entrynumbercell.innerHTML = productEntryRow.rowIndex;
     productNameCell.innerHTML = "<input type=\"text\" id=\""+productNameId+"\" name=\"productname\" placeholder=\"Enter product name or ID here\"></td>"; 
     quantityCell.innerHTML = "<input type=\"number\" id=\""+quantityId+"\" name=\"quantity\">";
     priceCell.innerHTML = "<input type=\"number\" step=\"0.01\" id=\""+priceId+"\" name=\"price\">";
@@ -74,6 +79,11 @@ function addNewProductField()
     document.getElementById(priceId).addEventListener("change", checkForNewProductField); 
 
     document.getElementById("delete"+inputid).addEventListener("click", function() {deleteRow(productEntryRow.rowIndex)});
+
+    for(j=1; j < productEntryTable.rows.length; j++)
+    {   
+        productEntryTable.rows[j].cells[0].innerHTML = j;
+    }
 }
 
 function calculateProductTotal(idNumber)
