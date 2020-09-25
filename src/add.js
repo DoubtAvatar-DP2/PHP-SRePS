@@ -73,7 +73,7 @@ function addNewProductField()
     document.getElementById(productNameId).addEventListener("change", checkForNewProductField); 
     document.getElementById(priceId).addEventListener("change", checkForNewProductField); 
 
-    document.getElementById("delete"+inputid).addEventListener("click", function() {deleteRow(i)});
+    document.getElementById("delete"+inputid).addEventListener("click", function() {deleteRow(productEntryRow.rowIndex)});
 }
 
 function calculateProductTotal(idNumber)
@@ -107,6 +107,8 @@ function calculateSalesTotal()
         var itemtotal = table.rows[i].cells[4].firstChild.value;
         totals += parseFloat(itemtotal);
     }
+
+    totals = totals.toFixed(2);
 
     if (!isNaN(totals))
     {
