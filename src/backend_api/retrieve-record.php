@@ -3,6 +3,9 @@
     require "../connector/salesRecord.php";
     require "../connector/recordDetail.php";
 
+    const SUCCESS_CODE = 0;
+    const FAILED_CODE = 1; 
+    
     /*
     * program starts here
     */
@@ -20,15 +23,25 @@
     // retrieve the recordDetails table
     $recordDetailTable = new SaleRecordDetails($db);
 
-    $recordNumber = $_POST["SalesRecordNumber"];
+    try {
 
-    $salesRecord = $salesRecordTable->find($recordNumber);
-    $salesRecordDetails = $recordDetailTable->findByRecordNumber($recordNumber);
+        $recordNumber = $_POST["SalesRecordNumber"];
+        if (!$recordNumber) throw new Exception("Can not receive sales record number via POST request.");
 
-    $salesData = Array(
-        "SalesRecord" => $salesRecord,
-        "RecordDetails" => $salesRecordDetails
-    );
+        $salesRecord = $salesRecordTable->find($recordNumber);
+        if (count($salesRecord) == 0) throw new Exception("Sales record does not exist in the database.");
 
-    echo json_encode($salesData);
+        $salesRecordDetails = $recordDetailTable->findByRecordNumber($recordNumber);
+
+        $salesData = Array(
+            "SalesRecord" => $salesRecord,
+            "RecordDetails" => $salesRecordDetails
+        );
+        
+        echo json_encode($salesData);
+    }
+    catch(Exception $e)
+    {
+        exit($e->getMessage());
+    }
 ?>
