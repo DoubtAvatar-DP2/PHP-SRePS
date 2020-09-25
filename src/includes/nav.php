@@ -9,10 +9,10 @@
 ?>
       <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
         <div class="sidebar-sticky">
-          <a class="navbar-brand" href="#"> PHP-SRePS </a>
+          <a class="navbar-brand" href="index.php"> PHP-SRePS </a>
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link <?php echo strpos($currentPage, "display.php") ? "active" : "" ?>" href="#"> Records </a>
+              <a class="nav-link <?php echo strpos($currentPage, "index.php") ? "active" : "" ?>" href="#"> Records </a>
             </li>
             <li class="nav-item">
               <a class="nav-link <?php echo strpos($currentPage, "") ? "active" : "" ?>" href="#"> Prediction </a>

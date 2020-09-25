@@ -48,7 +48,7 @@
       </p>
     </div>
     <div class="row">
-      <a href="home.html" class="btn btn-secondary">
+      <a href="index.php" class="btn btn-secondary">
         HOMEPAGE
       </a>
     </div>

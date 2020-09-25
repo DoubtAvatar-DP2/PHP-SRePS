@@ -29,7 +29,7 @@
       <input type="text" id="note" name="note" placeholder="Enter any comment"><br>
     </div>
     <div class="form-group col-md-12 col-lg-4 d-flex justify-content-between">
-      <a href="home.html" class="btn btn-secondary">
+      <a href="index.php" class="btn btn-secondary">
         HOMEPAGE
       </a>
       <input type="submit" class="btn btn-success" value="CREATE">
