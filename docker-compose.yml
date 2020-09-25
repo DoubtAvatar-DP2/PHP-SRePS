@@ -14,7 +14,7 @@ services:
       - ./src/:/var/www/html/
     ports: 
       - ${PHP_PORT}:80
-  
+
   # MySQL Server
   mysql:
     image: mysql:5.6.40
@@ -47,10 +47,10 @@ services:
     image: php:7.4-cli
     restart: "no"
     volumes:
-      - .:/composer
-    working_dir: /composer
-    entrypoint: src/vendor/bin/phpunit
-
+      - ./src/:/var/www/html/
+    working_dir: /var/www/html/
+    entrypoint: vendor/bin/phpunit
+  
   # Composer image used to download dependencies
   composer:
     image: composer:latest

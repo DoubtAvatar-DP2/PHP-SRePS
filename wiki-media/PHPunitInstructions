@@ -1,9 +1,5 @@
 to run the tests type
-- docker-compose run phpunit 
-or 
-- docker-compose up
-
-docker-compose run phpunit will just run the unit tests only
+- docker-compose run php vendor/bin/phpunit
 
 To make a test, they must be in the folder "tests"
 The test my end in the letters "Test.php"
