@@ -63,7 +63,7 @@ function addNewProductField()
     var totalCell = productEntryRow.insertCell(4);
     var deleteButtonCell = productEntryRow.insertCell(5);
     
-    entrynumbercell.innerHTML = inputid;
+    entrynumbercell.innerHTML = productEntryRow.rowIndex;
     productNameCell.innerHTML = "<input type=\"text\" id=\""+productNameId+"\" name=\"productname\" placeholder=\"Enter product name or ID here\" class='productNumber'></td>"; 
     quantityCell.innerHTML = "<input type=\"number\" id=\""+quantityId+"\" name=\"quantity\" class='quantity'>";
     priceCell.innerHTML = "<input type=\"number\" step=\"0.01\" id=\""+priceId+"\" name=\"price\" class='price'>";
