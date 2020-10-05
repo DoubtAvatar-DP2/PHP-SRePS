@@ -2,7 +2,7 @@
     include("includes/header.php");
     include("includes/nav.php");
 ?>
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <main role="main" class="col-md-9 offset-lg-2 offset-md-3 col-lg-10 px-md-4">
   <div
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -32,7 +32,7 @@
       <a href="index.php" class="btn btn-secondary">
         HOMEPAGE
       </a>
-      <input type="submit" class="btn btn-success" value="CREATE">
+      <input type="submit" id="add-record-button" class="btn btn-success" value="CREATE">
     </div>
 </form> 
 
