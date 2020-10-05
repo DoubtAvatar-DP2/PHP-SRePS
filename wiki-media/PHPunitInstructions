@@ -1,0 +1,11 @@
+to run the tests type
+- docker-compose run php vendor/bin/phpunit
+
+To make a test, they must be in the folder "tests"
+The test my end in the letters "Test.php"
+eg. MyTest.php TheTest.php Test1Test.php
+
+This config can be changed in the phpunit.xml
+
+To make a test, the function must start with the word "test"
+eg. public funtion testMyCurrentTest()

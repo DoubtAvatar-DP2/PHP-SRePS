@@ -69,6 +69,7 @@
 
     // establish the connection
     $db = (new Database())->getConnection();
+
     if (!$db)
     {
         die("Can not connect to database. Please try again later");
