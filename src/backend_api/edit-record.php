@@ -3,6 +3,8 @@
     require "../connector/salesRecord.php";
     require "../connector/recordDetail.php";
     
+    class SalesRecordUpdateFailedException extends Exception {};
+    class RecordDetailsUpdateFailedException extends Exception {};
     const SUCCESS_CODE = 0;
 
     function FetchRecordByPOST()
@@ -17,7 +19,7 @@
         return Array(    
             "SalesDate" => $_POST["SalesDate"],
             "Comment" => $_POST["Comment"],
-            "SalesRecordNumber" => $_POST["SalesRecordNumber"] ?? null
+            "SalesRecordNumber" => $_POST["SalesRecordNumber"]
         );
     }
 
@@ -28,9 +30,8 @@
         * return the successful record number
         * else throw error when unable to edit the database
         */
-
-        $rowsAffected = $table->update($newRecord);
-        if ($rowAffected == 0) throw new Exception("Can not update the record in the database");
+        $rowAffected = $table->update($newRecord);
+        if ($rowAffected == 0) throw new SalesRecordUpdateFailedException("Can not update sales record");
         
         return $newRecord["SalesRecordNumber"];
     }
@@ -90,44 +91,64 @@
 
     try {
         // collect sales date and comment data
-        $newRecord = FetchRecordByPOST();
-        // adding new sales record
-        $newRecordID = EditNewSalesRecord($salesRecordTable, $newRecord);
+        $edittedRecord = FetchRecordByPOST();
+        //
+        // backup record & details right before update
+        //
+        $backupRecord = $salesRecordTable->find($edittedRecord["SalesRecordNumber"]);
+        $backupDetails = $recordDetailTable->findByRecordNumber($edittedRecord["SalesRecordNumber"]);
+        //
+        // edit sales record
+        //
+        $edittedRecordID = EditSalesRecord($salesRecordTable, $edittedRecord);
         // retrieving record details
-        $recordDetails = FetchRecordDetailsByPOST($newRecordID);
+        $recordDetails = FetchRecordDetailsByPOST($edittedRecordID);
         // 
         // delete old record details that have the record number being updated.
         //
-        $recordDetailTable->deleteByRecordNumber($newRecordID);
-    }
-    catch(Exception $e)
-    {
-        exit($e->getMessage());
-    }
-    //
-    // add details into table.
-    // this should not cause conflicts because old table has been deleted.
-    //
-    // BUG: IN CASE adding fails -> old details have to be backed-up. 
-    //
-    //
-    for ($i = 0; $i < count($recordDetails); ++$i)
-    {
-        $rowInserted = $recordDetailTable->insert($recordDetails[$i]);
-        
-        if ($rowInserted == 0)
+        $recordDetailTable->deleteByRecordNumber($edittedRecordID);
+        //
+        // add details into table.
+        // this should not cause conflicts because old table has been deleted.
+        //
+        // BUG: IN CASE adding fails -> old details have to be backed-up. 
+        //
+        //
+        for ($i = 0; $i < count($recordDetails); ++$i)
         {
+            $rowInserted = $recordDetailTable->insert($recordDetails[$i]);
+            
+            if ($rowInserted == 0)
+            {
+                throw new RecordDetailsUpdateFailedException("Can not update details");
+                // die("Can not insert rows. Cancel adding. Remove previous added details.");
+            
+                // echo SUCCESS_CODE;
+            }
+        }
+    }
+    catch(RecordDetailsUpdateFailedException $e)
+    {
             //
             // if any row fails to be added, addition has to be cancelled
             // Remove all details already appended.
             //
-            $recordDetailTable->deleteByRecordNumber($newRecordID);
+            $recordDetailTable->deleteByRecordNumber($edittedRecordID);
             
             // Lastly, safely remove the current sales record.
-            $salesRecordTable->delete($newRecordID);
-            die("Can not insert rows. Cancel adding. Remove previous added details.");
-        }
-    }
+            $salesRecordTable->delete($edittedRecordID);
 
-    echo SUCCESS_CODE;
+            $salesRecordNumber->insert($backupRecord);
+            for ($i = 0; $i < count($backupDetails); ++$i)
+            {
+                $rowInserted = $recordDetailTable->insert($backupDetails[$i]);
+            }    
+            exit($e->getMessage());
+    }
+    catch(SalesRecordUpdateFailedException $e)
+    {
+        // should not do anything before database automatically rejects the UPDATE request
+
+        exit($e->getMessage());
+    }
 ?>

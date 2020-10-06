@@ -113,8 +113,7 @@
                     'SalesDate' => $input['SalesDate'],
                     'Comment' => $input['Comment'] ?? null,
                 ));
-
-                return $statement->rowCount() > 0 ? 1 : 0;
+                return $statement->rowCount();
             }
             catch(PDOException $e)
             {
