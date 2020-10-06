@@ -43,7 +43,7 @@ function FillSalesTable(data)
     var comment = data.SalesRecord[0].Comment;
     var recordDetails = data.RecordDetails;
     
-    document.getElementById("recorddate").value = recordDate;
+    document.getElementById("recorddate").value = moment(recordDate).format("YYYY-MM-DD");
     document.getElementById("note").value = comment;
 
     // fill in data into the correct outputs
