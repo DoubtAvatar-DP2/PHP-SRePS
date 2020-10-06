@@ -19,7 +19,11 @@
             $this->db = $db;
         }
 
-        public function findAll()
+        /**
+         * @param int $limit Default 0. If $limit is 0, there is no limit
+         * @param int $offset Default 0 The starting offset for the limit. If $limit is 0, there is no offset
+         */
+        public function findAll($limit = 0, $offset = 0)
         {
             /*
             * return an associate array containing all sales records
@@ -30,6 +34,8 @@
                 FROM 
                     $this->table_name
             ";
+            if($limit)
+                $statement .= "LIMIT $offset, $limit";            
 
             try {
                 $statement = $this->db->query($statement);
@@ -56,12 +62,11 @@
                 FROM $this->table_name
             JOIN SaleRecordDetails ON SalesRecords.SalesRecordNumber = SaleRecordDetails.SalesRecordNumber
                 GROUP BY SalesRecords.SalesRecordNumber
-            ORDER BY $order_by $order_direction";
+            ORDER BY $order_by $order_direction
+            ";
             if($limit)
-                $statement .= "
-                LIMIT $offset, $limit";
+                $statement .= "LIMIT $offset, $limit";
 
-            $statement .= ";";
             try {
                 $statement = $this->db->query($statement);
                 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
