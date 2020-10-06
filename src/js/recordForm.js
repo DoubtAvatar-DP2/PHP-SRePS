@@ -1,6 +1,8 @@
 var inputid = 0;
 
-addNewProductField();
+window.onload = () => {
+    addNewProductField();
+};
 
 function checkForNewProductField()
 {
@@ -45,7 +47,7 @@ function deleteRow(idNumber)
     }
 }
 
-function addNewProductField()
+function addNewProductField(productName = null, quantity = null, price = null)
 {
     inputid++;
 
@@ -71,14 +73,19 @@ function addNewProductField()
     deleteButtonCell.innerHTML = "<img id=\"delete"+inputid+"\" src=\"bin.png\" height=\"20\" width=\"20\">";
 
     var i = inputid;
+
+    document.getElementById(productNameId).value = productName;
+    document.getElementById(quantityId).value = quantity;
+    document.getElementById(priceId).value = price;
+
     document.getElementById(quantityId).addEventListener("change", function() {calculateProductTotal(i)}); 
     document.getElementById(priceId).addEventListener("change", function() {calculateProductTotal(i)}); 
 
     document.getElementById(quantityId).addEventListener("change", checkForNewProductField); 
     document.getElementById(productNameId).addEventListener("change", checkForNewProductField); 
     document.getElementById(priceId).addEventListener("change", checkForNewProductField); 
-
     document.getElementById("delete"+inputid).addEventListener("click", function() {deleteRow(productEntryRow.rowIndex)});
+
 
     for(j=1; j < productEntryTable.rows.length; j++)
     {   
