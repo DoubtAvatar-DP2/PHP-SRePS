@@ -24,7 +24,6 @@ window.onload = () => {
         },
         success: (data) => {
             salesData = JSON.parse(data);
-            console.log(salesData);
 
             if (!salesData.hasOwnProperty("SalesRecord")) 
             {
@@ -36,34 +35,6 @@ window.onload = () => {
         }
     });
 };
-
-// document.getElementById("delete").addEventListener("click", (event) => {
-//     event.preventDefault();
-
-//     var SalesRecordNumber = GetRecordIDByGET();
-
-//     $.post({
-//         url: "backend_api/delete-record.php",
-//         data: {
-//             SalesRecordNumber 
-//         },
-//         error: () => {
-//             alert("We can not retrieve your sales record now. Please try again later.");
-//         },
-//         success: (data) => {
-//             // salesData = JSON.parse(data);
-//             // console.log(salesData);
-
-//             // if (!salesData.hasOwnProperty("SalesRecord")) 
-//             // {
-//             //     alert("We are unable to retrieve your data");
-//             //     window.location.href = "index.php";
-//             // }
-//             // FillSalesTable(salesData);
-//             // addNewProductField();
-//         }
-//     });
-// })
 
 function FillSalesTable(data)
 {
