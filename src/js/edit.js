@@ -65,7 +65,6 @@ document.getElementById("update").addEventListener("click", (event) => {
     /*
     * fetch record data + details before send them to edit-record.php by POST
     */
-
     // prevent the form from submitting as the default action
     event.preventDefault();
     let SalesRecordNumber = GetRecordIDByGET();
