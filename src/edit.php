@@ -11,7 +11,7 @@
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
-        <button type="button" class="btn btn-danger">
+        <button type="button" id="delete" class="btn btn-danger">
           DELETE
         </button>
       </div>
@@ -40,7 +40,7 @@
       <a href="index.php" class="btn btn-secondary">
         HOMEPAGE
       </a>
-      <input type="submit" class="btn btn-success" value="CREATE">
+      <input type="submit" id="update" class="btn btn-success" value="UPDATE">
     </div>
 </form> 
 
