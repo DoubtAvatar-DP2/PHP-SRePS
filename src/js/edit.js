@@ -23,7 +23,6 @@ window.onload = () => {
         },
         success: (data) => {
             salesData = JSON.parse(data);
-            // console.log(salesData);
 
             if (!salesData.hasOwnProperty("SalesRecord")) 
             {
@@ -104,13 +103,16 @@ function FillSalesTable(data)
     var comment = data.SalesRecord[0].Comment;
     var recordDetails = data.RecordDetails;
     
-    document.getElementById("recorddate").value = recordDate;
+    document.getElementById("recorddate").value = moment(recordDate).format("YYYY-MM-DD");
     document.getElementById("note").value = comment;
 
-    //  that fill in data into the correct outputs
-    recordDetails.forEach((recordDetail) => 
+    // fill in data into the correct outputs
+    recordDetails.forEach((recordDetail, i) => { 
         addNewProductField(recordDetail.ProductNumber, recordDetail.QuantityOrdered, recordDetail.QuotedPrice) 
-    );
+        calculateProductTotal(i+1);
+    });
+    
+    //  
 }
 
 function GetRecordIDByGET()
