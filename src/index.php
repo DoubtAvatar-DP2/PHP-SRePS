@@ -46,60 +46,19 @@
               </tr>
             </thead>
             <tbody>
-              <?php
-              /**
-               * TODO:
-               *  Loop through all sales record results
-               */
-              ?>
-              <!-- <tr>
-                <td>1001</td>
-                <td>18-09-2020</td>
-                <td>$55.60</td>
-              </tr>
-              <tr>
-                <td>1002</td>
-                <td>18-09-2020</td>
-                <td>$132.00</td>
-              </tr>
-              <tr>
-                <td>1003</td>
-                <td>19-09-2020</td>
-                <td>$99.05</td>
-              </tr> -->
+
             </tbody>
           </table>
         </div>
         <nav aria-label="Page navigation example">
           <ul class="pagination">
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <?php
-              /**
-               * TODO:
-               *  Implement current page highlighting (page-item active)
-               *  Implement accurate page numbering
-               *  Implement pagination links
-               *  Extension: Implement custom page sizes
-               */
-            ?>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
           </ul>
         </nav>
       </main>
 
     
       <script src="js/list.js" type="text/javascript"></script>
+      <link rel="stylesheet" href="css/list.css">
 
 <?php
     include("includes/footer.php");
