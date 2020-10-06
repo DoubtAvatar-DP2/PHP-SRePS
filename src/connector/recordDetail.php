@@ -214,4 +214,29 @@
                 exit($e->getMessage());
             }
         }
+
+        public function deleteByRecordNumber($salesRecordNumber)
+        {
+            /*
+            * return 1 when the target detail is successfully deleted.
+            * return 0 when the target detail is not deleted.
+            */
+            $statement = "
+                DELETE FROM $this->table_name
+                WHERE 
+                    SalesRecordNumber = :SalesRecordNumber
+            ";
+
+            try {
+                $statement = $this->db->prepare($statement);
+                $statement->execute(array(
+                    "SalesRecordNumber" => $salesRecordNumber,
+                ));
+                return $statement->rowCount() > 0 ? 1 : 0;
+            }
+            catch(PDOException $e)
+            {
+                exit($e->getMessage());
+            }
+        }
     }
