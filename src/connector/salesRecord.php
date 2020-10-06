@@ -1,5 +1,16 @@
 <?php
     class SalesRecord {
+        /** Constant values */
+        // Sort Column constants
+        const SALES_RECORD_NUMBER = "SalesRecords.SalesRecordNumber";
+        const SALES_RECORD_DATE = "SalesRecords.SalesDate";
+        const TOTAL_ITEMS = "TotalItems";
+        const TOTAL_PRICE = "TotalPrice";
+
+        // Sort order constants
+        const ASC = "ASC";
+        const DESC = "DESC";
+
         private $db = null;
         private $table_name = "SalesRecords";
 
@@ -26,6 +37,36 @@
                 return $result;
             }
             catch(PDOException $e)
+            {
+                exit($e->getMessage());
+            }
+        }
+
+        /**
+         * @param int $limit Default 0. If $limit is 0, there is no limit
+         * @param int $offset Default 0 The starting offset for the limit. If $limit is 0, there is no offset
+         * @param string $order_by Default SALES_RECORD_DATE The column to order by
+         * @param string $order_direction Default DESC The direction to order in
+         * @return Array Returns an array containing all sales records, with the total price and total items
+         */
+        public function findAllOverview($limit = 0, $offset = 0, string $order_by = SalesRecord::SALES_RECORD_DATE, string $order_direction = SalesRecord::DESC)
+        {
+            $statement = "
+            SELECT SalesRecords.SalesRecordNumber, SalesRecords.SalesDate, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuotedPrice * SaleRecordDetails.QuantityOrdered) AS TotalPrice
+                FROM $this->table_name
+            JOIN SaleRecordDetails ON SalesRecords.SalesRecordNumber = SaleRecordDetails.SalesRecordNumber
+                GROUP BY SalesRecords.SalesRecordNumber
+            ORDER BY $order_by $order_direction";
+            if($limit)
+                $statement .= "
+                LIMIT $offset, $limit";
+
+            $statement .= ";";
+            try {
+                $statement = $this->db->query($statement);
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            } catch(PDOException $e)
             {
                 exit($e->getMessage());
             }
@@ -89,6 +130,7 @@
                 exit($e->getMessage());
             }
         }
+        
 
         public function update(Array $input)
         {
