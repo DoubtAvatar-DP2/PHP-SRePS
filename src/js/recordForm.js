@@ -1,8 +1,10 @@
 var inputid = 0;
 
-var products = ["ProductName", "NameOfProduct"];
+var products = [" "];
 
 addNewProductField();
+
+readProductNames();
 
 function checkForNewProductField()
 {
@@ -303,4 +305,24 @@ function autocomplete(inp, arr)
     {
     closeAllLists(e.target);
     });
+}
+
+function readProductNames()
+{
+    //set the value of productNames to the products in the database
+    /*var storedData;
+    $.get
+    (
+        "getProductNames.php", 
+        function(data, success)
+        {
+            if(success)
+            {
+                storedData = data;
+            }
+        }
+    );
+    alert("Data: " + storedData);
+    var htmlObject = $(storedData);
+    var table = htmlObject.getElementById("productNames");*/
 }
