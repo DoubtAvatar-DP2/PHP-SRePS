@@ -1,6 +1,6 @@
 var inputid = 0;
 
-var products = [" "];
+var products = [];
 
 addNewProductField();
 
@@ -310,19 +310,30 @@ function autocomplete(inp, arr)
 function readProductNames()
 {
     //set the value of productNames to the products in the database
-    /*var storedData;
-    $.get
-    (
-        "getProductNames.php", 
-        function(data, success)
+    var productsAsJSON = JSON.parse(getCookie("productNames"));
+    for (i in productsAsJSON) 
+    {
+        products.push(productsAsJSON[i]);
+    }
+    document.cookie = "productNames=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+function getCookie(cname) 
+{
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) 
+    {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') 
         {
-            if(success)
-            {
-                storedData = data;
-            }
+            c = c.substring(1);
         }
-    );
-    alert("Data: " + storedData);
-    var htmlObject = $(storedData);
-    var table = htmlObject.getElementById("productNames");*/
+        if (c.indexOf(name) == 0) 
+        {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
