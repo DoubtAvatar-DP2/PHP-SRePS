@@ -3,6 +3,20 @@
     require "../connector/salesRecord.php";
     require "../connector/recordDetail.php";
 
+    class PredictData
+    {
+        public $date;
+        public $recNum;
+        public $xy;
+        public $xSqr;
+
+        public function __construct($date, $recNum)
+        {
+            $this->date = $date;
+            $this->recNum = $recNum;
+        }
+    }
+
     function GetXAxis()
     {
 
@@ -19,12 +33,19 @@
 
     }
 
-    function GetXY($tableDataArray, $tableDataArrayX)
+    function GetXY($tableDataArrayX, $tableDataArrayY)
     {
         $dataArrayXY = array();
 
+        // temp; this should probably be done in query or GetLeastSquareRegression
+        $startDateX = "2020-09-04";
+        $endDateX = "2020-09-26";
+        $startX = strtotime($startDateX);
+        $endX = strtotime($endDateX);
+
         // find the appropriate QuantityOrdered and SalesDate, times them together into the array 
         // and return the array
+
     }
 
     // squares the value of x that's stored in the data array
