@@ -33,19 +33,23 @@
 
     }
 
-    function GetXY($tableDataArrayX, $tableDataArrayY)
+    function GetXY($tableDataArray)
     {
         $dataArrayXY = array();
 
-        // temp; this should probably be done in query or GetLeastSquareRegression
-        $startDateX = "2020-09-04";
-        $endDateX = "2020-09-26";
-        $startX = strtotime($startDateX);
-        $endX = strtotime($endDateX);
-
         // find the appropriate QuantityOrdered and SalesDate, times them together into the array 
         // and return the array
+        foreach($tableDataArray as $table)
+        {
+            $predictedData = new PredictData(strtotime($table["SalesDate"]), (int)$table["SalesRecordNumber"]);
+            $predictedData->xy = $predictedData->date * $predictedData->recNum;
+            array_push($dataArrayXY, $predictedData);
 
+            echo $predictedData->date . " : " . $predictedData->recNum . " : " . $predictedData->xy;
+            echo "<br>";
+        }
+
+        return $dataArrayXY;
     }
 
     // squares the value of x that's stored in the data array
@@ -124,5 +128,5 @@
 
     GetLeastSquareRegression($tableDataArray);
     GetXSquared($tableDataArrayX);
-
+    GetXY($tableDataArrayX);
 ?>
