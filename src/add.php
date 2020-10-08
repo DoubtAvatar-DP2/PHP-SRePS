@@ -10,7 +10,8 @@
       New Sales Record
     </h1>
   </div>
-
+  
+  <div id="error"></div>
   <form id="addrecordform">
     <div class="form-group mb-2">
       <label for="recorddate">Record Date:</label>
