@@ -17,23 +17,82 @@
         }
     }
 
-    function GetXAxis()
+    // this function will convert the datetimes to integers (eg. 2020-09-05 00:00:00 --> 1)
+    function ConvertXAxisToInt($tableDataArrayX, $startDateX)
     {
+        $startX = strtotime($startDateX);
 
+        // converts dates to a integer (unix time) 
+        $i = 0;
+        foreach($tableDataArrayX as $table)
+        {
+            echo "<br>";
+            $tableDataArrayX[$i]['SalesDate'] = strtotime($table["SalesDate"]);
+            echo $tableDataArrayX[$i]['SalesDate']; // this line is just for viewing on page will delete later
+            $i++;
+        }
+
+        echo "<br>";
+
+        // converts unix time to an single integer (i.e 6)
+        // round covert must be 'floor' as floor will round down only, very important
+        $j = 0;
+        foreach($tableDataArrayX as $table)
+        {  
+            $tempDayValue = floor(($table["SalesDate"] - $startX)/86400);
+            $tableDataArrayX[$j]["SalesDate"] = $tempDayValue;
+            echo $tableDataArrayX[$j]["SalesDate"]; // this line is just for viewing on page will delete later
+            echo "<br>";
+            $j++;
+        }
+
+        return $tableDataArrayX;
+    }
+
+    // gets the sum of x
+    function GetXSum($convertedXAxis)
+    {
+        $total = 0;
+        $i = 0;
+
+        foreach($convertedXAxis as $table)
+        {
+            $total += $table["SalesDate"];
+            $i++;
+        }
+        
+        return $total;
+    }
+
+    // gets the sum of y
+    function GetYSum($tableDataArrayY)
+    {
+        $total = 0;
+        $i = 0;
+
+        foreach($tableDataArrayY as $table)
+        {
+            $total += $table["QuantityOrdered"];
+            $i++;     
+        }
+
+        return $total;
     }
     
-    // functions that will be used 
+    // find the intercept
     function GetIntercept($tableDataArray)
     {
 
     }
 
+    // find the slope
     function GetSlope($tableDataArray)
     {
 
     }
 
-    function GetXY($tableDataArray)
+    // find XY
+    function GetXY($tableDataArray, $convertedXAxisArray)
     {
         $dataArrayXY = array();
 
@@ -53,44 +112,32 @@
     }
 
     // squares the value of x that's stored in the data array
-    function GetXSquared($tableDataArrayX)
+    function GetXSquared($convertedXAxisArray)
     {
         $sqrDataArrayX = array();
-        $startDateX = "2020-09-04";
-        $endDateX = "2020-09-26";
-        $startX = strtotime($startDateX);
-        $endX = strtotime($endDateX);
-
-        // pushed both sales number and sales date, as you will need a link for sale number later
-        // should make more sense later, still thinking of ideas to do this 
-        foreach($tableDataArrayX as $table)
-        {
-            //array_push($sqrDataArrayX, pow($table["SalesDate"], 2));
-            array_push($sqrDataArrayX, $table["SalesRecordNumber"]);
-            array_push($sqrDataArrayX, strtotime($table["SalesDate"]));
-        }
-        
-        // checks to see if  anything in the table is within the date time
-        // we will need to fix the search query to the database, as this will take a long time if there are 100+ sales records
-        $length = count($sqrDataArrayX);
-        for ($i = 1; $i <= $length; $i++)
-        {
-            if ($sqrDataArrayX[$i] > $startX && $sqrDataArrayX[$i] < $endX)
-            {
-                echo $sqrDataArrayX[$i];
-                echo "<br>";
-                echo $endX;
-                echo "<br>";
-            }
-            $i++;
-        }
         
         return $sqrDataArrayX;
     }
 
-    function GetLeastSquareRegression($tableDataArray)
+    function GetLeastSquareRegression($tableDataArrayY, $tableDataArrayX, $startDateX)
     {
+        // setting up values 
+        $convertedXAxis = ConvertXAxisToInt($tableDataArrayX, $startDateX);
+        $sumOfX = GetXSum($convertedXAxis);
+        $SumOfY = GetYSum($tableDataArrayY);
 
+        // get special values 
+        $XSquared = GetXSquared($convertedXAxisArray);
+        $XY = GetXY($tableDataArrayY, $convertedXAxisArray);
+
+        // get slope and intercept
+        $slope = GetSlope($tableDataArrayY, $convertedXAxisArray);
+        $intercept = GetIntercept($tableDataArrayY, $convertedXAxisArray);
+
+        // will have to figure out what to do with X
+        //$regressionLine = $slope * (X) + $intercept;
+        $regressionLine = null; 
+        return $regressionLine; 
     }
 
     /*
@@ -105,28 +152,32 @@
         die("Can not connect to database. Please try again later");
     }
 
-    // retrieve the salesRecord table (from salesrecord.php)
+    // This will be entered in from the user, for now this is just for the testing
+    $startDateX = "2020-09-04";
+    $endDateX = "2020-09-24";
+
     // This is needed for the x axis (date of sale)
     $salesRecordTable = new SalesRecord($db);
+    $tableDataArrayX = $salesRecordTable->findpredictionData($startDateX, $endDateX);
 
-    // I'm not totally familar with PHP, not sure if this is needed
-    $tableDataArrayX = $salesRecordTable->FindAll();
-
-    // retrieve the recordDetails table (from recordDetail.php)
     // This is needed for the y axis (number of items sold)
     $recordDetailTable = new SaleRecordDetails($db);
-
-    $tableDataArray = $recordDetailTable->FindAll();
+    $tableDataArrayY = $recordDetailTable->FindAll();
 
     // the foreach loop will just be for testing, will show quantity of items sold from table
-    foreach($tableDataArray as $table)
+    foreach($tableDataArrayY as $table)
     {
         echo $table['QuantityOrdered'];
         echo " ";
     }
     echo "<br>";
 
-    GetLeastSquareRegression($tableDataArray);
-    GetXSquared($tableDataArrayX);
-    GetXY($tableDataArrayX);
+    // the foreach loop will just be for testing, will show the dates sold
+    foreach($tableDataArrayX as $table)
+    {
+        echo $table['SalesDate'];
+        echo " ";
+    }
+
+    GetLeastSquareRegression($tableDataArrayY, $tableDataArrayX, $startDateX);
 ?>
