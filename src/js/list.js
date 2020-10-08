@@ -81,11 +81,35 @@ async function fetchPage() {
         row.appendChild(recordTotal);
         recordTable.appendChild(row);
     }
+}
 
+function updateSortingLinks() {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if(urlParams.get('sort') === null)
+        urlParams.set('sort', 'date'); // sorts by date desc by default
+
+    const links = ['record', 'date', 'price'];
+
+    links.map((link) => {
+        linkElem = $(`#${link}`)[0];
+        const linkParams = new URLSearchParams(urlParams);
+        if(linkParams.get('sort') == link) {
+            if(linkParams.get('order') == 'asc') {
+                linkParams.set('order', 'desc');
+                linkElem.innerHTML += " &#9650; &#9661;";
+            } else {
+                linkParams.set('order', 'asc');
+                linkElem.innerHTML += " &#9651; &#9660;";
+            }
+        } else
+            linkElem.innerHTML += " &#9651; &#9661;";
+        linkParams.set('sort', link);
+        linkElem.href = window.location.pathname + "?" + linkParams.toString();
+    });
 }
 
 $(() => {
+    updateSortingLinks();
     fetchPage();
-    //get page size and page number get params
-    //query for current page. update pagination
 });

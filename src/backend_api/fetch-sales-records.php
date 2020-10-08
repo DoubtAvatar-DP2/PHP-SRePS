@@ -13,8 +13,8 @@ try {
     $page_size = isset($_GET["page_size"]) && intval($_GET["page_size"]) > 0 ? intval($_GET["page_size"]) : DEFAULT_PAGE_SIZE;
 
     // Get sort by column and validate input
-    switch(strtolower($_GET["order_by"])) {
-        case "record_number":
+    switch(strtolower($_GET["sort"])) {
+        case "record":
             $order_by = SalesRecord::SALES_RECORD_NUMBER;
         break;
         case "items":

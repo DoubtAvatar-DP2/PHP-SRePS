@@ -40,9 +40,9 @@
           <table class="table table-striped table-sm">
             <thead>
               <tr>
-                <th>Record #</th>
-                <th>Date</th>
-                <th>Total Price</th>
+                <th><a id="record">Record #</a></th>
+                <th><a id="date">Date</a></th>
+                <th><a id="price">Total Price</a></th>
               </tr>
             </thead>
             <tbody>
