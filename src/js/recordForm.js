@@ -45,6 +45,7 @@ function deleteRow(idNumber)
     {   
         table.rows[j].cells[0].innerHTML = j;
     }
+    calculateSalesTotal();
 }
 
 function addNewProductField(productName = null, quantity = null, price = null)
@@ -155,6 +156,21 @@ function fetchRecordDetails()
     return recordDetails;
 }
 
+function AddErrorMessage(newMessage)
+{
+    $("#error").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    ${newMessage}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>`);
+}
+
+function ClearErrorMessage()
+{
+    $("#error").empty();
+}
+
 document.getElementById("add-record-button").addEventListener("click", (event) => {
 
     /*
@@ -174,15 +190,17 @@ document.getElementById("add-record-button").addEventListener("click", (event) =
         url: "backend_api/add-new-record.php",
         data: sales_record_data,
         success: (data) => {
-            // check if receiving successful code
-            if (data == 0)
+            console.log(data);
+            data = JSON.parse(data);
+            if (data.exitCode == 0)
             {
+                let newRecordID = data.newRecordID;
+                // check if receiving successful code        
                 alert("Successfully added a record, we will move you to the main page shortly.");
+                window.location.href = `view.php?RecordID=${newRecordID}`;
             }
-            else 
-            {
-                alert("Failed to add a record");
-                console.log(data);
+            else {
+                AddErrorMessage(data.errorMessage);
             }
         },
         error: () => {

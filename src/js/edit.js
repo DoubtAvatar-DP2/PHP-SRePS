@@ -19,14 +19,14 @@ window.onload = () => {
             SalesRecordNumber 
         },
         error: () => {
-            alert("We can not retrieve your sales record now. Please try again later.");
+            alert("We are unable to retrieve your record.");
         },
         success: (data) => {
             salesData = JSON.parse(data);
 
             if (!salesData.hasOwnProperty("SalesRecord")) 
             {
-                alert("We are unable to retrieve your data");
+                alert("We are unable to retrieve your record.");
                 window.location.href = "index.php";
             }
             FillSalesTable(salesData);
@@ -47,13 +47,13 @@ document.getElementById("delete").addEventListener("click", (event) => {
             SalesRecordNumber 
         },
         error: () => {
-            alert("We can not retrieve your sales record now. Please try again later.");
+            AddErrorMessage(`Unable to delete record ${SalesRecordNumber}.`);
         },
         success: (data) => {
             if (data==0)
             {
                 alert(`Successfully delete record ${SalesRecordNumber}`);
-                window.location.href = "index.php";
+                window.location.href = `index.php`;
             }
         }
     });
@@ -67,6 +67,9 @@ document.getElementById("update").addEventListener("click", (event) => {
     // prevent the form from submitting as the default action
     event.preventDefault();
     let SalesRecordNumber = GetRecordIDByGET();
+    let confirmation = window.confirm(`Are you sure you want to edit record ${SalesRecordNumber}?`);
+    if (confirmation == false) return;  
+
     sales_record_data = {
         SalesRecordNumber,
         SalesDate: document.getElementById("recorddate").value,
@@ -86,8 +89,7 @@ document.getElementById("update").addEventListener("click", (event) => {
             }
             else 
             {
-                alert(`Failed to edit record ${SalesRecordNumber}`);
-                console.log(data);
+                AddErrorMessage(`${data}`);
             }
         },
         error: () => {
@@ -111,8 +113,6 @@ function FillSalesTable(data)
         addNewProductField(recordDetail.ProductNumber, recordDetail.QuantityOrdered, recordDetail.QuotedPrice) 
         calculateProductTotal(i+1);
     });
-    
-    //  
 }
 
 function GetRecordIDByGET()
@@ -120,26 +120,4 @@ function GetRecordIDByGET()
     let url = new URL(window.location.href);
     let params = new URLSearchParams(url.search);
     return params.get("recordID");
-}
-
-function fetchRecordDetails()
-{
-    /*
-    * retrieve details from table into an array.
-    */
-    var productNumberInputs = document.getElementsByClassName("productNumber");
-    var quantityInputs = document.getElementsByClassName("quantity");
-    var quotedInputs = document.getElementsByClassName("price");
-
-    var recordDetails = [];
-
-    for (let i = 0; i < productNumberInputs.length - 1; ++i)
-    {
-        recordDetails.push({
-            productNumber: productNumberInputs[i].value,
-            quantityOrdered: quantityInputs[i].value,
-            quotedPrice: quotedInputs[i].value
-        });
-    }
-    return recordDetails;
 }

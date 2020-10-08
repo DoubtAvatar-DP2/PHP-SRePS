@@ -2,9 +2,7 @@
     require "../connector/database.php";
     require "../connector/salesRecord.php";
     require "../connector/recordDetail.php";
-    
-    class SalesRecordUpdateFailedException extends Exception {};
-    class RecordDetailsUpdateFailedException extends Exception {};
+    require "./exception.php";
     const SUCCESS_CODE = 0;
 
     function FetchRecordByPOST()
@@ -13,9 +11,8 @@
         * Return the associate array containing SalesDate and Comment collected from POST data
         * return null if salesDate is missing.
         */
-
         // sales date is required.
-        if (!$_POST["SalesDate"]) throw new Exception("SalesDate is missing");
+        if (!$_POST["SalesDate"]) throw new MissingDataException("SalesDate is missing");
         return Array(    
             "SalesDate" => $_POST["SalesDate"],
             "Comment" => $_POST["Comment"],
@@ -31,8 +28,18 @@
         * else throw error when unable to edit the database
         */
         $rowAffected = $table->update($newRecord);
-        if ($rowAffected == 0) throw new SalesRecordUpdateFailedException("Can not update sales record");
+        //
+        // retrieve new record back to double check if the modification is successful
+        //
+        $double_check = $table->find($newRecord["SalesRecordNumber"]);
+        $double_check = $double_check[0];
         
+        if ($double_check["SalesRecordNumber"] != $newRecord["SalesRecordNumber"] 
+            || $double_check["Comment"] != $newRecord["Comment"]
+            || date_parse($double_check["SalesDate"]) != date_parse($newRecord["SalesDate"]) ) 
+            
+            throw new SalesRecordUpdateFailedException("Updated record in the database is not the same as the expected record.");
+
         return $newRecord["SalesRecordNumber"];
     }
     
@@ -44,8 +51,8 @@
         */
         $recordDetails = $_POST["RecordDetails"];
 
-        if (!$salesRecordNumber) throw new Exception("SalesRecordNumber is missing");
-        if (!$recordDetails) throw new Exception("RecordDetails is missing");
+        if (!$salesRecordNumber) throw new MissingDataException("Can is missing");
+        if (!$recordDetails) throw new MissingDataException("No details found.");
         
         $details = Array();
 
@@ -57,8 +64,18 @@
             $quotedPrice = $newRecordDetails['quotedPrice'];
             $quantityOrdered = $newRecordDetails['quantityOrdered'];
             
-            // check if details are missing
-            if (!($productNumber && $quotedPrice && $quantityOrdered)) throw new Exception("Details are missing");
+            //
+            // check if product number is missing
+            //
+            if (!$productNumber)
+            {
+                throw new MissingDataException(sprintf("Row %d is missing the product number", $index + 1));
+            }
+            //
+            // check if price and quantity are missing
+            // 
+            if (!($quotedPrice && $quantityOrdered)) 
+                throw new MissingDataException(sprintf("Row %d are missing details", $index + 1));
             
             $newRecordDetails = Array(
                 'SalesRecordNumber' => $salesRecordNumber,
@@ -75,14 +92,12 @@
     /*
     * program starts here
     */
-
     // establish the connection
     $db = (new Database())->getConnection();
     if (!$db)
     {
         die("Can not connect to database. Please try again later");
     }
-
     // retrieve the salesRecord table
     $salesRecordTable = new SalesRecord($db);
     
@@ -92,6 +107,8 @@
     try {
         // collect sales date and comment data
         $edittedRecord = FetchRecordByPOST();
+        // retrieving record details
+        $recordDetails = FetchRecordDetailsByPOST($edittedRecord["SalesRecordNumber"]);
         //
         // backup record & details right before update
         //
@@ -101,8 +118,6 @@
         // edit sales record
         //
         $edittedRecordID = EditSalesRecord($salesRecordTable, $edittedRecord);
-        // retrieving record details
-        $recordDetails = FetchRecordDetailsByPOST($edittedRecordID);
         // 
         // delete old record details that have the record number being updated.
         //
@@ -113,32 +128,31 @@
         //
         // BUG: IN CASE adding fails -> old details have to be backed-up. 
         //
-        //
         for ($i = 0; $i < count($recordDetails); ++$i)
         {
             $rowInserted = $recordDetailTable->insert($recordDetails[$i]);
             
             if ($rowInserted == 0)
             {
-                throw new RecordDetailsUpdateFailedException("Can not update details");
-                // die("Can not insert rows. Cancel adding. Remove previous added details.");
-            
-                // echo SUCCESS_CODE;
+                throw new RecordDetailsUpdateFailedException("Details update failed. Check your product number, quantity and price inputs.");
             }
         }
     }
     catch(RecordDetailsUpdateFailedException $e)
     {
+            print_r($salesRecordTable);
             //
             // if any row fails to be added, addition has to be cancelled
             // Remove all details already appended.
             //
             $recordDetailTable->deleteByRecordNumber($edittedRecordID);
             
-            // Lastly, safely remove the current sales record.
-            $salesRecordTable->delete($edittedRecordID);
+            // Lastly, safely update the record table back to the original one.
+            EditSalesRecord($salesRecordTable, $backupRecord);
+            
+            //print_r($backupRecord);
 
-            $salesRecordNumber->insert($backupRecord);
+            // print_r($edittedRecord);
             for ($i = 0; $i < count($backupDetails); ++$i)
             {
                 $rowInserted = $recordDetailTable->insert($backupDetails[$i]);
@@ -146,6 +160,12 @@
             exit($e->getMessage());
     }
     catch(SalesRecordUpdateFailedException $e)
+    {
+        // should not do anything before database automatically rejects the UPDATE request
+
+        exit($e->getMessage());
+    }
+    catch(MissingDataException $e)
     {
         // should not do anything before database automatically rejects the UPDATE request
 
