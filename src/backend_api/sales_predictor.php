@@ -3,6 +3,11 @@
     require "../connector/salesRecord.php";
     require "../connector/recordDetail.php";
 
+    function GetXAxis()
+    {
+
+    }
+    
     // functions that will be used 
     function GetIntercept($tableDataArray)
     {
