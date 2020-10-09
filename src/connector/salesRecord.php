@@ -39,8 +39,7 @@
             $statement = "
                 SELECT 
                     SalesRecordNumber, SalesDate, Comment
-                FROM 
-                    $this->table_name
+                FROM $this->table_name
                 WHERE 
                     SalesRecordNumber = ?;
             ";            
@@ -114,7 +113,8 @@
                     'SalesDate' => $input['SalesDate'],
                     'Comment' => $input['Comment'] ?? null,
                 ));
-                return $statement->rowCount();
+
+                return $statement->rowCount() > 0 ? 1 : 0;
             }
             catch(PDOException $e)
             {
