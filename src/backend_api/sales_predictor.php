@@ -80,14 +80,16 @@
     }
     
     // find the intercept
-    function GetIntercept($tableDataArray)
+    function GetIntercept($dataSize, $sumOfX, $sumOfY, $slope)
     {
-
+        
+        return ($sumOfY - ($slope * $sumOfX)) / $dataSize;
     }
 
     // find the slope
-    function GetSlope($tableDataArray)
+    function GetSlope($tableDataArray, $sumOfX, $sumOfY)
     {
+        // temp
         
     }
 
@@ -151,19 +153,9 @@
         $predictDataArray = GetXY($tableDataArrayY, $convertedXAxisArray);
         //$predictDataArray = GetXSquared($predictDataArray); -- Sam: Don't think we need this, probably rename GetXY to something else if you want        
 
-        /*
-        $XSquared = GetXSquared($convertedXAxisArray);
-        $XY = GetXY($tableDataArrayY, $convertedXAxisArray);
-        */
-
         // get slope and intercept -- Sam: Again, reworked to work with the class
-        $slope = GetSlope($predictDataArray);
-        $intercept = GetIntercept($predictDataArray);
-
-        /*
-        $slope = GetSlope($tableDataArrayY, $convertedXAxisArray);
-        $intercept = GetIntercept($tableDataArrayY, $convertedXAxisArray);
-        */
+        $slope = GetSlope($predictDataArray, $sumOfX, $sumOfY);
+        $intercept = GetIntercept(count($predictDataArray), $sumOfX, $sumOfY, $slope);
 
         // will have to figure out what to do with X
         //$regressionLine = $slope * (X) + $intercept;
