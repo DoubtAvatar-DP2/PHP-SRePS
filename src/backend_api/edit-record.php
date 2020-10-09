@@ -93,19 +93,18 @@
     /*
     * program starts here
     */
-    // establish the connection
-    $db = (new Database())->getConnection();
-    if (!$db)
-    {
-        die("Can not connect to database. Please try again later");
-    }
-    // retrieve the salesRecord table
-    $salesRecordTable = new SalesRecord($db);
-    
-    // retrieve the recordDetails table
-    $recordDetailTable = new SaleRecordDetails($db);
-
     try {
+        // establish the connection
+        $db = (new Database())->getConnection();
+        if (!$db)
+        {
+            throw new Exception("Can not connect to database. Please try again later");
+        }
+        // retrieve the salesRecord table
+        $salesRecordTable = new SalesRecord($db);
+        
+        // retrieve the recordDetails table
+        $recordDetailTable = new SaleRecordDetails($db);
         // collect sales date and comment data
         $edittedRecord = FetchRecordByPOST();
         // retrieving record details
@@ -115,6 +114,16 @@
         //
         $backupRecord = $salesRecordTable->find($edittedRecord["SalesRecordNumber"]);
         $backupDetails = $recordDetailTable->findByRecordNumber($edittedRecord["SalesRecordNumber"]);
+    }
+    catch(Exception $e)
+    {
+        // when missing any data (record or detail), stop doing anything.
+        exit(json_encode(Array(
+            "exitCode" => 1,
+            "errorMessage" => $e->getMessage()
+        )));
+    }
+    try {
         //
         // edit sales record
         //
@@ -126,8 +135,6 @@
         //
         // add details into table.
         // this should not cause conflicts because old table has been deleted.
-        //
-        // BUG: IN CASE adding fails -> old details have to be backed-up. 
         //
         for ($i = 0; $i < count($recordDetails); ++$i)
         {
@@ -144,14 +151,6 @@
             "errorMessage" => "",
         )));
     }
-    catch(MissingDataException $e)
-    {
-        // when missing any data (record or detail), stop doing anything.
-        exit(json_encode(Array(
-            "exitCode" => 1,
-            "errorMessage" => $e->getMessage()
-        )));
-    }
     catch(SalesRecordUpdateFailedException $e)
     {
         // put backup data back
@@ -162,11 +161,7 @@
         )));
     }
     catch(RecordDetailsUpdateFailedException $e)
-    {
-            // REMOVE : comment
-            //
-            //print_r($salesRecordTable);
-            
+    {           
             //
             // if any row fails to be added, addition has to be cancelled
             // Remove all details already appended.
@@ -188,6 +183,9 @@
     }
     catch(Exception $e)
     {
- 
+        exit(json_encode(Array(
+            "exitCode" => 1,
+            "errorMessage" => $e->getMessage()
+        )));
     }
 ?>
