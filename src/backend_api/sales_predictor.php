@@ -92,22 +92,31 @@
     }
 
     // find XY
-    function GetXY($tableDataArray, $convertedXAxisArray)
+    function GetXY($tableDataArrayY, $tableDataArrayX)
     {
         $dataArrayXY = array();
 
+        //TODO: Delete echos below
+        echo "-- XY --";
+        echo "<br>";
+
         // find the appropriate QuantityOrdered and SalesDate, times them together into the array 
         // and return the array
-        foreach($tableDataArray as $table)
+        $it = new MultipleIterator();
+        $it->attachIterator(new ArrayIterator($tableDataArrayX));
+        $it->attachIterator(new ArrayIterator($tableDataArrayY));
+
+        foreach ($it as $dataXY)
         {
-            $predictedData = new PredictData(strtotime($table["SalesDate"]), (int)$table["SalesRecordNumber"]);
+            $predictedData = new PredictData($dataXY[0]["SalesDate"], (int)$dataXY[1]["QuantityOrdered"]);
             $predictedData->xy = $predictedData->date * $predictedData->recNum;
             array_push($dataArrayXY, $predictedData);
 
+            //TODO: Delete echos below
             echo $predictedData->date . " : " . $predictedData->recNum . " : " . $predictedData->xy;
             echo "<br>";
         }
-
+        
         return $dataArrayXY;
     }
 
@@ -115,6 +124,11 @@
     function GetXSquared($convertedXAxisArray)
     {
         $sqrDataArrayX = array();
+
+        foreach ($convertedXAxisArray as $xData)
+        {
+            array_push($sqrDataArrayX, pow((int)$xData["QuantityOrdered"]), 2);
+        }
         
         return $sqrDataArrayX;
     }
@@ -122,8 +136,8 @@
     function GetLeastSquareRegression($tableDataArrayY, $tableDataArrayX, $startDateX)
     {
         // setting up values 
-        $convertedXAxis = ConvertXAxisToInt($tableDataArrayX, $startDateX);
-        $sumOfX = GetXSum($convertedXAxis);
+        $convertedXAxisArray = ConvertXAxisToInt($tableDataArrayX, $startDateX);
+        $sumOfX = GetXSum($convertedXAxisArray);
         $SumOfY = GetYSum($tableDataArrayY);
 
         // get special values 
@@ -136,8 +150,8 @@
 
         // will have to figure out what to do with X
         //$regressionLine = $slope * (X) + $intercept;
-        $regressionLine = null; 
-        return $regressionLine; 
+        $regressionLine = null;
+        return $regressionLine;
     }
 
     /*
