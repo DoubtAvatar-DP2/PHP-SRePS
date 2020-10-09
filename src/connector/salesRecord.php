@@ -39,7 +39,8 @@
             $statement = "
                 SELECT 
                     SalesRecordNumber, SalesDate, Comment
-                FROM $this->table_name
+                FROM 
+                    $this->table_name
                 WHERE 
                     SalesRecordNumber = ?;
             ";            

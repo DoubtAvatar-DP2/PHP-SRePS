@@ -217,20 +217,20 @@
 
         public function deleteByRecordNumber($salesRecordNumber)
         {
-            /*
-            * return 1 when the target detail is successfully deleted.
-            * return 0 when the target detail is not deleted.
+            /* 
+            * Delete all record details that have the sales record number.
+            * return 1 when successfully deleted.
+            * return 0 when records failed to be deleted.
             */
             $statement = "
                 DELETE FROM $this->table_name
                 WHERE 
                     SalesRecordNumber = :SalesRecordNumber
             ";
-
             try {
                 $statement = $this->db->prepare($statement);
-                $statement->execute(array(
-                    "SalesRecordNumber" => $salesRecordNumber,
+                $statement->execute(Array(
+                    "SalesRecordNumber" => $salesRecordNumber
                 ));
                 return $statement->rowCount() > 0 ? 1 : 0;
             }
