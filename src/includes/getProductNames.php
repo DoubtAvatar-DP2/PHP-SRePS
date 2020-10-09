@@ -5,7 +5,7 @@ if($mysqli->connect_error)
   exit('Could not connect');
 }
 
-$sql = "SELECT ProductName FROM Products";
+$sql = "SELECT ProductName, ProductNumber FROM Products";
 $result = $mysqli->query($sql);
 $productNames = array();
 
