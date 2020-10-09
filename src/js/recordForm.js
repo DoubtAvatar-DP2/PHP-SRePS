@@ -62,6 +62,9 @@ function addNewProductField()
     var productEntryRow = productEntryTable.insertRow(-1);
     var entrynumbercell = productEntryRow.insertCell(0);
     var productNameCell = productEntryRow.insertCell(1);
+
+    productNameCell.classList.add("autocomplete");
+
     var quantityCell = productEntryRow.insertCell(2);
     var priceCell = productEntryRow.insertCell(3);
     var totalCell = productEntryRow.insertCell(4);
