@@ -14,7 +14,7 @@
   <form id="addrecordform">
     <div class="form-group mb-2">
       <label for="recorddate">Record Date:</label>
-      <input type="date" id="recorddate" name="recorddate" placeholder="Please enter the record date">
+      <input type="date" id="recorddate" name="recorddate" placeholder="Please enter the record date" required>
     </div>
     <div class="form-group">
       <table id="productEntries">
