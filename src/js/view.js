@@ -30,7 +30,7 @@ function addNewProductEntry(productNumber, productName, quantityOrdered, quotedP
     productNameCell.innerText = productName;
     quantityOrderedCell.innerText = quantityOrdered;
     quotedPriceCell.innerText = `$${quotedPrice}`;
-    totalPriceCell.innerText = `$${quotedPrice* quantityOrdered}`;
+    totalPriceCell.innerText = `$${(quotedPrice* quantityOrdered).toFixed(2)}`;
     newRow.appendChild(productNumberCell);
     newRow.appendChild(productNameCell);
     newRow.appendChild(quantityOrderedCell);
@@ -55,5 +55,5 @@ function fillSalesTable(data)
         orderTotal += recordDetail.QuantityOrdered * recordDetail.QuotedPrice;
     });
 
-    $("#total")[0].innerText = `Total: $${orderTotal}`;
+    $("#total")[0].innerText = `Total: $${orderTotal.toFixed(2)}`;
 }
