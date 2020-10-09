@@ -22,7 +22,6 @@ window.onload = () => {
             alert("We are unable to retrieve your record.");
         },
         success: (data) => {
-            console.log(data);
             salesData = JSON.parse(data);
 
             if (!salesData.hasOwnProperty("SalesRecord")) 
