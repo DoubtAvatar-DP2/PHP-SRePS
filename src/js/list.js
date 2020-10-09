@@ -64,14 +64,14 @@ async function fetchPage() {
     for(const record of body.results) {
         let row = document.createElement("tr");
         let recordLink = document.createElement("a");
-        recordLink.href = "/view.php?id=" + record.SalesRecordNumber;
+        recordLink.href = "/view.php?recordID=" + record.SalesRecordNumber;
         let recordNum = document.createElement("td");
         let recordDate = document.createElement("td");
         let recordTotal = document.createElement("td");
 
         recordLink.innerHTML = record.SalesRecordNumber;
         recordNum.appendChild(recordLink.cloneNode(true));
-        recordLink.innerHTML = record.SalesDate; //TODO: Adjust to a better date
+        recordLink.innerHTML = moment(record.SalesDate).format("YYYY-MM-DD");
         recordDate.appendChild(recordLink.cloneNode(true));
         recordLink.innerHTML = "$"+ record.TotalPrice;
         recordTotal.appendChild(recordLink.cloneNode(true));
