@@ -2,7 +2,8 @@
     require "../connector/database.php";
     require "../connector/salesRecord.php";
     require "../connector/recordDetail.php";
-    
+    require "./exception.php";
+
     const SUCCESS_CODE = 0;
 
     function FetchRecordByPOST()
@@ -13,7 +14,7 @@
         */
 
         // sales date is required.
-        if (!$_POST["SalesDate"]) throw new Exception("SalesDate is missing");
+        if (!$_POST["SalesDate"]) throw new MissingRecordDataException("SalesDate is missing");
         return Array(    
             "SalesDate" => $_POST["SalesDate"],
             "Comment" => $_POST["Comment"],
@@ -35,8 +36,8 @@
         */
         $recordDetails = $_POST["RecordDetails"];
 
-        if (!$salesRecordNumber) throw new Exception("SalesRecordNumber is missing");
-        if (!$recordDetails) throw new Exception("RecordDetails is missing");
+        if (!$salesRecordNumber) throw new MissingRecordDataException("SalesRecordNumber is missing");
+        if (!$recordDetails) throw new MissingDetailDataException("RecordDetails is missing");
         
         $details = Array();
 
@@ -49,7 +50,7 @@
             $quantityOrdered = $newRecordDetails['quantityOrdered'];
             
             // check if details are missing
-            if (!($productNumber && $quotedPrice && $quantityOrdered)) throw new Exception("Details are missing");
+            if (!($productNumber && $quotedPrice && $quantityOrdered)) throw new MissingDetailDataException("Details are missing");
             
             $newRecordDetails = Array(
                 'SalesRecordNumber' => $salesRecordNumber,
@@ -81,6 +82,7 @@
     // retrieve the recordDetails table
     $recordDetailTable = new SaleRecordDetails($db);
 
+    $lastSuccessfulIndex = -1;
     try {
         // collect sales date and comment data
         $newRecord = FetchRecordByPOST();
@@ -88,33 +90,46 @@
         $newRecordID = AddNewSalesRecord($salesRecordTable, $newRecord);
         // retrieving record details
         $recordDetails = FetchRecordDetailsByPOST($newRecordID);
-    }
-    catch(Exception $e)
-    {
-        exit($e->getMessage());
-    }
 
-
-    for ($i = 0; $i < count($recordDetails); ++$i)
-    {
-        $rowInserted = $recordDetailTable->insert($recordDetails[$i]);
         
-        if ($rowInserted == 0)
+        for ($i = 0; $i < count($recordDetails); ++$i)
         {
-            //
-            // if any row fails to be added, addition has to be cancelled
-            // Remove all details already appended.
-            //
-            for ($j = 0; $j <= $i; ++$j)
-            {
-                $recordDetailTable->delete($newRecordID, $recordDetails[$j]["ProductNumber"]);
-            }
-            
-            // Lastly, safely remove the current sales record.
-            $salesRecordTable->delete($newRecordID);
-            die("Can not insert rows. Cancel adding. Remove previous added details.");
+            $rowInserted = $recordDetailTable->insert($recordDetails[$i]);
+            if ($rowInserted == 0) throw new RecordDetailsUpdateFailedException("Can not insert rows. Cancel adding. Remove previous added details.");
+            $lastSuccessfulIndex = $i;
         }
     }
-
-    echo SUCCESS_CODE;
+    catch(DatabaseUpdateFailedException $e)
+    {
+        //
+        // if any row fails to be added, addition has to be cancelled
+        // Remove all details already appended.
+        //
+        for ($j = 0; $j <= $lastSuccessfulIndex; ++$j)
+        {
+            $recordDetailTable->delete($newRecordID, $recordDetails[$j]["ProductNumber"]);
+        }
+        
+        // Lastly, safely remove the current sales record.
+        $salesRecordTable->delete($newRecordID);
+        
+        exit(json_encode(Array(
+            "exitCode" => 1,
+            "errorMessage" => $e->getMessage()
+        )));
+    }
+    catch(MissingDataException $e)
+    {
+        $salesRecordTable->delete($newRecordID);
+        exit(json_encode(Array(
+            "exitCode" => 1,
+            "errorMessage" => $e->getMessage(),
+        )));
+    }
+    
+    exit(json_encode(Array(
+        "exitCode" => SUCCESS_CODE,
+        "newRecordID" => $newRecordID,
+        "errorMessage" => "",
+    )));
 ?>

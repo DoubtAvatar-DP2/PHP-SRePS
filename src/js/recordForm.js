@@ -1,6 +1,8 @@
 var inputid = 0;
 
-addNewProductField();
+window.onload = () => {
+    addNewProductField();
+};
 
 function checkForNewProductField()
 {
@@ -43,9 +45,10 @@ function deleteRow(idNumber)
     {   
         table.rows[j].cells[0].innerHTML = j;
     }
+    calculateSalesTotal();
 }
 
-function addNewProductField()
+function addNewProductField(productName = null, quantity = null, price = null)
 {
     inputid++;
 
@@ -71,14 +74,19 @@ function addNewProductField()
     deleteButtonCell.innerHTML = "<img id=\"delete"+inputid+"\" src=\"bin.png\" height=\"20\" width=\"20\">";
 
     var i = inputid;
+
+    document.getElementById(productNameId).value = productName;
+    document.getElementById(quantityId).value = quantity;
+    document.getElementById(priceId).value = price;
+
     document.getElementById(quantityId).addEventListener("change", function() {calculateProductTotal(i)}); 
     document.getElementById(priceId).addEventListener("change", function() {calculateProductTotal(i)}); 
 
     document.getElementById(quantityId).addEventListener("change", checkForNewProductField); 
     document.getElementById(productNameId).addEventListener("change", checkForNewProductField); 
     document.getElementById(priceId).addEventListener("change", checkForNewProductField); 
-
     document.getElementById("delete"+inputid).addEventListener("click", function() {deleteRow(productEntryRow.rowIndex)});
+
 
     for(j=1; j < productEntryTable.rows.length; j++)
     {   
@@ -148,6 +156,21 @@ function fetchRecordDetails()
     return recordDetails;
 }
 
+function AddErrorMessage(newMessage)
+{
+    $("#error").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    ${newMessage}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>`);
+}
+
+function ClearErrorMessage()
+{
+    $("#error").empty();
+}
+
 document.getElementById("add-record-button").addEventListener("click", (event) => {
 
     /*
@@ -167,15 +190,18 @@ document.getElementById("add-record-button").addEventListener("click", (event) =
         url: "backend_api/add-new-record.php",
         data: sales_record_data,
         success: (data) => {
-            // check if receiving successful code
-            if (data == 0)
+            console.log(data);
+            data = JSON.parse(data);
+            if (data.exitCode == 0)
             {
+                let newRecordID = data.newRecordID;
+                // check if receiving successful code        
                 alert("Successfully added a record, we will move you to the main page shortly.");
+                window.location.href = `view.php?RecordID=${newRecordID}`;
             }
-            else 
-            {
-                alert("Failed to add a record");
-                console.log(data);
+            else {
+                ClearErrorMessage();
+                AddErrorMessage(data.errorMessage);
             }
         },
         error: () => {
