@@ -190,7 +190,6 @@ document.getElementById("add-record-button").addEventListener("click", (event) =
         url: "backend_api/add-new-record.php",
         data: sales_record_data,
         success: (data) => {
-            console.log(data);
             data = JSON.parse(data);
             if (data.exitCode == 0)
             {
