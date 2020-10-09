@@ -6,14 +6,14 @@
     class PredictData
     {
         public $date;
-        public $recNum;
+        public $QtyNum;
         public $xy;
         public $xSqr;
 
-        public function __construct($date, $recNum)
+        public function __construct($date, $QtyNum)
         {
             $this->date = $date;
-            $this->recNum = $recNum;
+            $this->QtyNum = $QtyNum;
         }
     }
 
@@ -88,7 +88,7 @@
     // find the slope
     function GetSlope($tableDataArray)
     {
-
+        
     }
 
     // find XY
@@ -109,11 +109,12 @@
         foreach ($it as $dataXY)
         {
             $predictedData = new PredictData($dataXY[0]["SalesDate"], (int)$dataXY[1]["QuantityOrdered"]);
-            $predictedData->xy = $predictedData->date * $predictedData->recNum;
+            $predictedData->xy = $predictedData->date * $predictedData->QtyNum;
+            $predictedData->xSqr = pow($predictedData->QtyNum, 2);
             array_push($dataArrayXY, $predictedData);
 
             //TODO: Delete echos below
-            echo $predictedData->date . " : " . $predictedData->recNum . " : " . $predictedData->xy;
+            echo $predictedData->date . " : " . $predictedData->QtyNum . " : " . $predictedData->xy;
             echo "<br>";
         }
         
@@ -121,16 +122,22 @@
     }
 
     // squares the value of x that's stored in the data array
-    function GetXSquared($convertedXAxisArray)
+    function GetXSquared($predDataArray)
     {
-        $sqrDataArrayX = array();
+        //TODO: Delete echos below
+        echo "-- xSqr --";
+        echo "<br>";
 
-        foreach ($convertedXAxisArray as $xData)
+        foreach ($predDataArray as $xData)
         {
-            array_push($sqrDataArrayX, pow((int)$xData["QuantityOrdered"]), 2);
+            $xData->xSqr = pow((int)$xData->QuantityOrdered, 2);
+
+            //TODO: Delete echos below
+            echo $xData->date . " : " . $xData->QtyNum . " : " . $xData->xy . " : " . $xData->xSqr;
+            echo "<br>";
         }
         
-        return $sqrDataArrayX;
+        return $predDataArray;
     }
 
     function GetLeastSquareRegression($tableDataArrayY, $tableDataArrayX, $startDateX)
@@ -140,13 +147,23 @@
         $sumOfX = GetXSum($convertedXAxisArray);
         $SumOfY = GetYSum($tableDataArrayY);
 
-        // get special values 
+        // get special values -- Sam: I changed this to work with the class we created, we only need the one array as the object holds all t he values we need
+        $predictDataArray = GetXY($tableDataArrayY, $convertedXAxisArray);
+        //$predictDataArray = GetXSquared($predictDataArray); -- Sam: Don't think we need this, probably rename GetXY to something else if you want        
+
+        /*
         $XSquared = GetXSquared($convertedXAxisArray);
         $XY = GetXY($tableDataArrayY, $convertedXAxisArray);
+        */
 
-        // get slope and intercept
+        // get slope and intercept -- Sam: Again, reworked to work with the class
+        $slope = GetSlope($predictDataArray);
+        $intercept = GetIntercept($predictDataArray);
+
+        /*
         $slope = GetSlope($tableDataArrayY, $convertedXAxisArray);
         $intercept = GetIntercept($tableDataArrayY, $convertedXAxisArray);
+        */
 
         // will have to figure out what to do with X
         //$regressionLine = $slope * (X) + $intercept;
