@@ -3,6 +3,7 @@
     require "../connector/salesRecord.php";
     require "../connector/recordDetail.php";
     require "./exception.php";
+    
     const SUCCESS_CODE = 0;
 
     function FetchRecordByPOST()
@@ -12,7 +13,7 @@
         * return null if salesDate is missing.
         */
         // sales date is required.
-        if (!$_POST["SalesDate"]) throw new MissingDataException("SalesDate is missing");
+        if (!$_POST["SalesDate"]) throw new MissingRecordDataException("SalesDate is missing");
         return Array(    
             "SalesDate" => $_POST["SalesDate"],
             "Comment" => $_POST["Comment"],
@@ -51,8 +52,8 @@
         */
         $recordDetails = $_POST["RecordDetails"];
 
-        if (!$salesRecordNumber) throw new MissingDataException("Can is missing");
-        if (!$recordDetails) throw new MissingDataException("No details found.");
+        if (!$salesRecordNumber) throw new MissingRecordDataException("Record ID is missing");
+        if (!$recordDetails) throw new MissingDetailDataException("Details are missing.");
         
         $details = Array();
 
@@ -69,13 +70,13 @@
             //
             if (!$productNumber)
             {
-                throw new MissingDataException(sprintf("Row %d is missing the product number", $index + 1));
+                throw new MissingDetailDataException(sprintf("Row %d is missing the product number", $index + 1));
             }
             //
             // check if price and quantity are missing
             // 
             if (!($quotedPrice && $quantityOrdered)) 
-                throw new MissingDataException(sprintf("Row %d are missing details", $index + 1));
+                throw new MissingDetailDataException(sprintf("Row %d are missing details", $index + 1));
             
             $newRecordDetails = Array(
                 'SalesRecordNumber' => $salesRecordNumber,
@@ -137,10 +138,35 @@
                 throw new RecordDetailsUpdateFailedException("Details update failed. Check your product number, quantity and price inputs.");
             }
         }
+        exit(json_encode(Array(
+            "exitCode" => SUCCESS_CODE,
+            "edittedRecordID" => $edittedRecordID,
+            "errorMessage" => "",
+        )));
+    }
+    catch(MissingDataException $e)
+    {
+        // when missing any data (record or detail), stop doing anything.
+        exit(json_encode(Array(
+            "exitCode" => 1,
+            "errorMessage" => $e->getMessage()
+        )));
+    }
+    catch(SalesRecordUpdateFailedException $e)
+    {
+        // put backup data back
+        EditSalesRecord($salesRecordTable, $backupRecord);
+        exit(json_encode(Array(
+            "exitCode" => 1,
+            "errorMessage" => $e->getMessage()
+        )));
     }
     catch(RecordDetailsUpdateFailedException $e)
     {
-            print_r($salesRecordTable);
+            // REMOVE : comment
+            //
+            //print_r($salesRecordTable);
+            
             //
             // if any row fails to be added, addition has to be cancelled
             // Remove all details already appended.
@@ -150,25 +176,18 @@
             // Lastly, safely update the record table back to the original one.
             EditSalesRecord($salesRecordTable, $backupRecord);
             
-            //print_r($backupRecord);
-
-            // print_r($edittedRecord);
             for ($i = 0; $i < count($backupDetails); ++$i)
             {
                 $rowInserted = $recordDetailTable->insert($backupDetails[$i]);
             }    
-            exit($e->getMessage());
-    }
-    catch(SalesRecordUpdateFailedException $e)
-    {
-        // should not do anything before database automatically rejects the UPDATE request
+            exit(json_encode(Array(
+                "exitCode" => 1,
+                "errorMessage" => $e->getMessage()
+            )));
 
-        exit($e->getMessage());
     }
-    catch(MissingDataException $e)
+    catch(Exception $e)
     {
-        // should not do anything before database automatically rejects the UPDATE request
-
-        exit($e->getMessage());
+ 
     }
 ?>

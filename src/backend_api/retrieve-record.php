@@ -31,7 +31,7 @@
         if (!$recordNumber) throw new MissingRecordDataException("Can not receive sales record number via POST request.");
 
         $salesRecord = $salesRecordTable->find($recordNumber);
-        if (count($salesRecord) == 0) throw new NoRecordException("Sales record does not exist in the database.");
+        if (count($salesRecord) == 0) throw new MissingDetailDataException("Sales record does not exist in the database.");
 
         $salesRecordDetails = $recordDetailTable->findByRecordNumber($recordNumber);
 

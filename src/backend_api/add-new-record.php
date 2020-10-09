@@ -99,7 +99,7 @@
             $lastSuccessfulIndex = $i;
         }
     }
-    catch(RecordDetailsUpdateFailedException $e)
+    catch(DatabaseUpdateFailedException $e)
     {
         //
         // if any row fails to be added, addition has to be cancelled

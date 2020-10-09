@@ -22,6 +22,7 @@ window.onload = () => {
             alert("We are unable to retrieve your record.");
         },
         success: (data) => {
+            console.log(data);
             salesData = JSON.parse(data);
 
             if (!salesData.hasOwnProperty("SalesRecord")) 
@@ -82,18 +83,21 @@ document.getElementById("update").addEventListener("click", (event) => {
         url: "backend_api/edit-record.php",
         data: sales_record_data,
         success: (data) => {
-            // check if receiving successful code
-            if (data == 0)
+            data = JSON.parse(data);
+            if (data.exitCode == 0)
             {
-                alert(`Successfully edit record ${SalesRecordNumber}, we will move you to the main page shortly.`);
+                let edittedRecordID = data.edittedRecordID;
+                // check if receiving successful code        
+                alert("Successfully editted a record, we will move you to the edit page shortly.");
+                window.location.href = `view.php?RecordID=${edittedRecordID}`;
             }
-            else 
-            {
-                AddErrorMessage(`${data}`);
+            else {
+                ClearErrorMessage();
+                AddErrorMessage(data.errorMessage);
             }
         },
         error: () => {
-            alert(`We can not edit your sales record now. Please try again later.`);
+            AddErrorMessage(`We can not edit your sales record now. Please try again later.`);
         }
     });
 });
