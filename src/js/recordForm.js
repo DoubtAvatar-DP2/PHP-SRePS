@@ -4,9 +4,8 @@ var products = [];
 
 window.onload = () => {
     addNewProductField();
+    readProductNames();
 };
-
-readProductNames();
 
 function checkForNewProductField()
 {
@@ -326,6 +325,13 @@ function readProductNames()
         products.push(productsAsJSON[i]);
     }
     document.cookie = "productNames=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+function productToID(productName)
+{
+    var productID = 0;
+    var productsAndNumbers = JSON.parse(getCookie("productNamesAndNumbers"));
+    return productID;
 }
 
 function getCookie(cname) 
