@@ -8,36 +8,6 @@
             $this->db = $db;
         }
 
-        public function findpredictionData($startDate, $endDate)
-        {
-            /*
-            * return an associate array containing all sales for the dates requirements 
-            */
-            $statement = "
-                SELECT 
-                    SalesRecordNumber, SalesDate, Comment
-                FROM 
-                    $this->table_name
-                WHERE
-                    SalesDate
-                BETWEEN 
-                    '$startDate'
-                AND 
-                    '$endDate'
-            ";
-
-            try {
-                $statement = $this->db->prepare($statement);
-                $statement->execute(array($recordNumber));
-                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-                return $result;
-            }
-            catch(PDOException $e)
-            {
-                exit($e->getMessage());
-            }
-        }
-
         public function findAll()
         {
             /*
@@ -172,6 +142,36 @@
                     'SalesRecordNumber' => $salesRecordNumber
                 ));
                 return $statement->rowCount() > 0 ? 1 : 0;
+            }
+            catch(PDOException $e)
+            {
+                exit($e->getMessage());
+            }
+        }
+
+        public function findpredictionData($startDate, $endDate)
+        {
+            /*
+            * return an associate array containing all sales for the dates requirements 
+            */
+            $statement = "
+                SELECT 
+                    SalesRecordNumber, SalesDate, Comment
+                FROM 
+                    $this->table_name
+                WHERE
+                    SalesDate
+                BETWEEN 
+                    '$startDate'
+                AND 
+                    '$endDate'
+            ";
+
+            try {
+                $statement = $this->db->prepare($statement);
+                $statement->execute();
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
             }
             catch(PDOException $e)
             {

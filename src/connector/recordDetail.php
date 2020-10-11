@@ -214,4 +214,34 @@
                 exit($e->getMessage());
             }
         }
+
+        public function findpredictionData($salesNumberStart, $salesNumberEnd)
+        {
+            /*
+            * return an associate array containing all sales for the dates requirements 
+            */
+            $statement = "
+                SELECT 
+                    SalesRecordNumber, ProductNumber, QuotedPrice, QuantityOrdered
+                FROM 
+                    $this->table_name
+                WHERE
+                    SalesRecordNumber
+                BETWEEN 
+                    '$salesNumberStart'
+                AND 
+                    '$salesNumberEnd'
+            ";
+
+            try {
+                $statement = $this->db->prepare($statement);
+                $statement->execute();
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            }
+            catch(PDOException $e)
+            {
+                exit($e->getMessage());
+            }
+        }
     }
