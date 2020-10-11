@@ -21,7 +21,7 @@
   </div>
 
   
-  <form id="addrecordform">
+  <form id="addrecordform" autocomplete="off">
     <div class="form-group mb-2">
       <label for="recorddate">Record Date:</label>
       <input type="date" id="recorddate" name="recorddate" placeholder="Please enter the record date" required>

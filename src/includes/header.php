@@ -1,3 +1,7 @@
+<?php
+      include("getProductNames.php");  
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
