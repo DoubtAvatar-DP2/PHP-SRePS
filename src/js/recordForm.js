@@ -331,6 +331,9 @@ function productToID(productName)
 {
     var productID = 0;
     var productsAndNumbers = JSON.parse(getCookie("productNamesAndNumbers"));
+    productID = productsAndNumbers[productName];
+    document.cookie = "productNamesAndNumbers=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    alert(productID);
     return productID;
 }
 
