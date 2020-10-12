@@ -3,6 +3,7 @@
     // require "../connector/salesRecord.php";
     // require "../connector/recordDetail.php";
     require "connector/database.php";
+    require "connector/product.php";
     require "connector/salesRecord.php";
     require "connector/recordDetail.php";
 
@@ -26,23 +27,16 @@
         $startX = strtotime($startDateX);
 
         // converts dates to a integer (unix time) 
+        // round covert must be 'floor' as floor will round down only, very important
         $i = 0;
         foreach($tableDataArrayX as $table)
         {
             $tableDataArrayX[$i]['SalesDate'] = strtotime($table["SalesDate"]);
+            $tempDayValue = floor(($tableDataArrayX[$i]['SalesDate'] - $startX)/86400);
+            $tableDataArrayX[$i]["SalesDate"] = $tempDayValue;
             $i++;
-        }
 
-        // converts unix time to an single integer (i.e 6)
-        // round covert must be 'floor' as floor will round down only, very important
-        $j = 0;
-        foreach($tableDataArrayX as $table)
-        {  
-            $tempDayValue = floor(($table["SalesDate"] - $startX)/86400);
-            $tableDataArrayX[$j]["SalesDate"] = $tempDayValue;
-            $j++;
         }
-
         return $tableDataArrayX;
     }
 
@@ -50,12 +44,10 @@
     function GetXSum($tableDataArrayX)
     {
         $total = 0;
-        $i = 0;
 
         foreach($tableDataArrayX as $table)
         {
             $total += $table["SalesDate"];
-            $i++;
         }
         return $total;
     }
@@ -64,14 +56,12 @@
     function GetYSum($tableDataArrayY)
     {
         $total = 0;
-        $i = 0;
 
         foreach($tableDataArrayY as $table)
         {
-            $total += $table["QuantityOrdered"];
-            $i++;     
+            $total += $table["QuantityOrdered"]; 
         }
-        $total = $total - 24;
+        $total = $total;
         return $total;
     }
     
@@ -79,12 +69,10 @@
     function GetXSqrSum($tableDataArrayX)
     {
         $total = 0;
-        $i = 0;
 
         foreach($tableDataArrayX as $table)
         {
             $total += $table->xSqr;
-            $i++;
         }
         return $total;
     }
@@ -93,12 +81,10 @@
     function GetXYSum($tableDataArrayXY)
     {
         $total = 0;
-        $i = 0;
 
         foreach($tableDataArrayXY as $table)
         {
             $total += $table->xy;
-            $i++;
         }
         return $total;
     }
@@ -150,16 +136,17 @@
         echo "-- XY --";
         echo "<br>";
 
+        // converts quatitiy to a total
         $tableDataQuanityY = SalesRecordQuantity($tableDataArrayY, $tableDataArrayX);
 
         // find the appropriate QuantityOrdered and SalesDate, times them together into the array and return the array
         $it = new MultipleIterator();
         $it->attachIterator(new ArrayIterator($tableDataArrayX));
-        $it->attachIterator(new ArrayIterator($tableDataQuanityY));
+        $it->attachIterator(new ArrayIterator($tableDataArrayY));
 
         foreach ($it as $dataXY)
         {
-            $predictedData = new PredictData($dataXY[0]["SalesDate"], $dataXY[1]);
+            $predictedData = new PredictData($dataXY[0]["SalesDate"], $dataXY[1]['QuantityOrdered']);
             $predictedData->xy = $predictedData->date * $predictedData->QtyNum;
             $predictedData->xSqr = pow($predictedData->date, 2);
             array_push($dataArrayXY, $predictedData);
@@ -171,17 +158,17 @@
         return $dataArrayXY;
     }
 
-    function GetLeastSquareRegression($tableDataArrayY, $tableDataArrayX, $startDateX)
+    function GetLeastSquareRegression($startDateX, $itemTableArray)
     {
         // setting up date to x axis
-        $convertedXAxisArray = ConvertXAxisToInt($tableDataArrayX, $startDateX);
+        $convertedXAxisArray = ConvertXAxisToInt($itemTableArray, $startDateX);
 
         // get special values 
-        $predictDataArray = GetSpecialValues($tableDataArrayY, $convertedXAxisArray);
+        $predictDataArray = GetSpecialValues($itemTableArray, $convertedXAxisArray);
 
         // setting up sums 
         $XSum = GetXSum($convertedXAxisArray);
-        $YSum = GetYSum($tableDataArrayY);
+        $YSum = GetYSum($itemTableArray);
         $xSqrSum = GetXSqrSum($predictDataArray);
         $XYSum = GetXYSum($predictDataArray);
 
@@ -223,18 +210,19 @@
 
     // This will be entered in from the user, for now this is just for the testing
     $startDateX = "2020-09-04";
-    $endDateX = "2020-09-26";
+    $endDateX = "2020-09-25";
 
     // This is needed for the x axis (date of sale)
-    $salesRecordTable = new SalesRecord($db);
-    $tableDataArrayX = $salesRecordTable->findpredictionData($startDateX, $endDateX);
+    //$salesRecordTable = new SalesRecord($db);
+    //$tableDataArrayX = $salesRecordTable->findpredictionData($startDateX, $endDateX);
 
     // finds the min and max for record number, needed for query of table
-    $RecordNumbers = findRecordMinMax($tableDataArrayX);
+    //$RecordNumbers = findRecordMinMax($tableDataArrayX);
 
     // This is needed for the y axis (number of items sold)
     $recordDetailTable = new SaleRecordDetails($db);
-    $tableDataArrayY = $recordDetailTable->findpredictionData($RecordNumbers[0], $RecordNumbers[1]);
+    //$tableDataArrayY = $recordDetailTable->findpredictionData($RecordNumbers[0], $RecordNumbers[1]);
+    $itemTableArray = $recordDetailTable->findPredictionDatas($startDateX, $endDateX);
 
-    GetLeastSquareRegression($tableDataArrayY, $tableDataArrayX, $startDateX);
+    GetLeastSquareRegression($startDateX, $itemTableArray);
 ?>

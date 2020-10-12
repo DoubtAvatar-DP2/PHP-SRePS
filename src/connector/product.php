@@ -13,16 +13,16 @@
         {
             $statement = "
                 SELECT 
-                    product.productNumber, 
+                    product.ProductNumber,
                     product.productName, 
                     product.ProductDescription, 
                     product.Price, 
                     product.CategoryID, 
                     category.CategoryName
                 FROM 
-                    $product_table_name product 
+                    $this->product_table_name product 
                 JOIN 
-                    $category_table_name category 
+                    $this->category_table_name category 
                 ON 
                     product.CategoryID = category.CategoryID;
             ";
