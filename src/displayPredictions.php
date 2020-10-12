@@ -27,12 +27,26 @@
       <label for="recorddateend">Record End Date:</label>
       <input type="date" id="recorddateend" name="recorddateend" placeholder="Please enter the record date">
     </div>
+    <div>
+      <p>What do you want to display?</p>
+      <input type="radio" id="item" name="WHICHDATA" value="ITEM">
+      <label for="item">Item</label><br>
+      <input type="radio" id="category" name="WHICHDATA" value="CATEGORY">
+      <label for="category">Catergory</label><br>
+
+      <p>What period do you want to display?</p>
+      <input type="radio" id="week" name="PERIOD" value="WEEK">
+      <label for="week">Week</label><br>
+      <input type="radio" id="month" name="PERIOD" value="MONTH">
+      <label for="month">Month</label><br>
+    </div>
     <div class="form-group col-md-12 col-lg-4 d-flex justify-content-between">
       <a href="index.php" class="btn btn-secondary">
         HOMEPAGE
       </a>
+
       <input type="submit" class="btn btn-success" value="DISPLAY" name="DISPLAY">
-    </div>
+    </div>  
 </form> 
 
     <fieldset><legend>Customer Data</legend>
