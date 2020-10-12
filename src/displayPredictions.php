@@ -18,7 +18,7 @@
     </div>
   </div>
   
-  <form method="GET" action="displayPredictionsx.php">
+  <form method="GET" action="displayPredictions.php">
     <div class="form-group mb-2">
       <label for="recorddatestart">Record Start Date:</label>
       <input type="date" id="recorddatestart" name="recorddatestart" placeholder="Please enter the record date">
