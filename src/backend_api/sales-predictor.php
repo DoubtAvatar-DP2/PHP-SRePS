@@ -208,6 +208,28 @@
         die("Can not connect to database. Please try again later");
     }
 
+    // -- Just to show how to get the data we'll need from the display page --
+    echo $_GET["recorddatestart"] . " ";
+    echo $_GET["WHICHDATA"] . " ";
+    echo $_GET["PERIOD"] . " <br/>";
+
+    $strPeriod = "+1 " . $_GET["PERIOD"];
+
+    // Just to show how it can be done
+    $startDateX = strtotime($_GET["recorddatestart"]);
+    $endDateX = strtotime($strPeriod, $startDateX);
+
+    echo gmdate("Y-m-d", $startDateX) . " ";
+    echo gmdate("Y-m-d", $endDateX) . " <br/>";
+
+    // More realistically you'll want something like this if you want to keep the dates in DateTime before
+    // passing them into ConvertXAxisToInt
+    $strPeriod = "+1 " . $_GET["PERIOD"];
+    $startDateX = $_GET["recorddatestart"];
+    $endDateX = gmdate("Y-m-d", strtotime($strPeriod, strtotime($startDateX)));
+
+    // -- --
+
     // This will be entered in from the user, for now this is just for the testing
     $startDateX = "2020-09-04";
     $endDateX = "2020-09-25";
@@ -223,6 +245,11 @@
     $recordDetailTable = new SaleRecordDetails($db);
     //$tableDataArrayY = $recordDetailTable->findpredictionData($RecordNumbers[0], $RecordNumbers[1]);
     $itemTableArray = $recordDetailTable->findPredictionDatas($startDateX, $endDateX);
+
+    // -- Just to test my data --
+    var_dump($recordDetailTable->findPredictionDatas($startDateX, $endDateX));
+    var_dump($recordDetailTable->findPredictDataByDayProductNum($startDateX, $endDateX));
+    // -- --
 
     GetLeastSquareRegression($startDateX, $itemTableArray);
 ?>

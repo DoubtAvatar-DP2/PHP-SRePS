@@ -23,19 +23,21 @@
       <label for="recorddatestart">Record Start Date:</label>
       <input type="date" id="recorddatestart" name="recorddatestart" placeholder="Please enter the record date">
     </div>
+    <!-- Don't thing we this do to you being able to select a period which will add to the start date
     <div class="form-group mb-2">
       <label for="recorddateend">Record End Date:</label>
       <input type="date" id="recorddateend" name="recorddateend" placeholder="Please enter the record date">
     </div>
+    -->
     <div>
       <p>What do you want to display?</p>
-      <input type="radio" id="item" name="WHICHDATA" value="ITEM">
+      <input type="radio" id="item" name="WHICHDATA" value="ITEM" checked="checked">
       <label for="item">Item</label><br>
       <input type="radio" id="category" name="WHICHDATA" value="CATEGORY">
       <label for="category">Catergory</label><br>
 
       <p>What period do you want to display?</p>
-      <input type="radio" id="week" name="PERIOD" value="WEEK">
+      <input type="radio" id="week" name="PERIOD" value="WEEK" checked="checked">
       <label for="week">Week</label><br>
       <input type="radio" id="month" name="PERIOD" value="MONTH">
       <label for="month">Month</label><br>
