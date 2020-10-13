@@ -339,49 +339,4 @@
                 exit($e->getMessage());
             }
         }
-
-        // public function findPredictionDatas($startDateX, $endDateX)
-        // {
-        //     $statement = "
-        //         SELECT 
-        //             record.SalesRecordNumber,
-        //             record.ProductNumber, 
-        //             record.QuotedPrice, 
-        //             record.QuantityOrdered, 
-        //             product.ProductName,
-        //             category.CategoryName,
-        //             sales.SalesDate
-        //         FROM 
-        //             $this->table_name record 
-        //         JOIN 
-        //             $this->product_table_name product
-        //         ON 
-        //             record.ProductNumber = product.ProductNumber
-        //         JOIN 
-        //             $this->category_table_name category
-        //         ON
-        //             product.CategoryID = category.CategoryID
-        //         JOIN 
-        //             $this->sales_table_name sales
-        //         ON
-        //             record.SalesRecordNumber = sales.SalesRecordNumber
-        //         WHERE
-        //             sales.SalesDate
-        //         BETWEEN 
-        //             '$startDateX'
-        //         AND 
-        //             '$endDateX';
-        //     ";
-
-        //     try {
-        //         $statement = $this->db->prepare($statement);
-        //         $statement->execute();
-        //         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        //         return $result;
-        //     }
-        //     catch(PDOException $e)
-        //     {
-        //         exit($e->getMessage());
-        //     }
-        // }
     }
