@@ -2,6 +2,9 @@
     class SaleRecordDetails {
         private $db = null;
         private $table_name = "SaleRecordDetails";
+        private $product_table_name = "Products";
+        private $category_table_name = "Categories";
+        private $sales_table_name = "SalesRecords";
 
         public function __construct($db)
         {
@@ -214,4 +217,171 @@
                 exit($e->getMessage());
             }
         }
+
+        public function findpredictionData($salesNumberStart, $salesNumberEnd)
+        {
+            /*
+            * return an associate array containing all sales for the dates requirements 
+            */
+            $statement = "
+                SELECT 
+                    SalesRecordNumber, ProductNumber, QuotedPrice, QuantityOrdered
+                FROM 
+                    $this->table_name
+                WHERE
+                    SalesRecordNumber
+                BETWEEN 
+                    '$salesNumberStart'
+                AND 
+                    '$salesNumberEnd'
+            ";
+
+            try {
+                $statement = $this->db->prepare($statement);
+                $statement->execute();
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            }
+            catch(PDOException $e)
+            {
+                exit($e->getMessage());
+            }
+        }
+
+        public function findPredictionDatas($startDateX, $endDateX)
+        {
+            $statement = "
+                SELECT 
+                    sales.SalesDate,
+                    record.SalesRecordNumber,
+                    record.ProductNumber, 
+                    record.QuotedPrice, 
+                    record.QuantityOrdered, 
+                    product.ProductName,
+                    category.CategoryName
+                FROM 
+                    $this->sales_table_name sales
+                JOIN 
+                    $this->table_name record
+                ON
+                    sales.SalesRecordNumber = record.SalesRecordNumber
+                JOIN 
+                    $this->product_table_name product
+                ON 
+                    record.ProductNumber = product.ProductNumber
+                JOIN 
+                    $this->category_table_name category
+                ON
+                    product.CategoryID = category.CategoryID
+                WHERE
+                    sales.SalesDate
+                BETWEEN 
+                    '$startDateX'
+                AND 
+                    '$endDateX';
+            ";
+
+            try {
+                $statement = $this->db->prepare($statement);
+                $statement->execute();
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            }
+            catch(PDOException $e)
+            {
+                exit($e->getMessage());
+            }
+        }
+
+        public function findPredictDataByDayProductNum($startDateX, $endDateX)
+        {
+            $statement = "
+            SELECT 
+            sales.SalesDate,
+            record.SalesRecordNumber,
+            record.ProductNumber, 
+            record.QuotedPrice, 
+            SUM(record.QuantityOrdered) as AllQtyOrd, 
+            product.ProductName,
+            category.CategoryName
+            FROM 
+                $this->sales_table_name sales
+            JOIN 
+                $this->table_name record
+            ON
+                sales.SalesRecordNumber = record.SalesRecordNumber
+            JOIN 
+                $this->product_table_name product
+            ON 
+                record.ProductNumber = product.ProductNumber
+            JOIN 
+                $this->category_table_name category
+            ON
+                product.CategoryID = category.CategoryID
+            WHERE
+                sales.SalesDate
+            BETWEEN 
+                '$startDateX'
+            AND 
+                '$endDateX'
+            GROUP BY sales.SalesDate, record.ProductNumber
+            ORDER BY 1;
+            ";
+
+            try {
+                $statement = $this->db->prepare($statement);
+                $statement->execute();
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            }
+            catch(PDOException $e)
+            {
+                exit($e->getMessage());
+            }
+        }
+
+        // public function findPredictionDatas($startDateX, $endDateX)
+        // {
+        //     $statement = "
+        //         SELECT 
+        //             record.SalesRecordNumber,
+        //             record.ProductNumber, 
+        //             record.QuotedPrice, 
+        //             record.QuantityOrdered, 
+        //             product.ProductName,
+        //             category.CategoryName,
+        //             sales.SalesDate
+        //         FROM 
+        //             $this->table_name record 
+        //         JOIN 
+        //             $this->product_table_name product
+        //         ON 
+        //             record.ProductNumber = product.ProductNumber
+        //         JOIN 
+        //             $this->category_table_name category
+        //         ON
+        //             product.CategoryID = category.CategoryID
+        //         JOIN 
+        //             $this->sales_table_name sales
+        //         ON
+        //             record.SalesRecordNumber = sales.SalesRecordNumber
+        //         WHERE
+        //             sales.SalesDate
+        //         BETWEEN 
+        //             '$startDateX'
+        //         AND 
+        //             '$endDateX';
+        //     ";
+
+        //     try {
+        //         $statement = $this->db->prepare($statement);
+        //         $statement->execute();
+        //         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        //         return $result;
+        //     }
+        //     catch(PDOException $e)
+        //     {
+        //         exit($e->getMessage());
+        //     }
+        // }
     }
