@@ -384,4 +384,22 @@
         //         exit($e->getMessage());
         //     }
         // }
+
+        public function findPredictionCategories($startDateX, $endDateX)
+        {
+            // TODO: Add quert to find sales dates and product quanity and group by category
+            $statement = "";
+
+            try 
+            {
+                $statement = $this->db->prepare($statement);
+                $statement->execute();
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            }
+            catch(PDOException $e)
+            {
+                exit($e->getMessage());
+            }
+        }
     }

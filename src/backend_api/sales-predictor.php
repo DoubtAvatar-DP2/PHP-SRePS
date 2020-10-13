@@ -251,5 +251,7 @@
     var_dump($recordDetailTable->findPredictDataByDayProductNum($startDateX, $endDateX));
     // -- --
 
+    //TODO: Add boolean logic to get leastsquare regression differently based on user input
+
     GetLeastSquareRegression($startDateX, $itemTableArray);
 ?>
