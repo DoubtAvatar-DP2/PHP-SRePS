@@ -90,7 +90,7 @@
     
     // find the intercept
     function GetIntercept($dataSize,  $slope, $YSum, $XSum)
-    {   
+    {
         return ($YSum - ($slope * $XSum)) / $dataSize;
     }
 
@@ -128,23 +128,30 @@
         // get special values 
         $predictDataArray = GetSpecialValues($itemTableArray, $convertedXAxisArray);
 
-        // setting up sums 
-        $XSum = GetXSum($convertedXAxisArray);
-        $YSum = GetYSum($itemTableArray);
-        $xSqrSum = GetXSqrSum($predictDataArray);
-        $XYSum = GetXYSum($predictDataArray);
+        if(count($predictDataArray) != 0)
+        {
+            // setting up sums 
+            $XSum = GetXSum($convertedXAxisArray);
+            $YSum = GetYSum($itemTableArray);
+            $xSqrSum = GetXSqrSum($predictDataArray);
+            $XYSum = GetXYSum($predictDataArray);
 
-        echo $XSum . " : " . $YSum . " : " . $xSqrSum . " : " . $XYSum;
-        echo "<br>";
+            echo $XSum . " : " . $YSum . " : " . $xSqrSum . " : " . $XYSum;
+            echo "<br>";
 
-        // get slope and intercept -- Sam: Again, reworked to work with the class
-        $slope = GetSlope(count($predictDataArray), $predictDataArray, $XYSum, $XSum, $YSum, $xSqrSum);
-        $intercept = GetIntercept(count($predictDataArray), $slope, $YSum, $XSum);
+            // get slope and intercept -- Sam: Again, reworked to work with the class
+            $slope = GetSlope(count($predictDataArray), $predictDataArray, $XYSum, $XSum, $YSum, $xSqrSum);
+            $intercept = GetIntercept(count($predictDataArray), $slope, $YSum, $XSum);
 
-        echo "slope: " . $slope . " : Intercept " . $intercept;
+            echo "slope: " . $slope . " : Intercept " . $intercept;
 
-        $regressionLine = ($slope * $xValue) + $intercept;
-        return $regressionLine;
+            $regressionLine = ($slope * $xValue) + $intercept;
+            return $regressionLine;
+        }
+        else
+        {
+            return "Error: No data found to form a prediction from.";
+        }
     }
 
     function findRecordMinMax($tableDataArrayX)
