@@ -32,13 +32,9 @@
     <div>
       <p>What do you want to display?</p>
       <input type="radio" id="item" name="WHICHDATA" value="ITEM" checked="checked">
-      <label for="item">Item</label><br>
+      <label for="item">Item-</label><input type="text" id="ItemName" placeholder="Item Name"><br>
       <input type="radio" id="category" name="WHICHDATA" value="CATEGORY">
-      <label for="category">Catergory</label><br>
-      <input type="radio" id="specificItem" name="WHICHDATA" value="SPECIFICITEM">
-      <input type="text" id="ItemName" placeholder="Item Name"><br>
-      <input type="radio" id="specificCategory" name="WHICHDATA" value="SPECIFICCATEGORY">
-      <input type="text" id="CategoryName" placeholder="Category Name"><br>
+      <label for="category">Catergory-</label><input type="text" id="CategoryName" placeholder="Category Name"><br>
 
       <p>What period do you want to display?</p>
       <input type="radio" id="week" name="PERIOD" value="WEEK" checked="checked">
