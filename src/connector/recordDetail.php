@@ -119,6 +119,34 @@
             }
         }
 
+        public function productNameToId($productName)
+        {
+            /*
+            * return the id of the product with name that matches productname
+            */
+            $statement = "
+                SELECT 
+                    ProductNumber 
+                FROM 
+                    $this->product_table_name 
+                WHERE 
+                    ProductName LIKE :ProductName
+            ";            
+
+            try {
+                $statement = $this->db->prepare($statement);
+                $statement->execute(array(
+                    'ProductName' => $productName
+                ));
+                $result = $statement->fetch();
+                return $result[0];
+            }
+            catch(PDOException $e)
+            {
+                exit($e->getMessage());
+            }
+        }
+
         public function insert(Array $newRecordDetails)
         {
             /*
