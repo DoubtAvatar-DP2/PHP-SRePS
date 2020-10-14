@@ -293,8 +293,42 @@
             }
         }
 
-        public function findPredictDataByDayProductNum($startDateX, $endDateX)
+        public function findPredictDataItemOrCategory($startDateX, $endDateX, $itemOrCategory, $ID)
         {
+            $groupBy = "category.CategoryID";
+            $conditions = "";
+
+            if ($itemOrCategory == "ITEM")
+            {
+                $groupBy = "record.ProductNumber";
+
+                if ($ID != -1)
+                {
+                    $conditions .= "
+                    record.ProductNumber == $ID
+                    AND
+                    ";
+                }
+            }
+            else
+            {
+                if ($ID != -1)
+                {
+                    $conditions .= "
+                    category.CategoryID == $ID
+                    AND
+                    ";
+                }
+            }
+
+            $conditions .= "
+            sales.SalesDate
+            BETWEEN 
+            '$startDateX'
+            AND 
+            '$endDateX'
+            ";
+
             $statement = "
             SELECT 
             sales.SalesDate,
@@ -319,12 +353,8 @@
             ON
                 product.CategoryID = category.CategoryID
             WHERE
-                sales.SalesDate
-            BETWEEN 
-                '$startDateX'
-            AND 
-                '$endDateX'
-            GROUP BY sales.SalesDate, record.ProductNumber
+            $conditions
+            GROUP BY sales.SalesDate, $groupBy
             ORDER BY 1;
             ";
 

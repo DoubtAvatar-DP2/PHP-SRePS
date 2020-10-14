@@ -21,14 +21,8 @@
   <form method="GET" action="displayPredictions.php">
     <div class="form-group mb-2">
       <label for="recorddatestart">Record Start Date:</label>
-      <input type="date" id="recorddatestart" name="recorddatestart" placeholder="Please enter the record date">
+      <input type="date" id="recorddatestart" name="recorddatestart" value="2020-09-04"> <!--This date is just temp, we can maybe as JS to se the current date to be the deffault-->
     </div>
-    <!-- Don't thing we this do to you being able to select a period which will add to the start date
-    <div class="form-group mb-2">
-      <label for="recorddateend">Record End Date:</label>
-      <input type="date" id="recorddateend" name="recorddateend" placeholder="Please enter the record date">
-    </div>
-    -->
     <div>
       <p>What do you want to display?</p>
       <input type="radio" id="item" name="WHICHDATA" value="ITEM" checked="checked">
