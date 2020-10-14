@@ -293,8 +293,42 @@
             }
         }
 
-        public function findPredictDataByDayProductNum($startDateX, $endDateX)
+        public function findPredictDataItemOrCategory($startDateX, $endDateX, $itemOrCategory, $ID)
         {
+            $groupBy = "category.CategoryID";
+            $conditions = "";
+
+            if ($itemOrCategory == "ITEM")
+            {
+                $groupBy = "record.ProductNumber";
+
+                if ($ID != -1)
+                {
+                    $conditions .= "
+                    record.ProductNumber == $ID
+                    AND
+                    ";
+                }
+            }
+            else
+            {
+                if ($ID != -1)
+                {
+                    $conditions .= "
+                    category.CategoryID == $ID
+                    AND
+                    ";
+                }
+            }
+
+            $conditions .= "
+            sales.SalesDate
+            BETWEEN 
+            '$startDateX'
+            AND 
+            '$endDateX'
+            ";
+
             $statement = "
             SELECT 
             sales.SalesDate,
@@ -319,79 +353,12 @@
             ON
                 product.CategoryID = category.CategoryID
             WHERE
-                sales.SalesDate
-            BETWEEN 
-                '$startDateX'
-            AND 
-                '$endDateX'
-            GROUP BY sales.SalesDate, record.ProductNumber
+            $conditions
+            GROUP BY sales.SalesDate, $groupBy
             ORDER BY 1;
             ";
 
             try {
-                $statement = $this->db->prepare($statement);
-                $statement->execute();
-                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-                return $result;
-            }
-            catch(PDOException $e)
-            {
-                exit($e->getMessage());
-            }
-        }
-
-        // public function findPredictionDatas($startDateX, $endDateX)
-        // {
-        //     $statement = "
-        //         SELECT 
-        //             record.SalesRecordNumber,
-        //             record.ProductNumber, 
-        //             record.QuotedPrice, 
-        //             record.QuantityOrdered, 
-        //             product.ProductName,
-        //             category.CategoryName,
-        //             sales.SalesDate
-        //         FROM 
-        //             $this->table_name record 
-        //         JOIN 
-        //             $this->product_table_name product
-        //         ON 
-        //             record.ProductNumber = product.ProductNumber
-        //         JOIN 
-        //             $this->category_table_name category
-        //         ON
-        //             product.CategoryID = category.CategoryID
-        //         JOIN 
-        //             $this->sales_table_name sales
-        //         ON
-        //             record.SalesRecordNumber = sales.SalesRecordNumber
-        //         WHERE
-        //             sales.SalesDate
-        //         BETWEEN 
-        //             '$startDateX'
-        //         AND 
-        //             '$endDateX';
-        //     ";
-
-        //     try {
-        //         $statement = $this->db->prepare($statement);
-        //         $statement->execute();
-        //         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        //         return $result;
-        //     }
-        //     catch(PDOException $e)
-        //     {
-        //         exit($e->getMessage());
-        //     }
-        // }
-
-        public function findPredictionCategories($startDateX, $endDateX)
-        {
-            // TODO: Add quert to find sales dates and product quanity and group by category
-            $statement = "";
-
-            try 
-            {
                 $statement = $this->db->prepare($statement);
                 $statement->execute();
                 $result = $statement->fetchAll(PDO::FETCH_ASSOC);

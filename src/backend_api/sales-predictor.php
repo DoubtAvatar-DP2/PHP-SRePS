@@ -35,7 +35,6 @@
             $tempDayValue = floor(($tableDataArrayX[$i]['SalesDate'] - $startX)/86400);
             $tableDataArrayX[$i]["SalesDate"] = $tempDayValue;
             $i++;
-
         }
         return $tableDataArrayX;
     }
@@ -59,7 +58,7 @@
 
         foreach($tableDataArrayY as $table)
         {
-            $total += $table["QuantityOrdered"]; 
+            $total += $table["AllQtyOrd"]; 
         }
         $total = $total;
         return $total;
@@ -101,43 +100,10 @@
         return (($dataSize * $XYSum) - ($XSum* $YSum)) / (($dataSize * $xSqrSum) - pow($XSum, 2));
     }
 
-    // converts all quanities to a total for each sales record
-    function SalesRecordQuantity($tableDataArrayY, $tableDataArrayX)
-    {
-        $sorted = array();
-        $total = 0;
-        $j = 0;
-
-        // accumulates quatity sold 
-        // else it pushes current sales record quantity into and array and moves to the next sales record
-        foreach ($tableDataArrayY as $table)
-        {
-            if ($table["SalesRecordNumber"] == $tableDataArrayX[$j]["SalesRecordNumber"])
-            {
-                $total += $table["QuantityOrdered"];
-            }
-            else 
-            {
-                array_push($sorted, $total);
-                $total = $table["QuantityOrdered"];
-                $j++;
-            }
-        }
-        array_push($sorted, $total);
-        return array_reverse($sorted); // needs to be reversed
-    }
-
     // find XY
     function GetSpecialValues($tableDataArrayY, $tableDataArrayX)
     {
         $dataArrayXY = array();
-
-        //TODO: Delete echos below
-        echo "-- XY --";
-        echo "<br>";
-
-        // converts quatitiy to a total
-        $tableDataQuanityY = SalesRecordQuantity($tableDataArrayY, $tableDataArrayX);
 
         // find the appropriate QuantityOrdered and SalesDate, times them together into the array and return the array
         $it = new MultipleIterator();
@@ -146,19 +112,15 @@
 
         foreach ($it as $dataXY)
         {
-            $predictedData = new PredictData($dataXY[0]["SalesDate"], $dataXY[1]['QuantityOrdered']);
+            $predictedData = new PredictData($dataXY[0]["SalesDate"], $dataXY[1]['AllQtyOrd']);
             $predictedData->xy = $predictedData->date * $predictedData->QtyNum;
             $predictedData->xSqr = pow($predictedData->date, 2);
             array_push($dataArrayXY, $predictedData);
-
-            //TODO: Delete echos below
-            echo $predictedData->date . " : " . $predictedData->QtyNum . " : " . $predictedData->xy . " : " . $predictedData->xSqr;
-            echo "<br>";
         }
         return $dataArrayXY;
     }
 
-    function GetLeastSquareRegression($startDateX, $itemTableArray)
+    function GetLeastSquareRegression($startDateX, $itemTableArray, $xValue)
     {
         // setting up date to x axis
         $convertedXAxisArray = ConvertXAxisToInt($itemTableArray, $startDateX);
@@ -181,8 +143,7 @@
 
         echo "slope: " . $slope . " : Intercept " . $intercept;
 
-        //$regressionLine = $slope * (X) + $intercept;
-        $regressionLine = null;
+        $regressionLine = ($slope * $xValue) + $intercept;
         return $regressionLine;
     }
 
@@ -208,50 +169,16 @@
         die("Can not connect to database. Please try again later");
     }
 
-    // -- Just to show how to get the data we'll need from the display page --
-    echo $_GET["recorddatestart"] . " ";
-    echo $_GET["WHICHDATA"] . " ";
-    echo $_GET["PERIOD"] . " <br/>";
-
+    // Gets selections from the display page
     $strPeriod = "+1 " . $_GET["PERIOD"];
-
-    // Just to show how it can be done
-    $startDateX = strtotime($_GET["recorddatestart"]);
-    $endDateX = strtotime($strPeriod, $startDateX);
-
-    echo gmdate("Y-m-d", $startDateX) . " ";
-    echo gmdate("Y-m-d", $endDateX) . " <br/>";
-
-    // More realistically you'll want something like this if you want to keep the dates in DateTime before
-    // passing them into ConvertXAxisToInt
-    $strPeriod = "+1 " . $_GET["PERIOD"];
-    $startDateX = $_GET["recorddatestart"];
-    $endDateX = gmdate("Y-m-d", strtotime($strPeriod, strtotime($startDateX)));
-
-    // -- --
-
-    // This will be entered in from the user, for now this is just for the testing
-    $startDateX = "2020-09-04";
-    $endDateX = "2020-09-25";
-
-    // This is needed for the x axis (date of sale)
-    //$salesRecordTable = new SalesRecord($db);
-    //$tableDataArrayX = $salesRecordTable->findpredictionData($startDateX, $endDateX);
-
-    // finds the min and max for record number, needed for query of table
-    //$RecordNumbers = findRecordMinMax($tableDataArrayX);
+    $startDateX = $_GET["recorddatestart"]; //2020-09-04
+    $endDateX = gmdate("Y-m-d", strtotime($strPeriod, strtotime($startDateX))); //~2020-09-25
+    $groupBy = $_GET["WHICHDATA"];
+    $xValue = 15; // Just to test, will have to have some way of getting this
 
     // This is needed for the y axis (number of items sold)
     $recordDetailTable = new SaleRecordDetails($db);
-    //$tableDataArrayY = $recordDetailTable->findpredictionData($RecordNumbers[0], $RecordNumbers[1]);
-    $itemTableArray = $recordDetailTable->findPredictionDatas($startDateX, $endDateX);
+    $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, -1); // works perfect -- jack 
 
-    // -- Just to test my data --
-    var_dump($recordDetailTable->findPredictionDatas($startDateX, $endDateX));
-    var_dump($recordDetailTable->findPredictDataByDayProductNum($startDateX, $endDateX));
-    // -- --
-
-    //TODO: Add boolean logic to get leastsquare regression differently based on user input
-
-    GetLeastSquareRegression($startDateX, $itemTableArray);
+    echo "<br/> Regression: " . GetLeastSquareRegression($startDateX, $itemTableArray, $xValue);
 ?>
