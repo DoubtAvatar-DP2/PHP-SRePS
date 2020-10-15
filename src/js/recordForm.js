@@ -204,7 +204,7 @@ document.getElementById("add-record-button").addEventListener("click", (event) =
                 let newRecordID = data.newRecordID;
                 // check if receiving successful code        
                 alert("Successfully added a record, we will move you to the main page shortly.");
-                window.location.href = `view.php?RecordID=${newRecordID}`;
+                window.location.href = `view.php?recordID=${newRecordID}`;
             }
             else {
                 ClearErrorMessage();

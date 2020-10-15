@@ -70,13 +70,13 @@
             */
             $statement = "
                 SELECT 
-                    SalesRecordNumber, ProductNumber, QuotedPrice, QuantityOrdered
+                    SalesRecordNumber, SaleRecordDetails.ProductNumber, ProductName, QuotedPrice, QuantityOrdered
                 FROM 
                     $this->table_name
+                JOIN Products ON Products.ProductNumber = SaleRecordDetails.ProductNumber
                 WHERE 
                     SalesRecordNumber = :SalesRecordNumber
-            ";            
-
+            ";
             try {
                 $statement = $this->db->prepare($statement);
                 $statement->execute(array(
