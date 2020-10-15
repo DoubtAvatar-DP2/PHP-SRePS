@@ -90,11 +90,6 @@ function addNewProductField(productName = null, quantity = null, price = null)
 
     document.getElementById(quantityId).addEventListener("change", checkForNewProductField); 
     document.getElementById(productNameId).addEventListener("change", checkForNewProductField); 
-<<<<<<< HEAD
-    document.getElementById(priceId).addEventListener("change", checkForNewProductField);
-=======
-
->>>>>>> master
 
     document.getElementById(priceId).addEventListener("change", checkForNewProductField);
     document.getElementById("delete"+inputid).addEventListener("click", function() {deleteRow(productEntryRow.rowIndex)});
@@ -160,7 +155,7 @@ function fetchRecordDetails()
     for (let i = 0; i < productNumberInputs.length - 1; ++i)
     {
         recordDetails.push({
-            productNumber: productNumberInputs[i].value,
+            productNumber: productToID(productNumberInputs[i].value),
             quantityOrdered: quantityInputs[i].value,
             quotedPrice: quotedInputs[i].value
         });
