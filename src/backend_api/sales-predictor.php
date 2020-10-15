@@ -90,7 +90,7 @@
     
     // find the intercept
     function GetIntercept($dataSize,  $slope, $YSum, $XSum)
-    {   
+    {
         return ($YSum - ($slope * $XSum)) / $dataSize;
     }
 
@@ -105,10 +105,6 @@
     {
         $dataArrayXY = array();
 
-        //TODO: Delete echos below
-        echo "-- XY --";
-        echo "<br>";
-
         // find the appropriate QuantityOrdered and SalesDate, times them together into the array and return the array
         $it = new MultipleIterator();
         $it->attachIterator(new ArrayIterator($tableDataArrayX));
@@ -120,15 +116,11 @@
             $predictedData->xy = $predictedData->date * $predictedData->QtyNum;
             $predictedData->xSqr = pow($predictedData->date, 2);
             array_push($dataArrayXY, $predictedData);
-
-            //TODO: Delete echos below
-            echo $predictedData->date . " : " . $predictedData->QtyNum . " : " . $predictedData->xy . " : " . $predictedData->xSqr;
-            echo "<br>";
         }
         return $dataArrayXY;
     }
 
-    function GetLeastSquareRegression($startDateX, $itemTableArray)
+    function GetLeastSquareRegression($startDateX, $itemTableArray, $xValue)
     {
         // setting up date to x axis
         $convertedXAxisArray = ConvertXAxisToInt($itemTableArray, $startDateX);
@@ -136,24 +128,30 @@
         // get special values 
         $predictDataArray = GetSpecialValues($itemTableArray, $convertedXAxisArray);
 
-        // setting up sums 
-        $XSum = GetXSum($convertedXAxisArray);
-        $YSum = GetYSum($itemTableArray);
-        $xSqrSum = GetXSqrSum($predictDataArray);
-        $XYSum = GetXYSum($predictDataArray);
+        if(count($predictDataArray) != 0)
+        {
+            // setting up sums 
+            $XSum = GetXSum($convertedXAxisArray);
+            $YSum = GetYSum($itemTableArray);
+            $xSqrSum = GetXSqrSum($predictDataArray);
+            $XYSum = GetXYSum($predictDataArray);
 
-        echo $XSum . " : " . $YSum . " : " . $xSqrSum . " : " . $XYSum;
-        echo "<br>";
+            echo $XSum . " : " . $YSum . " : " . $xSqrSum . " : " . $XYSum;
+            echo "<br>";
 
-        // get slope and intercept -- Sam: Again, reworked to work with the class
-        $slope = GetSlope(count($predictDataArray), $predictDataArray, $XYSum, $XSum, $YSum, $xSqrSum);
-        $intercept = GetIntercept(count($predictDataArray), $slope, $YSum, $XSum);
+            // get slope and intercept -- Sam: Again, reworked to work with the class
+            $slope = GetSlope(count($predictDataArray), $predictDataArray, $XYSum, $XSum, $YSum, $xSqrSum);
+            $intercept = GetIntercept(count($predictDataArray), $slope, $YSum, $XSum);
 
-        echo "slope: " . $slope . " : Intercept " . $intercept;
+            echo "slope: " . $slope . " : Intercept " . $intercept;
 
-        //$regressionLine = $slope * (X) + $intercept;
-        $regressionLine = null;
-        return $regressionLine;
+            $regressionLine = ($slope * $xValue) + $intercept;
+            return $regressionLine;
+        }
+        else
+        {
+            return "Error: No data found to form a prediction from.";
+        }
     }
 
     function findRecordMinMax($tableDataArrayX)
@@ -178,39 +176,16 @@
         die("Can not connect to database. Please try again later");
     }
 
-    // -- Just to show how to get the data we'll need from the display page --
-    echo $_GET["recorddatestart"] . " ";
-    echo $_GET["WHICHDATA"] . " ";
-    echo $_GET["PERIOD"] . " <br/>";
-
+    // Gets selections from the display page
     $strPeriod = "+1 " . $_GET["PERIOD"];
-
-    // Just to show how it can be done
-    $startDateX = strtotime($_GET["recorddatestart"]);
-    $endDateX = strtotime($strPeriod, $startDateX);
-
-    echo gmdate("Y-m-d", $startDateX) . " ";
-    echo gmdate("Y-m-d", $endDateX) . " <br/>";
-
-    // More realistically you'll want something like this if you want to keep the dates in DateTime before
-    // passing them into ConvertXAxisToInt
-    $strPeriod = "+1 " . $_GET["PERIOD"];
-    $startDateX = $_GET["recorddatestart"];
-    $endDateX = gmdate("Y-m-d", strtotime($strPeriod, strtotime($startDateX)));
-
-    // -- --
-
-    // This will be entered in from the user, for now this is just for the testing
-    $startDateX = "2020-09-04";
-    $endDateX = "2020-09-25";
+    $startDateX = $_GET["recorddatestart"]; //2020-09-04
+    $endDateX = gmdate("Y-m-d", strtotime($strPeriod, strtotime($startDateX))); //~2020-09-25
+    $groupBy = $_GET["WHICHDATA"];
+    $xValue = 15; // Just to test, will have to have some way of getting this
 
     // This is needed for the y axis (number of items sold)
     $recordDetailTable = new SaleRecordDetails($db);
-    $itemTableArray = $recordDetailTable->findPredictDataByDayProductNum($startDateX, $endDateX); // works perfect -- jack 
-    // -- Just to test my data --
-    var_dump($recordDetailTable->findPredictionDatas($startDateX, $endDateX));
-    var_dump($recordDetailTable->findPredictDataByDayProductNum($startDateX, $endDateX));
-    // -- --
+    $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, -1); // works perfect -- jack 
 
-    GetLeastSquareRegression($startDateX, $itemTableArray);
+    echo "<br/> Regression: " . GetLeastSquareRegression($startDateX, $itemTableArray, $xValue);
 ?>
