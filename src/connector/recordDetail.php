@@ -62,19 +62,19 @@
             } else {
                 if($startDate && !$endDate) { // Start date specified, no end date specified
                     $statement .= "
-                    WHERE SalesRecords.SalesDate >= :startDate
+                    WHERE sr.SalesDate >= :startDate
                     ";
                     $statement = $this->db->prepare($statement);
                     $statement->execute(array("startDate" => $startDate));
                 } elseif(!$startDate && $endDate) { // No start date specified, end date specified
                     $statement .= "
-                    WHERE SalesRecords.SalesDate <= :endDate
+                    WHERE sr.SalesDate <= :endDate
                     ";
                     $statement = $this->db->prepare($statement);
                     $statement->execute(array("endDate" => $endDate));
                 } else { // Both start date and end date specified
                     $statement .= "
-                    WHERE SalesRecords.SalesDate BETWEEN :startDate AND :endDate
+                    WHERE sr.SalesDate BETWEEN :startDate AND :endDate
                     ";
                     $statement = $this->db->prepare($statement);
                     $statement->execute(array("startDate" => $startDate, "endDate" => $endDate));
