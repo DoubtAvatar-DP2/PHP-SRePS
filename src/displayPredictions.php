@@ -52,10 +52,11 @@
     {
         $test = include("backend_api/sales-predictor.php");
         echo "<br>";
-
+        echo "slope: " . $test[0];
         echo "<br>";
-
-        echo $test[0];
+        echo "intercept: " . $test[1];
+        echo "<br>";
+        echo "Example Date: " . $test[2][3]['SalesDate'];
     }
 
     ?>
