@@ -142,8 +142,8 @@
             // setting up sums 
             $XSum = GetXSum($convertedXAxisArray);
             $YSum = GetYSum($itemTableArray);
-            $xSqrSum = GetXSqrSum($predictDataArray);
-            $XYSum = GetXYSum($predictDataArray);
+            $xSqrSum = GetXSqrSum($predictDataArray); 
+            $XYSum = GetXYSum($predictDataArray); 
 
             echo $XSum . " : " . $YSum . " : " . $xSqrSum . " : " . $XYSum;
             echo "<br>";

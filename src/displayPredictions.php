@@ -56,7 +56,12 @@
         echo "<br>";
         echo "intercept: " . $test[1];
         echo "<br>";
-        echo "Example Date: " . $test[2][3]['SalesDate'];
+        echo "Example Date: " ;//. $test[2][3]['SalesDate'];
+        foreach ($test[2] as $a)
+        {
+          echo $a['SalesDate'];
+          echo "<br>";
+        }
     }
 
     ?>
