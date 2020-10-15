@@ -1,13 +1,8 @@
 <?php
     include("includes/header.php");
     include("includes/nav.php");
-
-    /**
-     * TODO:
-     *  Query DB for all sales records
-     *  Implement pagination with query (e.g. ?page=5 should skip the first 5 pages of results) - Consider limiting pages to 25 records per page?
-     */
 ?>
+
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
         <div
@@ -40,66 +35,25 @@
           <table class="table table-striped table-sm">
             <thead>
               <tr>
-                <th>Record #</th>
-                <th>Date</th>
-                <th>Total Price</th>
+                <th><a id="record">Record #</a></th>
+                <th><a id="date">Date</a></th>
+                <th><a id="price">Total Price</a></th>
               </tr>
             </thead>
             <tbody>
-              <?php
-              /**
-               * TODO:
-               *  Loop through all sales record results
-               */
-              ?>
-              <!-- <tr>
-                <td>1001</td>
-                <td>18-09-2020</td>
-                <td>$55.60</td>
-              </tr>
-              <tr>
-                <td>1002</td>
-                <td>18-09-2020</td>
-                <td>$132.00</td>
-              </tr>
-              <tr>
-                <td>1003</td>
-                <td>19-09-2020</td>
-                <td>$99.05</td>
-              </tr> -->
+
             </tbody>
           </table>
         </div>
         <nav aria-label="Page navigation example">
           <ul class="pagination">
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <?php
-              /**
-               * TODO:
-               *  Implement current page highlighting (page-item active)
-               *  Implement accurate page numbering
-               *  Implement pagination links
-               *  Extension: Implement custom page sizes
-               */
-            ?>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
           </ul>
         </nav>
       </main>
 
-    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js" integrity="sha512-Izh34nqeeR7/nwthfeE0SI3c8uhFSnqxV0sI9TvTcXiFJkMd6fB644O64BRq2P/LA/+7eRvCw4GmLsXksyTHBg==" crossorigin="anonymous"></script> 
       <script src="js/list.js" type="text/javascript"></script>
+      <link rel="stylesheet" href="css/list.css">
 
 <?php
     include("includes/footer.php");
