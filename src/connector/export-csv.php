@@ -25,8 +25,9 @@ function setDownloadHeaders($fileName, $contentLength) {
  *
  * @param array $data An array of arrays, containing the data to export
  * @param array $headings default null An optional array containing the column headings
+ * @param string $fileName The file name to be used
  **/
-function exportToCSV(array $data, ?array $headings = null) {
+function exportToCSV(array $data, ?array $headings = null, string $fileName="export.csv") {
     $output = "";
 
     if($headings) {
@@ -55,8 +56,9 @@ function exportToCSV(array $data, ?array $headings = null) {
  * Intakes an associative array of data. Generates a CSV and downloads a CSV file
  *
  * @param array $data An array of arrays, containing the data to export
+ * @param string $fileName The file name to be used
   **/
-function exportAssocToCSV(array $data) {
+function exportAssocToCSV(array $data, string $fileName="export.csv") {
     $output = "";
 
     //Loop through the first array and use its associative keys as column headings
@@ -71,7 +73,7 @@ function exportAssocToCSV(array $data) {
         }
         $output .= "\r\n";
     }
-    setDownloadHeaders("export.csv", strlen($output));
+    setDownloadHeaders($fileName, strlen($output));
 
     flush(); // Flush system output buffer
 
