@@ -44,7 +44,7 @@ function exportToCSV(array $data, ?array $headings = null, string $fileName="exp
         $output .= "\r\n";
     }
 
-    setDownloadHeaders("export.csv", strlen($output));
+    setDownloadHeaders($fileName, strlen($output));
 
     flush(); // Flush system output buffer
     echo $output;
