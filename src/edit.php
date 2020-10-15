@@ -2,9 +2,6 @@
     include("includes/header.php");
     include("includes/nav.php");
 ?>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js" integrity="sha512-Izh34nqeeR7/nwthfeE0SI3c8uhFSnqxV0sI9TvTcXiFJkMd6fB644O64BRq2P/LA/+7eRvCw4GmLsXksyTHBg==" crossorigin="anonymous"></script>
-
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
   <div
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -21,7 +18,7 @@
   </div>
 
   
-  <form id="addrecordform">
+  <form id="addrecordform" autocomplete="off">
     <div class="form-group mb-2">
       <label for="recorddate">Record Date:</label>
       <input type="date" id="recorddate" name="recorddate" placeholder="Please enter the record date" required>
