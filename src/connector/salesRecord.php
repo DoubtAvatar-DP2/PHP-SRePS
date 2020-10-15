@@ -148,35 +148,5 @@
                 exit($e->getMessage());
             }
         }
-
-        public function findpredictionData($startDate, $endDate)
-        {
-            /*
-            * return an associate array containing all sales for the dates requirements 
-            */
-            $statement = "
-                SELECT 
-                    SalesRecordNumber, SalesDate, Comment
-                FROM 
-                    $this->table_name
-                WHERE
-                    SalesDate
-                BETWEEN 
-                    '$startDate'
-                AND 
-                    '$endDate'
-            ";
-
-            try {
-                $statement = $this->db->prepare($statement);
-                $statement->execute();
-                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-                return $result;
-            }
-            catch(PDOException $e)
-            {
-                exit($e->getMessage());
-            }
-        }
     }
 ?>

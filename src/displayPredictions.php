@@ -50,7 +50,13 @@
     // if data has been submitted
     if (!empty($_GET["DISPLAY"]))
     {
-        include("backend_api/sales-predictor.php");
+        $test = include("backend_api/sales-predictor.php");
+        echo "<br>";
+        echo "slope: " . $test[0];
+        echo "<br>";
+        echo "intercept: " . $test[1];
+        echo "<br>";
+        echo "Example Date: " . $test[2][3]['SalesDate'];
     }
 
     ?>
