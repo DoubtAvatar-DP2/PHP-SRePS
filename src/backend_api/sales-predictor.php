@@ -95,7 +95,7 @@
     }
 
     // find the slope
-    function GetSlope($dataSize, $tableDataArray, $XYSum, $XSum, $YSum, $xSqrSum)
+    function GetSlope($dataSize, $XYSum, $XSum, $YSum, $xSqrSum)
     {
         return (($dataSize * $XYSum) - ($XSum* $YSum)) / (($dataSize * $xSqrSum) - pow($XSum, 2));
     }
@@ -120,6 +120,13 @@
         return $dataArrayXY;
     }
 
+    function returnArray($slope, $intercept, $itemTableArray)
+    {
+        $regressionLine = array();
+        array_push($regressionLine, $slope, $intercept, $itemTableArray);
+        return $regressionLine;
+    }
+
     function GetLeastSquareRegression($startDateX, $itemTableArray, $xValue)
     {
         // setting up date to x axis
@@ -128,6 +135,8 @@
         // get special values 
         $predictDataArray = GetSpecialValues($itemTableArray, $convertedXAxisArray);
 
+        // needs to be greater than 1 due do the way the regression line is calculated, if it is two it will end up dividing by 0.
+        // must be two serpate days
         if(count($predictDataArray) > 1)
         {
             // setting up sums 
@@ -140,12 +149,13 @@
             echo "<br>";
 
             // get slope and intercept -- Sam: Again, reworked to work with the class
-            $slope = GetSlope(count($predictDataArray), $predictDataArray, $XYSum, $XSum, $YSum, $xSqrSum);
+            $slope = GetSlope(count($predictDataArray), $XYSum, $XSum, $YSum, $xSqrSum);
             $intercept = GetIntercept(count($predictDataArray), $slope, $YSum, $XSum);
 
             echo "slope: " . $slope . " : Intercept " . $intercept;
 
-            $regressionLine = ($slope * $xValue) + $intercept;
+            //$regressionLine = ($slope * $xValue) + $intercept;
+            $regressionLine = returnArray($slope, $intercept, $itemTableArray);
             return $regressionLine;
         }
         else
@@ -187,5 +197,6 @@
     $recordDetailTable = new SaleRecordDetails($db);
     $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, -1); 
 
-    echo "<br/> Regression: " . GetLeastSquareRegression($startDateX, $itemTableArray, $xValue);
+    // returns an array ie. [slope, intercept, array of data]
+    return GetLeastSquareRegression($startDateX, $itemTableArray, $xValue);
 ?>
