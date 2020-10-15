@@ -10,6 +10,9 @@
     $sr = new SalesRecord($db);
     $srd = new SaleRecordDetails($db);
 
+    $startDate = $_GET['start'] ?? null;
+    $endDate = $_GET['end'] ?? null;
+
     if(!$_GET['file'])
         die();
     
@@ -20,12 +23,12 @@
             break;
         
         case 'salesReport':
-            $data = $srd->findAllSalesData(null,null);
+            $data = $srd->findAllSalesData($startDate, $endDate);
             exportAssocToCSV($data, "salesReport.csv");
             break;
         
         case 'summary':
-            $data = $sr->findAllDailySalesSummary(null, null);
+            $data = $sr->findAllDailySalesSummary($startDate, $endDate);
             exportAssocToCSV($data, "dailySummary.csv");
             break;
 
