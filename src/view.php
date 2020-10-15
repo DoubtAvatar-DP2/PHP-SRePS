@@ -11,41 +11,32 @@
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
-        <button type="button" class="btn btn-info">
+        <a class="btn btn-info" id="editLink">
           EDIT
-        </button>
+        </a>
       </div>
     </div>
   </div>
 
   <div class="col-12">
     <div class="row">
-      <p>Record Date: 24/09/2020</p>
+      <p id="recorddate">Record Date: </p>
     </div>
     <div class="row">
       <table id="productEntries" class="col-md-12">
           <tbody>
               <tr><th>#</th><th>Product Name</th><th>Quantity</th><th>Quoted Price</th><th>Total Price</th></tr>
-              <tr>
-                <td>1</td>
-                <td>Sample Product Name</td>
-                <td>2</td>
-                <td>$3</td>
-                <td>$6</td>
-              </tr>
           </tbody>
       </table>
     </div>
     <div class="row">
-      <b id=total>Total $0</b>
+      <b id="total">Total </b>
     </div>
     <div class="row">
       <p>Note:</p>
     </div>
     <div class="row">
-      <p>
-        Sample comment
-      </p>
+      <p id="note"></p>
     </div>
     <div class="row">
       <a href="index.php" class="btn btn-secondary">
@@ -54,7 +45,7 @@
     </div>
   </div>
 
-
+<script src="js/view.js"></script>
 
 </main>
 <?php
