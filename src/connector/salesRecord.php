@@ -67,13 +67,13 @@
         /**
          * @param string $startDate nullable starting date for summary
          * @param string $endDate nullable ending date for summary
-         * @return assoc array (SalesDate, TotalSales, TotalItems, TotalPrice)
+         * @return array (SalesDate, TotalSales, TotalItems, TotalPrice)
          */
         public function findAllDailySalesSummary(?string $startDate, ?string $endDate)
         {
             if(!$startDate && !$endDate) { // No start date or end date specified
                 $statement = "
-                SELECT SalesRecords.SalesDate, COUNT(DISTINCT SalesRecords.SalesRecordNumber) AS TotalSales, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuantityOrdered * SaleRecordDetails.QuotedPrice) AS TotalSales FROM SalesRecords
+                SELECT SalesRecords.SalesDate, COUNT(DISTINCT SalesRecords.SalesRecordNumber) AS TotalNumSales, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuantityOrdered * SaleRecordDetails.QuotedPrice) AS TotalSales FROM SalesRecords
                 JOIN SaleRecordDetails ON SaleRecordDetails.SalesRecordNumber = SalesRecords.SalesRecordNumber
                 GROUP BY SalesRecords.SalesDate
                 ";
@@ -89,7 +89,7 @@
             } else {
                 if($startDate && !$endDate) { // Start date specified, no end date specified
                     $statement = "
-                    SELECT SalesRecords.SalesDate, COUNT(DISTINCT SalesRecords.SalesRecordNumber) AS TotalSales, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuantityOrdered * SaleRecordDetails.QuotedPrice) AS TotalSales FROM SalesRecords
+                    SELECT SalesRecords.SalesDate, COUNT(DISTINCT SalesRecords.SalesRecordNumber) AS TotalNumSales, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuantityOrdered * SaleRecordDetails.QuotedPrice) AS TotalSales FROM SalesRecords
                     JOIN SaleRecordDetails ON SaleRecordDetails.SalesRecordNumber = SalesRecords.SalesRecordNumber
                     WHERE SalesRecords.SalesDate >= :startDate
                     GROUP BY SalesRecords.SalesDate
@@ -98,7 +98,7 @@
                     $statement->execute(array("startDate" => $startDate));
                 } elseif(!$startDate && $endDate) { // No start date specified, end date specified
                     $statement = "
-                    SELECT SalesRecords.SalesDate, COUNT(DISTINCT SalesRecords.SalesRecordNumber) AS TotalSales, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuantityOrdered * SaleRecordDetails.QuotedPrice) AS TotalSales FROM SalesRecords
+                    SELECT SalesRecords.SalesDate, COUNT(DISTINCT SalesRecords.SalesRecordNumber) AS TotalNumSales, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuantityOrdered * SaleRecordDetails.QuotedPrice) AS TotalSales FROM SalesRecords
                     JOIN SaleRecordDetails ON SaleRecordDetails.SalesRecordNumber = SalesRecords.SalesRecordNumber
                     WHERE SalesRecords.SalesDate <= :endDate
                     GROUP BY SalesRecords.SalesDate
@@ -107,7 +107,7 @@
                     $statement->execute(array("endDate" => $endDate));
                 } else { // Both start date and end date specified
                     $statement = "
-                    SELECT SalesRecords.SalesDate, COUNT(DISTINCT SalesRecords.SalesRecordNumber) AS TotalSales, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuantityOrdered * SaleRecordDetails.QuotedPrice) AS TotalSales FROM SalesRecords
+                    SELECT SalesRecords.SalesDate, COUNT(DISTINCT SalesRecords.SalesRecordNumber) AS TotalNumSales, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuantityOrdered * SaleRecordDetails.QuotedPrice) AS TotalSales FROM SalesRecords
                     JOIN SaleRecordDetails ON SaleRecordDetails.SalesRecordNumber = SalesRecords.SalesRecordNumber
                     WHERE SalesRecords.SalesDate BETWEEN :startDate AND :endDate
                     GROUP BY SalesRecords.SalesDate
