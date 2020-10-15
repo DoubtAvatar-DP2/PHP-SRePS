@@ -3,7 +3,6 @@ window.onload = () => {
     // retrieve record ID from GET parameter
     // https://stackoverflow.com/questions/5448545/how-to-retrieve-get-parameters-from-javascript
     //
-
     var SalesRecordNumber = GetRecordIDByGET();
 
     // check if the sales record number is valid input
@@ -20,14 +19,14 @@ window.onload = () => {
             SalesRecordNumber 
         },
         error: () => {
-            alert("We can not retrieve your sales record now. Please try again later.");
+            alert("We are unable to retrieve your record.");
         },
         success: (data) => {
             salesData = JSON.parse(data);
 
             if (!salesData.hasOwnProperty("SalesRecord")) 
             {
-                alert("We are unable to retrieve your data");
+                alert("We are unable to retrieve your record.");
                 window.location.href = "index.php";
             }
             FillSalesTable(salesData);
@@ -35,6 +34,72 @@ window.onload = () => {
         }
     });
 };
+
+document.getElementById("delete").addEventListener("click", (event) => {
+    event.preventDefault();
+    let SalesRecordNumber = GetRecordIDByGET();
+    let confirmation = window.confirm(`Are you sure you want to permanently delete record ${SalesRecordNumber}?`);
+    if (confirmation == false) return;  
+
+    $.post({
+        url: "backend_api/delete-record.php",
+        data: {
+            SalesRecordNumber 
+        },
+        error: () => {
+            AddErrorMessage(`Unable to delete record ${SalesRecordNumber}.`);
+        },
+        success: (data) => {
+            if (data==0)
+            {
+                alert(`Successfully delete record ${SalesRecordNumber}`);
+                window.location.href = `index.php`;
+            }
+        }
+    });
+});
+
+document.getElementById("update").addEventListener("click", (event) => {
+
+    /*
+    * fetch record data + details before send them to edit-record.php by POST
+    */
+    // prevent the form from submitting as the default action
+    event.preventDefault();
+    let SalesRecordNumber = GetRecordIDByGET();
+    let confirmation = window.confirm(`Are you sure you want to edit record ${SalesRecordNumber}?`);
+    if (confirmation == false) return;  
+
+    sales_record_data = {
+        SalesRecordNumber,
+        SalesDate: document.getElementById("recorddate").value,
+        Comment: document.getElementById("note").value,
+        RecordDetails: fetchRecordDetails() 
+    };
+
+    // post to add-new-record.php
+    $.post({
+        url: "backend_api/edit-record.php",
+        data: sales_record_data,
+        success: (data) => {
+            data = JSON.parse(data);
+            if (data.exitCode == 0)
+            {
+                let edittedRecordID = data.edittedRecordID;
+                // check if receiving successful code        
+                alert("Successfully editted a record, we will move you to the edit page shortly.");
+                window.location.href = `view.php?RecordID=${edittedRecordID}`;
+            }
+            else {
+                ClearErrorMessage();
+                AddErrorMessage(data.errorMessage);
+            }
+        },
+        error: () => {
+            AddErrorMessage(`We can not edit your sales record now. Please try again later.`);
+        }
+    });
+});
 
 function FillSalesTable(data)
 {
@@ -51,8 +116,6 @@ function FillSalesTable(data)
         addNewProductField(recordDetail.ProductNumber, recordDetail.QuantityOrdered, recordDetail.QuotedPrice) 
         calculateProductTotal(i+1);
     });
-    
-    //  
 }
 
 function GetRecordIDByGET()
