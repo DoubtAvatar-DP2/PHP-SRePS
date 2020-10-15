@@ -142,8 +142,8 @@
             // setting up sums 
             $XSum = GetXSum($convertedXAxisArray);
             $YSum = GetYSum($itemTableArray);
-            $xSqrSum = GetXSqrSum($predictDataArray);
-            $XYSum = GetXYSum($predictDataArray);
+            $xSqrSum = GetXSqrSum($predictDataArray); 
+            $XYSum = GetXYSum($predictDataArray); 
 
             echo $XSum . " : " . $YSum . " : " . $xSqrSum . " : " . $XYSum;
             echo "<br>";
@@ -191,8 +191,8 @@
     $startDateX = $_GET["recorddatestart"]; //2020-09-04
     $endDateX = gmdate("Y-m-d", strtotime($strPeriod, strtotime($startDateX))); //~2020-09-25
     $groupBy = $_GET["WHICHDATA"];
-    $xValue = 15; // Just to test, will have to have some way of getting this
-
+    //$xValue = 15; // Just to test, will have to have some way of getting this
+    
     // This is needed for the y axis (number of items sold)
     $recordDetailTable = new SaleRecordDetails($db);
     $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, -1); 
