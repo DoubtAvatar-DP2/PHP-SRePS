@@ -93,6 +93,10 @@ function addNewProductField(productName = null, quantity = null, price = null)
 
     document.getElementById(priceId).addEventListener("change", checkForNewProductField);
     document.getElementById("delete"+inputid).addEventListener("click", function() {deleteRow(productEntryRow.rowIndex)});
+    if(products.length <= 0)
+    {
+        readProductNames();
+    }
     autocomplete(document.getElementById(productNameId), products);
 
     for(j=1; j < productEntryTable.rows.length; j++)
