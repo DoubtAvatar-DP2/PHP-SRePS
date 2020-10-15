@@ -128,7 +128,7 @@
         // get special values 
         $predictDataArray = GetSpecialValues($itemTableArray, $convertedXAxisArray);
 
-        if(count($predictDataArray) != 0)
+        if(count($predictDataArray) > 1)
         {
             // setting up sums 
             $XSum = GetXSum($convertedXAxisArray);
@@ -185,7 +185,7 @@
 
     // This is needed for the y axis (number of items sold)
     $recordDetailTable = new SaleRecordDetails($db);
-    $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, -1); // works perfect -- jack 
+    $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, -1); 
 
     echo "<br/> Regression: " . GetLeastSquareRegression($startDateX, $itemTableArray, $xValue);
 ?>

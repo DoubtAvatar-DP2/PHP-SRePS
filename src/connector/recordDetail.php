@@ -333,7 +333,7 @@
                 if ($ID != -1)
                 {
                     $conditions .= "
-                    record.ProductNumber == $ID
+                    record.ProductNumber = '$ID'
                     AND
                     ";
                 }
@@ -343,14 +343,14 @@
                 if ($ID != -1)
                 {
                     $conditions .= "
-                    category.CategoryID == $ID
+                    category.CategoryID = '$ID'
                     AND
                     ";
                 }
             }
 
             $conditions .= "
-            sales.SalesDate
+                 sales.SalesDate
             BETWEEN 
             '$startDateX'
             AND 
