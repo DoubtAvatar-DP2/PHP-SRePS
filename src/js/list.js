@@ -109,7 +109,18 @@ function updateSortingLinks() {
     });
 }
 
+function updateSearchParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.get('startDate')) {
+        $("#startDate")[0].value = urlParams.get('startDate');
+    }
+    if(urlParams.get('endDate')) {
+        $("#endDate")[0].value = urlParams.get('endDate');
+    }
+}
+
 $(() => {
     updateSortingLinks();
+    updateSearchParams();
     fetchPage();
 });
