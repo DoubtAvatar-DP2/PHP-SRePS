@@ -145,11 +145,11 @@
                 JOIN SaleRecordDetails ON SalesRecords.SalesRecordNumber = SaleRecordDetails.SalesRecordNumber
             ";
             if($startDate && !$endDate)
-                $statement .= "WHERE SalesDate >= $startDate";
+                $statement .= "WHERE SalesDate >= '$startDate'";
             elseif (!$startDate && $endDate)
-                $statement .= "WHERE SalesDate <= $endDate";
+                $statement .= "WHERE SalesDate <= '$endDate'";
             elseif ($startDate && $endDate)
-                $statement .= "WHERE SalesDate BETWEEN $startDate and $endDate";
+                $statement .= "WHERE SalesDate BETWEEN '$startDate' and '$endDate'";
 
             $statement .= "
                 GROUP BY SalesRecords.SalesRecordNumber
@@ -159,7 +159,6 @@
                 $statement .= "LIMIT $offset, $limit";
 
             try {
-                die($statement);
                 $statement = $this->db->query($statement);
                 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
                 return [
