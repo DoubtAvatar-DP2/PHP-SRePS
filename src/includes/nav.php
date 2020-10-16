@@ -13,7 +13,7 @@
           <a class="navbar-brand" href="index.php"> PHP-SRePS </a>
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link <?php echo strpos($currentPage, "index.php") ? "active" : "" ?>" href="#"> Records </a>
+              <a class="nav-link <?php echo strpos($currentPage, "index.php") ? "active" : "" ?>" href="index.php"> Records </a>
             </li>
             <li class="nav-item">
               <a class="nav-link <?php /*echo strpos($currentPage, "displayPredictions.php") ? "active" : "" */ ?>" href="#"> Prediction </a>
@@ -22,7 +22,7 @@
               <a class="nav-link <?php /* echo strpos($currentPage, "") ? "active" : "" */ ?>" href="#"> Sales Report </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?php echo strpos($currentPage, "export.php") ? "active" : "" ?>" href="#"> Export </a>
+              <a class="nav-link <?php echo strpos($currentPage, "export.php") ? "active" : "" ?>" href="export.php"> Export </a>
             </li>
           </ul>
           <hr />
