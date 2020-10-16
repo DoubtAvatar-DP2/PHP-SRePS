@@ -145,14 +145,9 @@
             $xSqrSum = GetXSqrSum($predictDataArray); 
             $XYSum = GetXYSum($predictDataArray); 
 
-            echo $XSum . " : " . $YSum . " : " . $xSqrSum . " : " . $XYSum;
-            echo "<br>";
-
             // get slope and intercept -- Sam: Again, reworked to work with the class
             $slope = GetSlope(count($predictDataArray), $XYSum, $XSum, $YSum, $xSqrSum);
             $intercept = GetIntercept(count($predictDataArray), $slope, $YSum, $XSum);
-
-            echo "slope: " . $slope . " : Intercept " . $intercept;
 
             $regressionLine = returnArray($slope, $intercept, $itemTableArray);
             return $regressionLine;
