@@ -1,0 +1,191 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<!doctype html>
+<html>
+
+<head>
+	<title>Horizontal Bar Chart</title>
+	<style>
+	canvas {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	</style>
+</head>
+
+<body>
+	<div id="container" style="width: 75%;">
+		<canvas id="canvas"></canvas>
+	</div>
+	<script>
+
+        var item = "Panadol 500mg Tablet 500";
+
+        var labels = [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "30",
+        ];
+
+        var revenues = [
+            20000,
+            14000,
+            12000,
+            15000,
+            18000,
+            19000,
+            22000,
+            10000,
+            12000,
+            16000,
+            20000,
+            14000,
+            12000,
+            15000,
+            18000,
+            19000,
+            22000,
+            10000,
+            12000,
+            16000,
+            20000,
+            14000,
+            12000,
+            15000,
+            18000,
+            19000,
+            22000,
+            10000,
+            12000,
+            16000,
+        ];
+        var clients = [
+            201,
+            140,
+            80,
+            150,
+            190,
+            170,
+            202,
+            200,
+            150,
+            180,
+            201,
+            140,
+            80,
+            150,
+            190,
+            170,
+            202,
+            180,
+            201,
+            75,
+            201,
+            140,
+            80,
+            150,
+            190,
+            170,
+            202,
+            75,
+            75,
+            75
+        ];
+
+        var mix = document.getElementById("canvas").getContext('2d');
+        var mixChart = new Chart(mix, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        type: 'line',
+                        label: "clients",
+                        data: clients,
+                        borderColor: '#FE5E41',
+                        backgroundColor: 'rgba(52, 89, 149, 0)',
+                        yAxisID: 'clients',
+                    },
+                    {
+                        type: 'bar',
+                        label: "Revenues",
+                        data: revenues,
+                        borderColor: 'rgba(0, 0, 0, 0)',
+                        backgroundColor: '#00A878',
+                        fill: true,
+                        yAxisID: 'revenues',
+                    },
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [
+                        {
+                            id: "clients",
+                            ticks: {
+                                beginAtZero: true,
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'clients'
+                            }
+                        },
+                        {
+                            id: "revenues",
+                            position: 'right',
+                            ticks: {
+                                beginAtZero: true,
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'revenues ($)'
+                            }
+                        },
+                    ]
+                },
+
+                responsive: true,
+
+                title: {
+                    display: true,
+                    text: `Total sales and number of records for ${item}`
+                },
+                
+                tooltips: 
+                {
+                    mode: 'index',
+                    intersect: true
+                }
+            }
+        });
+	</script>
+</body>
+
+</html>

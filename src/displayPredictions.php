@@ -14,33 +14,32 @@
   <form method="GET" action="displayPredictions.php">
     <div class="form-group mb-2">
       <label for="recorddatestart">Record Start Date:</label>
-      <input type="date" id="recorddatestart" name="recorddatestart" placeholder="Please enter the record date">
+      <input type="date" id="recorddatestart" name="recorddatestart" value="2020-09-04"> <!--This date is just temp, we can maybe as JS to se the current date to be the deffault-->
     </div>
-
     <div>
-      <p>What do you want to display?</p>
+      <p>What period do you want to display?
+        <input type="radio" id="week" name="PERIOD" value="WEEK" checked="checked"><label for="week"> Week</label>
+        <input type="radio" id="month" name="PERIOD" value="MONTH"><label for="month"> Month</label>
+      </p>
+      <p>What do you want to display?
       <input type="radio" id="item" name="WHICHDATA" value="ITEM" checked="checked">
-      <label for="item">Item-</label><input type="text" id="ItemName" placeholder="Item Name"><br>
+      <label for="item">Item -  </label><input type="text" id="ItemName" placeholder="Item Name">
       <input type="radio" id="category" name="WHICHDATA" value="CATEGORY">
-      <label for="category">Catergory-</label><input type="text" id="CategoryName" placeholder="Category Name"><br>
-
-      <p>What period do you want to display?</p>
-      <input type="radio" id="week" name="PERIOD" value="WEEK" checked="checked">
-      <label for="week">Week</label><br>
-      <input type="radio" id="month" name="PERIOD" value="MONTH">
-      <label for="month">Month</label><br>
+      <label for="category">Catergory - </label><input type="text" id="CategoryName" placeholder="Category Name">
+      </p>
     </div>
     <div class="form-group col-md-12 col-lg-4 d-flex justify-content-between">
-      <input type="submit" class="btn btn-success" value="DISPLAY" name="DISPLAY">
+      <input type="submit" class="btn btn-success" value="PREDICT" name="PREDICT" id="predict">
     </div>
     
     <div class="row">
-      <table id="productEntries" class="col-md-12">
+      <table id="pastSales" class="col-md-12">
           <tbody>
-              <tr><th>#</th><th>Date</th><th>Items sold</th><th>Total sales</th></tr>
+              <tr><th>Date</th><th>Items sold</th><th>Total sales</th></tr>
           </tbody>
       </table>
     </div>
+
     <div class="row">
       <b id="total">Total </b>
     </div>
@@ -48,6 +47,7 @@
     <div class="row">
       <p id="note"></p>
     </div>
+    
     <div class="row">
       <a href="index.php" class="btn btn-secondary">
         HOMEPAGE
@@ -60,13 +60,23 @@
     // if data has been submitted
     if (!empty($_GET["DISPLAY"]))
     {
-        include("backend_api/sales-predictor.php");
+        $test = include("backend_api/sales-predictor.php");
+        echo "<br>";
+        echo "slope: " . $test[0];
+        echo "<br>";
+        echo "intercept: " . $test[1];
+        echo "<br>";
+        echo "Example Date: " ;
+        foreach ($test[2] as $a)
+        {
+          echo $a['SalesDate'];
+          echo "<br>";
+        }
     }
-
     ?>
 
 </main>
-
+<script src="js/predict.js"></script>
 <?php
     include("includes/footer.php");
 ?>
