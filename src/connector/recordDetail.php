@@ -1,5 +1,6 @@
 <?php
-    class SaleRecordDetails {
+    class SaleRecordDetails 
+    {
         private $db = null;
         private $table_name = "SaleRecordDetails";
         private $product_table_name = "Products";
@@ -323,3 +324,4 @@
             }
         }
     }
+?>

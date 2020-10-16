@@ -127,7 +127,7 @@
         return $regressionLine;
     }
 
-    function GetLeastSquareRegression($startDateX, $itemTableArray, $xValue)
+    function GetLeastSquareRegression($startDateX, $itemTableArray)
     {
         // setting up date to x axis
         $convertedXAxisArray = ConvertXAxisToInt($itemTableArray, $startDateX);
@@ -154,7 +154,6 @@
 
             echo "slope: " . $slope . " : Intercept " . $intercept;
 
-            //$regressionLine = ($slope * $xValue) + $intercept;
             $regressionLine = returnArray($slope, $intercept, $itemTableArray);
             return $regressionLine;
         }
@@ -189,14 +188,14 @@
     // Gets selections from the display page
     $strPeriod = "+1 " . $_GET["PERIOD"];
     $startDateX = $_GET["recorddatestart"]; //2020-09-04
-    $endDateX = gmdate("Y-m-d", strtotime($strPeriod, strtotime($startDateX))); //~2020-09-25
+    $endDateX = gmdate("Y-m-d", strtotime($strPeriod, strtotime($startDateX))); //~2020-09-2
     $groupBy = $_GET["WHICHDATA"];
-    //$xValue = 15; // Just to test, will have to have some way of getting this
-    
+    $groupID = ($_GET["ITEMID"] != "") ? $_GET["ITEMID"] : $_GET["CATEGORYID"]; // Assuming the two ID boxes
+
     // This is needed for the y axis (number of items sold)
     $recordDetailTable = new SaleRecordDetails($db);
-    $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, -1); 
+    $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, $groupID); 
 
     // returns an array ie. [slope, intercept, array of data]
-    return GetLeastSquareRegression($startDateX, $itemTableArray, $xValue);
+    exit(json_encodde(GetLeastSquareRegression($startDateX, $itemTableArray)));
 ?>
