@@ -81,7 +81,12 @@ function addNewProductField(productName = null, quantity = null, price = null)
 
     var i = inputid;
 
-    document.getElementById(productNameId).value = productName;
+    if(products.length <= 0)
+    {
+        readProductNames();
+    }
+
+    document.getElementById(productNameId).value = productIdToName(productName);
     document.getElementById(quantityId).value = quantity;
     document.getElementById(priceId).value = price;
 
@@ -93,10 +98,6 @@ function addNewProductField(productName = null, quantity = null, price = null)
 
     document.getElementById(priceId).addEventListener("change", checkForNewProductField);
     document.getElementById("delete"+inputid).addEventListener("click", function() {deleteRow(productEntryRow.rowIndex)});
-    if(products.length <= 0)
-    {
-        readProductNames();
-    }
     autocomplete(document.getElementById(productNameId), products);
 
     for(j=1; j < productEntryTable.rows.length; j++)
@@ -353,8 +354,20 @@ function productToID(productName)
     var productID = 0;
     var productsAndNumbers = JSON.parse(getCookie("productNamesAndNumbers"));
     productID = productsAndNumbers[productName];
-    document.cookie = "productNamesAndNumbers=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     return productID;
+}
+
+function productIdToName(productID)
+{
+    var productName = "";
+    for(i = 0; i < products.length; i++)
+    {
+        if (productID == productToID(products[i]))
+        {
+            productName = products[i];
+        }
+    }
+    return productName;
 }
 
 function getCookie(cname) 
