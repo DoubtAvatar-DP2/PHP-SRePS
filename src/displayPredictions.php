@@ -15,6 +15,7 @@
     <div class="form-group mb-2">
       <label for="recorddatestart">Record Start Date:</label>
       <input type="date" id="recorddatestart" name="recorddatestart" value="2020-09-04"> <!--This date is just temp, we can maybe as JS to se the current date to be the deffault-->
+
     </div>
     <div>
       <p>What period do you want to display?
@@ -23,9 +24,9 @@
       </p>
       <p>What do you want to display?
       <input type="radio" id="item" name="WHICHDATA" value="ITEM" checked="checked">
-      <label for="item">Item -  </label><input type="text" id="ItemName" placeholder="Item Name">
+      <label for="item">Item -  </label><input type="text" id="ITEMID" placeholder="Item Name">
       <input type="radio" id="category" name="WHICHDATA" value="CATEGORY">
-      <label for="category">Catergory - </label><input type="text" id="CategoryName" placeholder="Category Name">
+      <label for="category">Catergory - </label><input type="text" id="CATEGORYID" placeholder="Category Name">
       </p>
     </div>
     <div class="form-group col-md-12 col-lg-4 d-flex justify-content-between">

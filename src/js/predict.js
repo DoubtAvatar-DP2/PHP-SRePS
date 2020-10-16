@@ -7,10 +7,12 @@ document.getElementById("predict").addEventListener("click", (event) => {
     event.preventDefault();
 
     input_data = {
-        productNumber: document.getElementById("ItemName").value,
+        //productNumber: document.getElementById("ItemName").value,
         recorddatestart: document.getElementById("recorddatestart").value,
         PERIOD: document.getElementById("week").checked ? "WEEK" : "MONTH",
-        WHICHDATA: document.getElementById("item").checked ? "ITEM" : "CATEGORY" 
+        WHICHDATA: document.getElementById("item").checked ? "ITEM" : "CATEGORY",
+        ITEMID: document.getElementById("ITEMID").value,
+        CATEGORYID: document.getElementById("CATEGORYID").value 
     };
 
     console.log(input_data);
@@ -19,10 +21,10 @@ document.getElementById("predict").addEventListener("click", (event) => {
         url: "backend_api/sales-predictor.php",
         data: input_data,
         success: (data) => {
-            data = JSON.parse(data);
+            // data = JSON.parse(data);
             console.log(data);
-            tableData = data[2];
-            tableData.forEach((record) => addNewDateEntry(record.SalesDate, record.AllQtyOrd, record.QuotedPrice))
+            // tableData = data[2];
+            // tableData.forEach((record) => addNewDateEntry(record.SalesDate, record.AllQtyOrd, record.QuotedPrice))
         },
         error: (data) => {
             console.log(data);

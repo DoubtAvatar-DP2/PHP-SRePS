@@ -1,11 +1,12 @@
 <?php
-    // require "../connector/database.php";
-    // require "../connector/salesRecord.php";
-    // require "../connector/recordDetail.php";
-    require "connector/database.php";
-    require "connector/product.php";
-    require "connector/salesRecord.php";
-    require "connector/recordDetail.php";
+    require "../connector/database.php";
+    require "../connector/salesRecord.php";
+    require "../connector/recordDetail.php";
+    require "../connector/product.php";
+    // require "connector/database.php";
+    // require "connector/product.php";
+    // require "connector/salesRecord.php";
+    // require "connector/recordDetail.php";
 
     class PredictData
     {
@@ -192,10 +193,16 @@
     $groupBy = $_GET["WHICHDATA"];
     $groupID = ($_GET["ITEMID"] != "") ? $_GET["ITEMID"] : $_GET["CATEGORYID"]; // Assuming the two ID boxes
 
+    echo $strPeriod;
+    echo $startDateX;
+    echo $endDateX;
+    echo $groupBy;
+    echo $groupID;
+
     // This is needed for the y axis (number of items sold)
     $recordDetailTable = new SaleRecordDetails($db);
     $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, $groupID); 
 
     // returns an array ie. [slope, intercept, array of data]
-    exit(json_encodde(GetLeastSquareRegression($startDateX, $itemTableArray)));
+    exit(json_encode(GetLeastSquareRegression($startDateX, $itemTableArray)));
 ?>

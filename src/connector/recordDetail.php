@@ -290,6 +290,7 @@
             record.ProductNumber, 
             record.QuotedPrice, 
             SUM(record.QuantityOrdered) as AllQtyOrd, 
+            SUM(record.QuotedPrice * record.QuantityOrdered) as TotalPrice,
             product.ProductName,
             category.CategoryName
             FROM 
