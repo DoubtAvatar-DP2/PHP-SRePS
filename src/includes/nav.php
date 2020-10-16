@@ -16,7 +16,7 @@
               <a class="nav-link <?php echo strpos($currentPage, "index.php") ? "active" : "" ?>" href="#"> Records </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?php echo strpos($currentPage, "sales-predictor.php") ? "active" : "" ?>" href="#"> Prediction </a>
+              <a class="nav-link <?php echo strpos($currentPage, "displayPredictions.php") ? "active" : "" ?>" href="#"> Prediction </a>
             </li>
             <li class="nav-item">
               <a class="nav-link <?php /* echo strpos($currentPage, "") ? "active" : "" */ ?>" href="#"> Sales Report </a>
