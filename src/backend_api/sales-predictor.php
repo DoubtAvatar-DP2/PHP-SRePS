@@ -192,5 +192,5 @@
     $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, $groupID); 
 
     // returns an array ie. [slope, intercept, array of data]
-    exit(json_encodde(GetLeastSquareRegression($startDateX, $itemTableArray)));
+    exit(json_encode(GetLeastSquareRegression($startDateX, $itemTableArray)));
 ?>
