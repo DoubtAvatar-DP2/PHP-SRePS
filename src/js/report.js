@@ -36,6 +36,8 @@ document.getElementById("report").addEventListener("click", (event) => {
                 return;
             }
 
+            // write title
+            document.getElementById("reportTitle").innerHTML = `${input_data.WHICHDATA == "ITEM" ? data[0].ProductName: data[0].CategoryName} Sales Report`;
             // draw table
             data.forEach((record) => addNewDateEntry(record.SalesDate, record.AllQtyOrd, record.TotalPrice));
             

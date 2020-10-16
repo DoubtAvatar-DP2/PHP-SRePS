@@ -29,6 +29,9 @@
             <div class="btn-group mr-2">
               <a href="add.php" class="btn btn-success">Add</a>
             </div>
+            <div class="btn-group mr-2">
+              <a href="backend_api/export-file.php?file=records" class="btn btn-success">Export</a>
+            </div>
           </div>
         </div>
         <div class="table-responsive">

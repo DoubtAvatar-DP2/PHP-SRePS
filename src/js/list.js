@@ -38,7 +38,7 @@ async function fetchPage() {
             link.appendChild(linkText);
         } else if(i > body.total_pages) { //if i > total_pages we are creating the next link
             link.setAttribute("aria-label","Previous");
-            if(urlParams.get('page') < body.total_pages) {
+            if(urlParams.get('page') && urlParams.get('page') < body.total_pages) {
                 newUrlParams.set('page', +urlParams.get('page')+1);
                 link.href = pageURL + "?" + newUrlParams.toString();
             }

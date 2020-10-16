@@ -81,7 +81,12 @@ function addNewProductField(productName = null, quantity = null, price = null)
 
     var i = inputid;
 
-    document.getElementById(productNameId).value = productName;
+    if(products.length <= 0)
+    {
+        readProductNames();
+    }
+
+    document.getElementById(productNameId).value = productIdToName(productName);
     document.getElementById(quantityId).value = quantity;
     document.getElementById(priceId).value = price;
 
@@ -90,7 +95,6 @@ function addNewProductField(productName = null, quantity = null, price = null)
 
     document.getElementById(quantityId).addEventListener("change", checkForNewProductField); 
     document.getElementById(productNameId).addEventListener("change", checkForNewProductField); 
-
 
     document.getElementById(priceId).addEventListener("change", checkForNewProductField);
     document.getElementById("delete"+inputid).addEventListener("click", function() {deleteRow(productEntryRow.rowIndex)});
@@ -156,7 +160,7 @@ function fetchRecordDetails()
     for (let i = 0; i < productNumberInputs.length - 1; ++i)
     {
         recordDetails.push({
-            productNumber: productNumberInputs[i].value,
+            productNumber: productToID(productNumberInputs[i].value),
             quantityOrdered: quantityInputs[i].value,
             quotedPrice: quotedInputs[i].value
         });
@@ -343,6 +347,27 @@ function readProductNames()
         products.push(productsAsJSON[i]);
     }
     document.cookie = "productNames=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+function productToID(productName)
+{
+    var productID = 0;
+    var productsAndNumbers = JSON.parse(getCookie("productNamesAndNumbers"));
+    productID = productsAndNumbers[productName];
+    return productID;
+}
+
+function productIdToName(productID)
+{
+    var productName = "";
+    for(i = 0; i < products.length; i++)
+    {
+        if (productID == productToID(products[i]))
+        {
+            productName = products[i];
+        }
+    }
+    return productName;
 }
 
 function getCookie(cname) 

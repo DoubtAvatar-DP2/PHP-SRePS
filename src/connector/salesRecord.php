@@ -65,6 +65,68 @@
         }
 
         /**
+         * @param string $startDate nullable starting date for summary
+         * @param string $endDate nullable ending date for summary
+         * @return array (SalesDate, TotalSales, TotalItems, TotalPrice)
+         */
+        public function findAllDailySalesSummary(?string $startDate, ?string $endDate)
+        {
+            if(!$startDate && !$endDate) { // No start date or end date specified
+                $statement = "
+                SELECT SalesRecords.SalesDate, COUNT(DISTINCT SalesRecords.SalesRecordNumber) AS TotalNumSales, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuantityOrdered * SaleRecordDetails.QuotedPrice) AS TotalSales FROM SalesRecords
+                JOIN SaleRecordDetails ON SaleRecordDetails.SalesRecordNumber = SalesRecords.SalesRecordNumber
+                GROUP BY SalesRecords.SalesDate
+                ";
+                try {
+                    $statement = $this->db->query($statement);
+                    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                    return $result;
+                }
+                catch(PDOException $e)
+                {
+                    exit($e->getMessage());
+                }
+            } else {
+                if($startDate && !$endDate) { // Start date specified, no end date specified
+                    $statement = "
+                    SELECT SalesRecords.SalesDate, COUNT(DISTINCT SalesRecords.SalesRecordNumber) AS TotalNumSales, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuantityOrdered * SaleRecordDetails.QuotedPrice) AS TotalSales FROM SalesRecords
+                    JOIN SaleRecordDetails ON SaleRecordDetails.SalesRecordNumber = SalesRecords.SalesRecordNumber
+                    WHERE SalesRecords.SalesDate >= :startDate
+                    GROUP BY SalesRecords.SalesDate
+                    ";
+                    $statement = $this->db->prepare($statement);
+                    $statement->execute(array("startDate" => $startDate));
+                } elseif(!$startDate && $endDate) { // No start date specified, end date specified
+                    $statement = "
+                    SELECT SalesRecords.SalesDate, COUNT(DISTINCT SalesRecords.SalesRecordNumber) AS TotalNumSales, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuantityOrdered * SaleRecordDetails.QuotedPrice) AS TotalSales FROM SalesRecords
+                    JOIN SaleRecordDetails ON SaleRecordDetails.SalesRecordNumber = SalesRecords.SalesRecordNumber
+                    WHERE SalesRecords.SalesDate <= :endDate
+                    GROUP BY SalesRecords.SalesDate
+                    ";
+                    $statement = $this->db->prepare($statement);
+                    $statement->execute(array("endDate" => $endDate));
+                } else { // Both start date and end date specified
+                    $statement = "
+                    SELECT SalesRecords.SalesDate, COUNT(DISTINCT SalesRecords.SalesRecordNumber) AS TotalNumSales, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuantityOrdered * SaleRecordDetails.QuotedPrice) AS TotalSales FROM SalesRecords
+                    JOIN SaleRecordDetails ON SaleRecordDetails.SalesRecordNumber = SalesRecords.SalesRecordNumber
+                    WHERE SalesRecords.SalesDate BETWEEN :startDate AND :endDate
+                    GROUP BY SalesRecords.SalesDate
+                    ";
+                    $statement = $this->db->prepare($statement);
+                    $statement->execute(array("startDate" => $startDate, "endDate" => $endDate));
+                }
+                try {
+                    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                    return $result;
+                }
+                catch(PDOException $e)
+                {
+                    exit($e->getMessage());
+                }
+            }
+        }
+
+        /**
          * @param int $limit Default 0. If $limit is 0, there is no limit
          * @param int $offset Default 0 The starting offset for the limit. If $limit is 0, there is no offset
          * @param string $order_by Default SALES_RECORD_DATE The column to order by

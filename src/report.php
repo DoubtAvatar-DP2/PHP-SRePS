@@ -23,7 +23,7 @@
             </div>
 
             <div class="col">
-            <label for="recorddateend">End Date </label><input class="form-control mr-sm-2" type="date" id="recorddateend" name="recorddateend" value="2020-09-04" required>
+            <label for="recorddateend">End Date </label><input class="form-control mr-sm-2" type="date" id="recorddateend" name="recorddateend" value="2020-10-16" required>
             </div>
             <div class="col">
                 <input type="radio" class="form-check-input" id="category" name="WHICHDATA" value="CATEGORY"><label for="category">Catergory </label><input class="form-control mr-sm-2" type="text" id="CATEGORYID" placeholder="Category Name"></p>
@@ -35,7 +35,7 @@
     </div>
 </form> 
 <div>
-  <h2 id="reportTitle"></h2>
+  <h4 id="reportTitle"></h2>
 </div>
 <div class="row table-responsive">
       <table id="reportTable" class="table table-striped table-sm col-md-12" >
