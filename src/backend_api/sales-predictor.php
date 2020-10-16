@@ -145,14 +145,9 @@
             $xSqrSum = GetXSqrSum($predictDataArray); 
             $XYSum = GetXYSum($predictDataArray); 
 
-            echo $XSum . " : " . $YSum . " : " . $xSqrSum . " : " . $XYSum;
-            echo "<br>";
-
             // get slope and intercept -- Sam: Again, reworked to work with the class
             $slope = GetSlope(count($predictDataArray), $XYSum, $XSum, $YSum, $xSqrSum);
             $intercept = GetIntercept(count($predictDataArray), $slope, $YSum, $XSum);
-
-            echo "slope: " . $slope . " : Intercept " . $intercept;
 
             $regressionLine = returnArray($slope, $intercept, $itemTableArray);
             return $regressionLine;
@@ -197,5 +192,5 @@
     $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, $groupID); 
 
     // returns an array ie. [slope, intercept, array of data]
-    exit(json_encodde(GetLeastSquareRegression($startDateX, $itemTableArray)));
+    exit(json_encode(GetLeastSquareRegression($startDateX, $itemTableArray)));
 ?>
