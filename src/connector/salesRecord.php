@@ -129,18 +129,29 @@
         /**
          * @param int $limit Default 0. If $limit is 0, there is no limit
          * @param int $offset Default 0 The starting offset for the limit. If $limit is 0, there is no offset
+         * @param string $startDate Default null The start date to filter by
+         * @param string $endDate Default null The end date to filter by
          * @param string $order_by Default SALES_RECORD_DATE The column to order by
          * @param string $order_direction Default DESC The direction to order in
          * @return Array Returns an array containing all sales records, with the total price and total items
          */
-        public function findAllOverview(int $limit = 0, int $offset = 0, ?string $order_by = SalesRecord::SALES_RECORD_DATE, ?string $order_direction = SalesRecord::DESC)
+        public function findAllOverview(int $limit = 0, int $offset = 0, ?string $startDate = null, ?string $endDate = null, ?string $order_by = SalesRecord::SALES_RECORD_DATE, ?string $order_direction = SalesRecord::DESC)
         {
             $order_by = $order_by ?? SalesRecord::SALES_RECORD_DATE;
             $order_direction = $order_direction ?? SalesRecord::DESC;
             $statement = "
             SELECT SalesRecords.SalesRecordNumber, SalesRecords.SalesDate, SUM(SaleRecordDetails.QuantityOrdered) AS TotalItems, SUM(SaleRecordDetails.QuotedPrice * SaleRecordDetails.QuantityOrdered) AS TotalPrice
                 FROM $this->table_name
-            JOIN SaleRecordDetails ON SalesRecords.SalesRecordNumber = SaleRecordDetails.SalesRecordNumber
+                JOIN SaleRecordDetails ON SalesRecords.SalesRecordNumber = SaleRecordDetails.SalesRecordNumber
+            ";
+            if($startDate && !$endDate)
+                $statement .= "WHERE SalesDate >= $startDate";
+            elseif (!$startDate && $endDate)
+                $statement .= "WHERE SalesDate <= $endDate";
+            elseif ($startDate && $endDate)
+                $statement .= "WHERE SalesDate BETWEEN $startDate and $endDate";
+
+            $statement .= "
                 GROUP BY SalesRecords.SalesRecordNumber
             ORDER BY $order_by $order_direction
             ";
@@ -148,6 +159,7 @@
                 $statement .= "LIMIT $offset, $limit";
 
             try {
+                die($statement);
                 $statement = $this->db->query($statement);
                 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
                 return [
