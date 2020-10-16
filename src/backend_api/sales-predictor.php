@@ -1,11 +1,11 @@
 <?php
-    require "../connector/database.php";
-    require "../connector/salesRecord.php";
-    require "../connector/recordDetail.php";
-    // require "connector/database.php";
-    // require "connector/product.php";
-    // require "connector/salesRecord.php";
-    // require "connector/recordDetail.php";
+    // require "../connector/database.php";
+    // require "../connector/salesRecord.php";
+    // require "../connector/recordDetail.php";
+    require "connector/database.php";
+    require "connector/product.php";
+    require "connector/salesRecord.php";
+    require "connector/recordDetail.php";
 
     class PredictData
     {
@@ -127,7 +127,7 @@
         return $regressionLine;
     }
 
-    function GetLeastSquareRegression($startDateX, $itemTableArray, $xValue)
+    function GetLeastSquareRegression($startDateX, $itemTableArray)
     {
         // setting up date to x axis
         $convertedXAxisArray = ConvertXAxisToInt($itemTableArray, $startDateX);
@@ -142,19 +142,18 @@
             // setting up sums 
             $XSum = GetXSum($convertedXAxisArray);
             $YSum = GetYSum($itemTableArray);
-            $xSqrSum = GetXSqrSum($predictDataArray);
-            $XYSum = GetXYSum($predictDataArray);
+            $xSqrSum = GetXSqrSum($predictDataArray); 
+            $XYSum = GetXYSum($predictDataArray); 
 
-            // echo $XSum . " : " . $YSum . " : " . $xSqrSum . " : " . $XYSum;
-            // echo "<br>";
+            echo $XSum . " : " . $YSum . " : " . $xSqrSum . " : " . $XYSum;
+            echo "<br>";
 
             // get slope and intercept -- Sam: Again, reworked to work with the class
             $slope = GetSlope(count($predictDataArray), $XYSum, $XSum, $YSum, $xSqrSum);
             $intercept = GetIntercept(count($predictDataArray), $slope, $YSum, $XSum);
 
-            // echo "slope: " . $slope . " : Intercept " . $intercept;
+            echo "slope: " . $slope . " : Intercept " . $intercept;
 
-            //$regressionLine = ($slope * $xValue) + $intercept;
             $regressionLine = returnArray($slope, $intercept, $itemTableArray);
             return $regressionLine;
         }
@@ -189,18 +188,14 @@
     // Gets selections from the display page
     $strPeriod = "+1 " . $_GET["PERIOD"];
     $startDateX = $_GET["recorddatestart"]; //2020-09-04
-    $endDateX = gmdate("Y-m-d", strtotime($strPeriod, strtotime($startDateX))); //~2020-09-25
+    $endDateX = gmdate("Y-m-d", strtotime($strPeriod, strtotime($startDateX))); //~2020-09-2
     $groupBy = $_GET["WHICHDATA"];
-
-    // echo $strPeriod;
-    // echo $startDateX;
-    $xValue = 15; // Just to test, will have to have some way of getting this
+    $groupID = ($_GET["ITEMID"] != "") ? $_GET["ITEMID"] : $_GET["CATEGORYID"]; // Assuming the two ID boxes
 
     // This is needed for the y axis (number of items sold)
     $recordDetailTable = new SaleRecordDetails($db);
-    $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, -1); 
+    $itemTableArray = $recordDetailTable->findPredictDataItemOrCategory($startDateX, $endDateX, $groupBy, $groupID); 
 
     // returns an array ie. [slope, intercept, array of data]
-    $res = GetLeastSquareRegression($startDateX, $itemTableArray, $xValue);
-    echo json_encode($res);
+    exit(json_encodde(GetLeastSquareRegression($startDateX, $itemTableArray)));
 ?>
