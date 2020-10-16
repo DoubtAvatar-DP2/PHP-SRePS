@@ -16,20 +16,15 @@
               <a class="nav-link <?php echo strpos($currentPage, "index.php") ? "active" : "" ?>" href="#"> Records </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?php /* echo strpos($currentPage, "") ? "active" : "" */ ?>" href="#"> Prediction </a>
+              <a class="nav-link <?php echo strpos($currentPage, "sales-predictor.php") ? "active" : "" ?>" href="#"> Prediction </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?php /* echo strpos($currentPage, "") ? "active" : "" */ ?>" href="#"> Import </a>
+              <a class="nav-link <?php /* echo strpos($currentPage, "") ? "active" : "" */ ?>" href="#"> Sales Report </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?php /* echo strpos($currentPage, "") ? "active" : "" */ ?>" href="#"> Export </a>
+              <a class="nav-link <?php echo strpos($currentPage, "") ? "active" : "export.php" ?>" href="#"> Export </a>
             </li>
           </ul>
           <hr />
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link <?php /* echo strpos($currentPage, "") ? "active" : "" */ ?>" href="#"> About Us </a>
-            </li>
-          </ul>
         </div>
       </nav>
