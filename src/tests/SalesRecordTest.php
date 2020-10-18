@@ -26,14 +26,14 @@ function FetchRecordEdited()
     );
 };
 
-function initializeRecordDB()
-{
-    $db = (new Database())->getConnection();
-    $salesRecord = new SalesRecord($db);
-    return $salesRecord;
-};
+// function initializeRecordDB()
+// {
+//     $db = (new Database())->getConnection();
+//     $salesRecord = new SalesRecord($db);
+//     return $salesRecord;
+// };
 
-class MyTest extends TestCase
+class SalesTest extends TestCase
 {
     # if test fails double check the db to see if record already exist, if it does remove it
     public function testInsertion()
