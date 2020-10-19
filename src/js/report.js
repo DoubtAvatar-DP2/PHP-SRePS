@@ -1,3 +1,22 @@
+document.getElementById("item").addEventListener("change", (e) => {
+    if (document.getElementById("item").checked)
+    {
+        document.getElementById("ITEMID").disabled = false;
+        document.getElementById("CATEGORYID").value = null;
+        document.getElementById("CATEGORYID").disabled = true;
+    }
+});
+
+document.getElementById("category").addEventListener("change", (e) => {
+    if (document.getElementById("category").checked)
+    {
+        document.getElementById("CATEGORYID").disabled = false;    
+        document.getElementById("ITEMID").disabled = true;
+        document.getElementById("ITEMID").value = null;
+    }
+});
+
+
 document.getElementById("report").addEventListener("click", (event) => {
 
     /*

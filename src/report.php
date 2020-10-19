@@ -23,15 +23,16 @@
             </div>
 
             <div class="col">
-            <label for="recorddateend">End Date </label><input class="form-control mr-sm-2" type="date" id="recorddateend" name="recorddateend" value="2020-10-16" required>
+              <label for="recorddateend">End Date </label><input class="form-control mr-sm-2" type="date" id="recorddateend" name="recorddateend" value="2020-10-16" required>
             </div>
+            
             <div class="col">
-                <input type="radio" class="form-check-input" id="category" name="WHICHDATA" value="CATEGORY"><label for="category">Catergory </label><input class="form-control mr-sm-2" type="text" id="CATEGORYID" placeholder="Category Name"></p>
+                <input type="radio" class="form-check-input" id="category" name="WHICHDATA" value="CATEGORY"><label for="category">Category</label><input class="form-control mr-sm-2" type="text" id="CATEGORYID" placeholder="Category ID"></p>
             </div>
 
-        <div class="col">
-            <input type="radio" class="form-check-input" id="item" name="WHICHDATA" value="ITEM" checked="checked"><label for="item">Item </label><input class="form-control mr-sm-2" type="text" id="ITEMID" placeholder="Item Name">
-        </div>
+            <div class="col">
+              <input type="radio" class="form-check-input" id="item" name="WHICHDATA" value="ITEM" checked="checked"><label for="item">Product</label><input class="form-control mr-sm-2" type="text" id="ITEMID" placeholder="Product ID">
+            </div>
     </div>
 </form> 
 <div>
