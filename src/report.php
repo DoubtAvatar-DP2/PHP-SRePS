@@ -41,7 +41,7 @@
 <div class="row table-responsive">
       <table id="reportTable" class="table table-striped table-sm col-md-12" >
           <tbody>
-              <tr><th>Date</th><th>Items sold</th><th>Total sales</th></tr>
+              <tr><th>Date</th><th>Items sold</th><th>Total sales ($)</th></tr>
           </tbody>
       </table>
     </div>
