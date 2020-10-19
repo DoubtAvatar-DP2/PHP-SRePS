@@ -27,11 +27,11 @@
             </div>
             
             <div class="col">
-                <input type="radio" class="form-check-input" id="category" name="WHICHDATA" value="CATEGORY"><label for="category">Category</label><input class="form-control mr-sm-2" type="text" id="CATEGORYID" placeholder="Category ID"></p>
+                <input type="radio" class="form-check-input" id="category" name="WHICHDATA" value="CATEGORY"><label for="category">Category</label><input class="form-control mr-sm-2" type="text" id="CATEGORYID" placeholder="Type Category ID (e.g., 8 for medicine)" disabled></p>
             </div>
 
             <div class="col">
-              <input type="radio" class="form-check-input" id="item" name="WHICHDATA" value="ITEM" checked="checked"><label for="item">Product</label><input class="form-control mr-sm-2" type="text" id="ITEMID" placeholder="Product ID">
+              <input type="radio" class="form-check-input" id="item" name="WHICHDATA" value="ITEM" checked="checked"><label for="item">Product</label><input class="form-control mr-sm-2" type="text" id="ITEMID" placeholder="Type Product ID (e.g, 2489407 for panadol)">
             </div>
     </div>
 </form> 
