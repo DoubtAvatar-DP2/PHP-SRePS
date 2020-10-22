@@ -12,6 +12,12 @@ try {
     $page = isset($_GET["page"]) && intval($_GET["page"]) > 0 ? intval($_GET["page"]) : 1;
     $page_size = isset($_GET["page_size"]) && intval($_GET["page_size"]) > 0 ? intval($_GET["page_size"]) : DEFAULT_PAGE_SIZE;
 
+    $startDate = $_GET["startDate"];
+    $endDate = $_GET["endDate"];
+
+    $startDate = implode("-",array_map('intval', explode("-", $startDate)));
+    $endDate = implode("-",array_map('intval', explode("-", $endDate)));
+
     // Get sort by column and validate input
     switch(strtolower($_GET["sort"])) {
         case "record":
@@ -41,7 +47,7 @@ try {
     }
 
     $offset = $page == 1 ? 0 : (($page-1)*$page_size);
-    $records = $salesRecordTable->findAllOverview($page_size, $offset, $order_by, $order_direction);
+    $records = $salesRecordTable->findAllOverview($page_size, $offset, $startDate, $endDate, $order_by, $order_direction);
 
     // Set return type as json
     header('Content-Type: application/json');

@@ -14,13 +14,12 @@
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
               <form class="form-inline my-2 my-lg-0">
-                <?php
-                  /**
-                   * TODO:
-                   *  Implement search
-                   */
-                ?>
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+                <label for="startDate">Start: </label>
+
+                <input class="form-control mr-sm-2" type="date" name="startDate" id="startDate">
+                <label for="endDate">End: </label>
+                
+                <input class="form-control mr-sm-2" type="date" name="endDate" id="endDate">
                 <button class="btn btn-primary my-2 my-sm-0" type="submit">
                   Search
                 </button>
