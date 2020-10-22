@@ -28,6 +28,7 @@
 
   <!--chart JS-->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <script src="https://rawgit.com/chartjs/chartjs-plugin-annotation/master/chartjs-plugin-annotation.js"></script> 
 </head>
 
 <body>
