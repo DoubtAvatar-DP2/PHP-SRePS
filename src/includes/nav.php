@@ -19,7 +19,7 @@
               <a class="nav-link <?php echo strpos($currentPage, "displayPredictions.php") ? "active" : "" ?>" href="displayPredictions.php"> Prediction </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?php /* echo strpos($currentPage, "") ? "active" : "" */ ?>" href="#"> Sales Report </a>
+              <a class="nav-link <?php echo strpos($currentPage, "report.php") ? "active" : "" ?>" href="report.php"> Sales Report </a>
             </li>
             <li class="nav-item">
               <a class="nav-link <?php echo strpos($currentPage, "export.php") ? "active" : "" ?>" href="export.php"> Export </a>

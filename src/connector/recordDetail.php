@@ -1,7 +1,11 @@
 <?php
-    class SaleRecordDetails {
+    class SaleRecordDetails 
+    {
         private $db = null;
         private $table_name = "SaleRecordDetails";
+        private $product_table_name = "Products";
+        private $category_table_name = "Categories";
+        private $sales_table_name = "SalesRecords";
 
         public function __construct($db)
         {
@@ -176,6 +180,34 @@
             }
         }
 
+        public function productNameToId($productName)
+        {
+            /*
+            * return the id of the product with name that matches productname
+            */
+            $statement = "
+                SELECT 
+                    ProductNumber 
+                FROM 
+                    $this->product_table_name 
+                WHERE 
+                    ProductName LIKE :ProductName
+            ";            
+
+            try {
+                $statement = $this->db->prepare($statement);
+                $statement->execute(array(
+                    'ProductName' => $productName
+                ));
+                $result = $statement->fetch();
+                return $result[0];
+            }
+            catch(PDOException $e)
+            {
+                exit($e->getMessage());
+            }
+        }
+
         public function insert(Array $newRecordDetails)
         {
             /*
@@ -275,24 +307,77 @@
             }
         }
 
-        public function deleteByRecordNumber($salesRecordNumber)
+        public function findPredictDataItemOrCategory($startDateX, $endDateX, $itemOrCategory, $ID)
         {
-            /* 
-            * Delete all record details that have the sales record number.
-            * return 1 when successfully deleted.
-            * return 0 when records failed to be deleted.
-            */
-            $statement = "
-                DELETE FROM $this->table_name
-                WHERE 
-                    SalesRecordNumber = :SalesRecordNumber
+            $groupBy = "category.CategoryID";
+            $conditions = "";
+
+            if ($itemOrCategory == "ITEM")
+            {
+                $groupBy = "record.ProductNumber";
+
+                if ($ID != -1)
+                {
+                    $conditions .= "
+                    record.ProductNumber = '$ID'
+                    AND
+                    ";
+                }
+            }
+            else
+            {
+                if ($ID != -1)
+                {
+                    $conditions .= "
+                    category.CategoryID = '$ID'
+                    AND
+                    ";
+                }
+            }
+
+            $conditions .= "
+                 sales.SalesDate
+            BETWEEN 
+            '$startDateX'
+            AND 
+            '$endDateX'
             ";
+
+            $statement = "
+            SELECT 
+            sales.SalesDate,
+            record.SalesRecordNumber,
+            record.ProductNumber, 
+            record.QuotedPrice, 
+            SUM(record.QuantityOrdered) as AllQtyOrd, 
+            SUM(record.QuotedPrice * record.QuantityOrdered) as TotalPrice,
+            product.ProductName,
+            category.CategoryName
+            FROM 
+                $this->sales_table_name sales
+            JOIN 
+                $this->table_name record
+            ON
+                sales.SalesRecordNumber = record.SalesRecordNumber
+            JOIN 
+                $this->product_table_name product
+            ON 
+                record.ProductNumber = product.ProductNumber
+            JOIN 
+                $this->category_table_name category
+            ON
+                product.CategoryID = category.CategoryID
+            WHERE
+            $conditions
+            GROUP BY sales.SalesDate, $groupBy
+            ORDER BY 1;
+            ";
+
             try {
                 $statement = $this->db->prepare($statement);
-                $statement->execute(Array(
-                    "SalesRecordNumber" => $salesRecordNumber
-                ));
-                return $statement->rowCount() > 0 ? 1 : 0;
+                $statement->execute();
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
             }
             catch(PDOException $e)
             {
@@ -300,3 +385,4 @@
             }
         }
     }
+?>
