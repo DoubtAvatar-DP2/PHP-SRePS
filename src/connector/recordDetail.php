@@ -307,6 +307,31 @@
             }
         }
 
+        public function deleteByRecordNumber($salesRecordNumber)
+        {
+            /* 
+            * Delete all record details that have the sales record number.
+            * return 1 when successfully deleted.
+            * return 0 when records failed to be deleted.
+            */
+            $statement = "
+                DELETE FROM $this->table_name
+                WHERE 
+                    SalesRecordNumber = :SalesRecordNumber
+            ";
+            try {
+                $statement = $this->db->prepare($statement);
+                $statement->execute(Array(
+                    "SalesRecordNumber" => $salesRecordNumber
+                ));
+                return $statement->rowCount() > 0 ? 1 : 0;
+            }
+            catch(PDOException $e)
+            {
+                exit($e->getMessage());
+            }
+        }
+        
         public function findPredictDataItemOrCategory($startDateX, $endDateX, $itemOrCategory, $ID)
         {
             $groupBy = "category.CategoryID";
