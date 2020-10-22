@@ -88,7 +88,8 @@ document.getElementById("update").addEventListener("click", (event) => {
                 let edittedRecordID = data.edittedRecordID;
                 // check if receiving successful code        
                 alert("Successfully editted a record, we will move you to the edit page shortly.");
-                window.location.href = `view.php?RecordID=${edittedRecordID}`;
+                window.location.href = `view.php?recordID=${edittedRecordID}`;
+                document.cookie = "productNamesAndNumbers=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             }
             else {
                 ClearErrorMessage();
