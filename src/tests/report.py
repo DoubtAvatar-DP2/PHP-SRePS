@@ -33,6 +33,7 @@ class TestReportFrontEnd(unittest.TestCase):
     def test_generate_product_table(self):
         #
         # Test if the table generated is correct when product number is entered
+        # Test if number of items sold and total sales column number are in the correct format
         #
         driver = self.driver
         driver.get("http://localhost:8080/report.php")
@@ -145,7 +146,8 @@ class TestReportFrontEnd(unittest.TestCase):
     
     def test_valid_date_range(self):
         #
-        # test if data in the table is correct
+        # test if the date is within month and week
+        # 
         #
         driver = self.driver
         driver.get("http://localhost:8080/report.php")
