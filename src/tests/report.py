@@ -26,18 +26,14 @@ def check_decimal(string):
         return False
 
 class TestReportFrontEnd(unittest.TestCase):
-
-    def setUp(self):
-        self.driver = webdriver.Chrome(r"chromedriver.exe")
-
-    def test_title(self):
-        driver = self.driver
-        driver.get("http://localhost:8080/report.php")
-        self.assertIn("PHP-SRePS", driver.title, "wrong title")
-        header = driver.find_element_by_class_name("h2")
-        self.assertIn("Report", header.get_attribute('innerHTML'), "wrong header")
     
-    def test_generate_table(self):
+    def setUp(self):
+        self.driver = webdriver.Chrome(r"C:\Users\hodac\chromedriver.exe")
+
+    def test_generate_product_table(self):
+        #
+        # Test if the table generated is correct when product number is entered
+        #
         driver = self.driver
         driver.get("http://localhost:8080/report.php")
         driver.find_element_by_id("item").click()
@@ -72,7 +68,49 @@ class TestReportFrontEnd(unittest.TestCase):
             # total sales column
             self.assertEqual(check_decimal(cells[2].get_attribute("innerHTML")), True)
 
+    def test_generate_category_table(self):
+        #
+        # test if category table is generated
+        #
+        driver = self.driver
+        driver.get("http://localhost:8080/report.php")
+        driver.find_element_by_id("category").click()
+        
+        product_textbox = driver.find_element_by_id("ITEMID")
+        category_textbox = driver.find_element_by_id("CATEGORYID")
+        
+        self.assertEqual('true', product_textbox.get_attribute("disabled"))
+        self.assertEqual("", category_textbox.get_attribute("value"))
+
+        category_textbox.send_keys("8")
+        
+        # click to generate report
+        driver.find_element_by_id("report").click()
+
+        report_title = driver.find_element_by_id("reportTitle")
+        self.assertEqual("Medicine Sales Report", report_title.get_attribute("innerHTML"))
+
+        self.assertGreaterEqual(len(driver.find_element_by_id("reportTable").find_elements_by_tag_name("tr")), 2, "There must be at least one record row")
+
+        # traverse through table and check
+        for i, row in enumerate(driver.find_element_by_id("reportTable").find_elements_by_tag_name("tr")):
+            if i == 0: continue
+            cells = row.find_elements_by_tag_name("td")
+            
+            # date column
+            self.assertEqual(check_valid_date_format(cells[0].get_attribute("innerHTML")), True)
+            
+            # number of item column
+            self.assertEqual(cells[1].get_attribute("innerHTML").isnumeric(), True)
+            
+            # total sales column
+            self.assertEqual(check_decimal(cells[2].get_attribute("innerHTML")), True)
+
+
     def test_generate_chart(self):
+        #
+        # test if chart is generated properly
+        #
         driver = self.driver
         driver.get("http://localhost:8080/report.php")
         driver.find_element_by_id("item").click()
@@ -87,6 +125,9 @@ class TestReportFrontEnd(unittest.TestCase):
         self.assertNotEqual(driver.find_element_by_id("chart").get_attribute("innerHTML"), "")
     
     def test_not_found_record(self):
+        #
+        # test if a message is displayed properly when no record found
+        #
         driver = self.driver
         driver.get("http://localhost:8080/report.php")
         driver.find_element_by_id("item").click()
@@ -103,6 +144,9 @@ class TestReportFrontEnd(unittest.TestCase):
 
     
     def test_valid_date_range(self):
+        #
+        # test if data in the table is correct
+        #
         driver = self.driver
         driver.get("http://localhost:8080/report.php")
         
@@ -136,6 +180,17 @@ class TestReportFrontEnd(unittest.TestCase):
 
             self.assertGreaterEqual(record_date, start_date)
             self.assertLessEqual(record_date, end_date)
+    
+    def test_title(self):
+        #
+        # test if meta data (title) is correct
+        #
+        driver = self.driver
+        driver.get("http://localhost:8080/report.php")
+        self.assertIn("PHP-SRePS", driver.title, "wrong title")
+        header = driver.find_element_by_class_name("h2")
+        self.assertIn("Report", header.get_attribute('innerHTML'), "wrong header")
+    
 
     def tearDown(self):
         self.driver.close()
